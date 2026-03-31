@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LALA - 모바일 쇼핑몰</title>
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+    <style>
+        /* 기본 리셋 및 폰트 */
+        * { margin:0; padding:0; list-style:none; text-decoration:none; color:inherit; box-sizing: border-box; font-family: 'Pretendard', sans-serif;}
+        body { background-color: #f8f9fa; display: flex; justify-content: center; }
+
+        .wrap { 
+            width: 100%; 
+            max-width: 480px; 
+            background-color: #fff; 
+            min-height: 100vh; 
+            position: relative; 
+            padding-bottom: 70px; /* 하단 네비게이션 공간 */
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        /* 헤더 */
+        .header { 
+            height: 60px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 0 20px; 
+            position: sticky; 
+            top: 0; 
+            background: #fff; 
+            z-index: 100;
+        }
+        .header h1 { font-size: 22px; color: #7ec8e3; font-weight: 800; }
+        .header .icon { display: flex; gap: 15px; }
+        .header .icon img { width: 24px; } /* 아이콘 대체용 */
+
+        /* 추가: 장바구니 뱃지 및 검색창, 풀스크린 뷰 스타일 */
+        .header .icon .icon-btn { cursor: pointer; position: relative; }
+        .cart-badge {
+            position: absolute; top: -5px; right: -8px;
+            background-color: #ff4b4b; color: white;
+            font-size: 10px; font-weight: bold;
+            width: 16px; height: 16px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .search-bar-container {
+            display: none; padding: 10px 20px; background: #fff;
+            border-bottom: 1px solid #eee;
+        }
+        .search-bar-container input {
+            width: 100%; padding: 10px 15px;
+            border: 1px solid #ddd; border-radius: 20px;
+            outline: none; font-size: 14px;
+        }
+        .full-screen-view {
+            display: none; padding: 20px;
+        }
+        .category-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
+        }
+        .category-grid .cat-box {
+            background: #f4f4f4; padding: 30px 0; text-align: center;
+            border-radius: 12px; font-weight: bold; cursor: pointer;
+        }
+        /* 상품 상세 페이지 (오버레이 모달) */
+        .detail-page {
+            display: none; position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%; background: #fff; z-index: 200;
+            overflow-y: auto; padding-bottom: 80px;
+        }
+        .detail-header-bar {
+            padding: 15px 20px; display: flex; justify-content: space-between;
+            align-items: center; border-bottom: 1px solid #eee;
+            position: sticky; top: 0; background: #fff; z-index: 201;
+        }
+        .detail-img-box { width: 100%; height: 400px; background: #f4f4f4; }
+        .detail-img-box img { width: 100%; height: 100%; object-fit: cover; }
+        .detail-info { padding: 20px; }
+        .detail-info h2 { font-size: 20px; margin-bottom: 10px; }
+        .detail-info .price { font-size: 24px; color: #7ec8e3; font-weight: bold; }
+        .bottom-cart-bar {
+            position: fixed; bottom: 0; width: 100%; max-width: 480px;
+            padding: 10px 20px 20px; background: #fff; border-top: 1px solid #eee;
+            z-index: 201; box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        }
+        .add-cart-btn {
+            width: 100%; padding: 15px; background: #7ec8e3; color: #fff;
+            border: none; border-radius: 12px; font-size: 16px; font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* 1. 슬라이드 (배너 세로 길이 축소) */
+        .slide { 
+            width: 100%; 
+            height: 280px; /* 기존 450px에서 축소 */
+            overflow: hidden; 
+            position: relative; 
+            background-color: #e6f4f9;
+        }
+        .slide ul { 
+            width: 300%; 
+            height: 100%; 
+            display: flex; 
+        }
+        .slide ul li { 
+            width: 33.3333%; 
+            height: 100%; 
+        }
+        .slide ul li img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; /* 이미지가 찌그러지지 않고 영역에 꽉 차게 */
+            object-position: center top;
+        }
+
+        /* 2. 카테고리 (box2) */
+        .box2 { padding: 15px 20px; border-bottom: 1px solid #f0f0f0; }
+        .box2 ul { 
+            display: flex; 
+            gap: 10px; 
+            overflow-x: auto; 
+            scrollbar-width: none;
+        }
+        .box2 ul::-webkit-scrollbar { display: none; }
+        .box2 ul li { flex: 0 0 auto; }
+        .box2 ul li a { 
+            display: block; 
+            padding: 8px 16px; 
+            background-color: #f4f4f4; 
+            border-radius: 20px; 
+            font-size: 14px; 
+            color: #666;
+            transition: all 0.2s;
+        }
+        /* 활성화된 카테고리 스타일 */
+        .box2 ul li.active a { 
+            background-color: #7ec8e3; 
+            color: #fff; 
+            font-weight: bold; 
+        }
+
+        /* 타이틀 바 (찜 탭 이동 시 표시) */
+        .section-title {
+            display: none;
+            padding: 20px 20px 0;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* 3. 상품 목록 (box3) */
+        .box3 { padding: 20px; }
+        .box3 ul { 
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: space-between; 
+            gap: 15px 0;
+        }
+        .box3 ul li.product-item { 
+            width: 48%; 
+            margin-bottom: 10px;
+        }
+        .box3 .img { 
+            width: 100%; 
+            aspect-ratio: 1/1.1; 
+            border-radius: 10px; 
+            overflow: hidden; 
+            margin-bottom: 10px; 
+            position: relative; /* 찜 버튼을 위한 기준점 */
+        }
+        .box3 .img img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+        }
+        
+        /* 찜(좋아요) 버튼 */
+        .wish-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            font-size: 16px;
+            color: #ccc;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+            z-index: 10;
+        }
+        .wish-btn.liked {
+            color: #ff4b4b; /* 활성화 시 빨간색(또는 테마색) */
+        }
+
+        .box3 .txt { padding: 0 4px; }
+        .box3 .txt p { font-size: 14px; color: #333; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .box3 .txt span { font-size: 16px; font-weight: bold; color: #7ec8e3; }
+        .box3 .txt .best { display: inline-block; font-size: 10px; color: #ff6b6b; font-weight: bold; margin-bottom: 4px; }
+
+        /* 찜한 상품이 없을 때 메시지 */
+        .empty-msg {
+            display: none;
+            width: 100%;
+            text-align: center;
+            padding: 50px 0;
+            color: #888;
+            font-size: 14px;
+        }
+
+        /* 4. 하단 네비게이션 (nav) */
+        .nav { 
+            position: fixed; 
+            bottom: 0; 
+            width: 100%; 
+            max-width: 480px; 
+            background: #fff; 
+            border-top: 1px solid #eee; 
+            z-index: 100;
+        }
+        .nav ul { 
+            display: flex; 
+            justify-content: space-around; 
+            padding: 10px 0 15px; 
+        }
+        .nav ul li { text-align: center; width: 25%; cursor: pointer; }
+        .nav ul li img { width: 24px; margin-bottom: 4px; opacity: 0.6; } /* 임시 아이콘 처리 */
+        .nav ul li span { display: block; font-size: 11px; color: #888; }
+        
+        /* 활성화된 네비게이션 바 */
+        .nav ul li.active span { color: #7ec8e3; font-weight: bold; }
+        .nav ul li.active img { opacity: 1; filter: sepia(100%) hue-rotate(180deg) saturate(300%); }
+
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <!-- 헤더 -->
+        <div class="header">
+            <h1>ANNY</h1>
+            <div class="icon">
+                <span class="icon-btn search-icon" style="font-size: 20px;">🔍</span>
+                <span class="icon-btn cart-icon" style="font-size: 20px;">
+                    🛒
+                    <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
+                </span>
+            </div>
+        </div>
+
+        <!-- 검색창 (숨김 상태) -->
+        <div class="search-bar-container" id="searchBar">
+            <input type="text" placeholder="어떤 상품을 찾으시나요?">
+        </div>
+
+        <!-- 슬라이드 배너 -->
+        <div class="slide" id="mainSlide">
+            <ul>
+                <!-- 로컬 ./images/ 경로 사용 + 캔버스 확인용 미리보기 이미지 적용 -->
+                <li><img src="./images/11.jpg" onerror="this.src='https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80'" alt="배너1"></li>
+                <li><img src="./images/22.jpg" onerror="this.src='https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&q=80'" alt="배너2"></li>
+                <li><img src="./images/33.jpg" onerror="this.src='https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&q=80'" alt="배너3"></li>
+            </ul>
+        </div>
+
+        <!-- 카테고리 메뉴 (data-filter 속성 부여) -->
+        <div class="box2" id="categoryBox">
+            <ul>
+                <li class="active" data-filter="all"><a href="#">전체</a></li>
+                <li data-filter="OUTER"><a href="#">OUTER</a></li>
+                <li data-filter="TOP"><a href="#">TOP</a></li>
+                <li data-filter="PANTS"><a href="#">PANTS</a></li>
+                <li data-filter="BAG"><a href="#">BAG</a></li>
+            </ul>
+        </div>
+
+        <!-- 찜 탭 진입 시 보여줄 타이틀 -->
+        <div class="section-title" id="wishTitle">나의 찜 목록</div>
+
+        <!-- 상품 목록 -->
+        <div class="box3">
+            <div class="empty-msg" id="emptyWishMsg">찜한 상품이 없습니다.</div>
+            
+            <ul id="productList">
+                <!-- 상품 1 (아우터) -->
+                <li class="product-item" data-category="OUTER">
+                    <div class="img">
+                        <img src="./images/1.jpg" onerror="this.src='https://images.unsplash.com/photo-1539533113208-f6df8cc8b543?w=500&q=80'" alt="오버핏 울 코트">
+                        <!-- 찜(좋아요) 버튼 추가 -->
+                        <button class="wish-btn" aria-label="찜하기">♡</button>
+                    </div>
+                    <div class="txt">
+                        <span class="best">BEST</span>
+                        <p>레더 자켓</p>
+                        <span>419,000원</span>
+                    </div>
+                </li>
+
+                <!-- 상품 2 (하의) -->
+                <li class="product-item" data-category="PANTS">
+                    <div class="img">
+                        <img src="./images/2.jpg" onerror="this.src='https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=500&q=80'" alt="캐시미어 라운드 니트">
+                        <button class="wish-btn" aria-label="찜하기">♡</button>
+                    </div>
+                    <div class="txt">
+                        <span class="best">NEW</span>
+                        <p>명품바지</p>
+                        <span>215,000원</span>
+                    </div>
+                </li>
+
+                <!-- 상품 3 (상의) -->
+                <li class="product-item" data-category="TOP">
+                    <div class="img">
+                        <img src="./images/3.jpg" onerror="this.src='https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=500&q=80'" alt="와이드 데님 팬츠">
+                        <button class="wish-btn" aria-label="찜하기">♡</button>
+                    </div>
+                    <div class="txt">
+                        <p>블라우스</p>
+                        <span>256,000원</span>
+                    </div>
+                </li>
+
+                <!-- 상품 4 (잡화) -->
+                <li class="product-item" data-category="BAG">
+                    <div class="img">
+                        <img src="./images/4.jpg" onerror="this.src='https://images.unsplash.com/photo-1584916201218-f4242ceb4809?w=500&q=80'" alt="가죽 미니 숄더백">
+                        <button class="wish-btn" aria-label="찜하기">♡</button>
+                    </div>
+                    <div class="txt">
+                        <span class="best">SALE</span>
+                        <p>핸드백</p>
+                        <span>610,000원</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 전체화면 카테고리 뷰 -->
+        <div class="full-screen-view" id="fullCategoryView">
+            <h2 style="margin-bottom: 20px;">전체 카테고리</h2>
+            <div class="category-grid">
+                <div class="cat-box">🧥 OUTER</div>
+                <div class="cat-box">👕 TOP</div>
+                <div class="cat-box">👖 PANTS</div>
+                <div class="cat-box">👜 BAG</div>
+                <div class="cat-box">👗 DRESS</div>
+                <div class="cat-box">👟 SHOE</div>
+            </div>
+        </div>
+
+        <!-- 상품 상세 페이지 (오버레이 모달) -->
+        <div class="detail-page" id="detailPage">
+            <div class="detail-header-bar">
+                <span id="closeDetail" style="cursor: pointer; font-size: 20px;">⬅️</span>
+                <span style="font-weight: bold; font-size: 16px;">상품 상세</span>
+                <span style="width: 20px;"></span> <!-- 레이아웃 균형용 -->
+            </div>
+            <div class="detail-img-box">
+                <img id="detailImg" src="" alt="상품 이미지">
+            </div>
+            <div class="detail-info">
+                <h2 id="detailTitle">상품명</h2>
+                <div class="price" id="detailPrice">0원</div>
+                <p style="margin-top: 20px; font-size: 14px; color: #666; line-height: 1.6;">
+                    부드러운 소재와 세련된 디자인으로 제작되었습니다.<br>
+                    어떤 코디에도 자연스럽게 어울리며 편안한 착용감을 자랑합니다.<br>
+                    (상세 설명 영역)
+                </p>
+            </div>
+            <div class="bottom-cart-bar">
+                <button class="add-cart-btn" id="addCartBtn">장바구니 담기</button>
+            </div>
+        </div>
+
+        <!-- 하단 네비게이션 -->
+        <div class="nav">
+            <ul>
+                <li class="nav-item active" data-target="home">
+                    <span style="font-size:24px; display:block;">🏠</span>
+                    <span>홈</span>
+                </li>
+                <li class="nav-item" data-target="category">
+                    <span style="font-size:24px; display:block;">🗂️</span>
+                    <span>카테고리</span>
+                </li>
+                <li class="nav-item" data-target="wish">
+                    <span style="font-size:24px; display:block;">❤️</span>
+                    <span>찜</span>
+                </li>
+                <li class="nav-item">
+                    <span style="font-size:24px; display:block;">👤</span>
+                    <span>마이</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 스크립트 (기존 web.js 로직 포함) -->
+    <script>
+        $(document).ready(function(){
+            
+            // 1. 배너 자동 슬라이드 로직 (기존 web.js 방식 유지)
+            setInterval(function(){
+                $('.slide ul').animate({marginLeft: '-100%'}, 500, function(){
+                    $('.slide ul li:first').appendTo('.slide ul');
+                    $('.slide ul').css('marginLeft', 0);
+                });
+            }, 3000);
+
+            // 현재 앱 상태 (home 또는 wish)
+            let currentMode = 'home';
+            let cartItemCount = 0; // 장바구니 담긴 개수
+
+            // --- 1. 검색창 및 상세페이지 / 장바구니 로직 ---
+            
+            // 검색 아이콘 클릭 시 토글
+            $('.search-icon').click(function(){
+                $('#searchBar').slideToggle(200);
+            });
+
+            // 상품 클릭 시 상세 페이지 열기
+            $('.product-item').click(function(e){
+                // 좋아요(하트) 버튼 클릭은 무시
+                if($(e.target).hasClass('wish-btn')) return;
+
+                // 클릭한 상품의 정보 가져와서 모달에 적용
+                let imgSrc = $(this).find('.img img').attr('src');
+                let title = $(this).find('.txt p').text();
+                let price = $(this).find('.txt span').last().text();
+
+                $('#detailImg').attr('src', imgSrc);
+                $('#detailTitle').text(title);
+                $('#detailPrice').text(price);
+
+                $('#detailPage').fadeIn(200);
+            });
+
+            // 상세 페이지 닫기
+            $('#closeDetail').click(function(){
+                $('#detailPage').fadeOut(200);
+            });
+
+            // 장바구니에 담기 버튼 클릭
+            $('#addCartBtn').click(function(){
+                cartItemCount++; // 카운트 증가
+                $('#cartBadge').text(cartItemCount).show(); // 숫자 변경 및 뱃지 노출
+                alert('장바구니에 상품이 담겼습니다.');
+                $('#detailPage').fadeOut(200); // 담은 후 창 닫기
+            });
+            // --- // 신규 기능 로직 종료 ---
+
+            // 2. 카테고리 클릭 시 필터링 로직
+            $('.box2 ul li').click(function(e){
+                e.preventDefault();
+                
+                // 클릭한 카테고리 버튼 활성화
+                $('.box2 ul li').removeClass('active');
+                $(this).addClass('active');
+
+                // data-filter 값 가져오기
+                let filterValue = $(this).attr('data-filter');
+
+                // 전체 보기일 경우
+                if(filterValue === 'all') {
+                    $('.product-item').fadeIn(200);
+                } else {
+                    // 선택된 카테고리만 보여주기
+                    $('.product-item').hide();
+                    $('.product-item[data-category="' + filterValue + '"]').fadeIn(200);
+                }
+            });
+
+            // 3. 좋아요(하트) 버튼 클릭 로직
+            $('.wish-btn').click(function(e){
+                e.preventDefault();
+                // 좋아요 상태 토글
+                $(this).toggleClass('liked');
+                
+                if($(this).hasClass('liked')) {
+                    $(this).text('♥'); // 채워진 하트
+                } else {
+                    $(this).text('♡'); // 빈 하트
+                }
+
+                // 만약 현재 '찜' 탭을 보고 있는 중이라면, 리스트 즉시 갱신
+                if(currentMode === 'wish') {
+                    renderWishlist();
+                }
+            });
+
+            // 4. 하단 네비게이션(탭) 전환 로직
+            $('.nav-item').click(function(){
+                $('.nav-item').removeClass('active');
+                $(this).addClass('active');
+
+                let target = $(this).attr('data-target');
+
+                if(target === 'home') {
+                    currentMode = 'home';
+                    // 홈 화면 요소 보이기
+                    $('#mainSlide, #categoryBox, .box3').show();
+                    $('#fullCategoryView, #wishTitle, #emptyWishMsg').hide();
+                    
+                    // 기존에 선택되어 있던 카테고리 필터 다시 적용
+                    let activeFilter = $('.box2 ul li.active').attr('data-filter') || 'all';
+                    if(activeFilter === 'all') {
+                        $('.product-item').show();
+                    } else {
+                        $('.product-item').hide();
+                        $('.product-item[data-category="' + activeFilter + '"]').show();
+                    }
+
+                } else if(target === 'wish') {
+                    currentMode = 'wish';
+                    // 배너와 카테고리, 전체카테고리 숨기기
+                    $('#mainSlide, #categoryBox, #fullCategoryView').hide();
+                    $('.box3').show(); // 상품 목록 활성화
+                    $('#wishTitle').fadeIn(200);
+                    
+                    // 찜한 상품만 필터링해서 보여주기
+                    renderWishlist();
+
+                } else if(target === 'category') {
+                    currentMode = 'category';
+                    // 배너, 리스트 숨기고 전체 카테고리 화면 표시
+                    $('#mainSlide, #categoryBox, .box3, #wishTitle, #emptyWishMsg').hide();
+                    $('#fullCategoryView').fadeIn(200);
+                }
+            });
+
+            // 찜 목록 렌더링 함수
+            function renderWishlist() {
+                let likedCount = 0;
+                
+                $('.product-item').each(function(){
+                    let isLiked = $(this).find('.wish-btn').hasClass('liked');
+                    if(isLiked) {
+                        $(this).show();
+                        likedCount++;
+                    } else {
+                        $(this).hide();
+                    }
+                });
+
+                // 찜한 상품이 0개일 경우 안내 메시지 표시
+                if(likedCount === 0) {
+                    $('#emptyWishMsg').show();
+                } else {
+                    $('#emptyWishMsg').hide();
+                }
+            }
+            
+        });
+    </script>
+</body>
+</html>

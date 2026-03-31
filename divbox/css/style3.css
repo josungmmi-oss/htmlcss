@@ -1,0 +1,44 @@
+@charset "utf-8";
+body{
+    font-family: "맑은고딕" ;
+}
+*{
+    margin: 0;
+    padding: 0;
+}
+li{
+    list-style: none;
+}
+ul{
+    width: 1000px;
+    height: 300px;
+    border: 5px solid black;
+    margin: 0 auto;
+}
+ul li{
+    width: 235px;
+    height: 300px;
+    margin-right: 20px;
+    float: left;
+    background-color: blue;
+}
+ul .last{
+    margin-right: 0;
+}
+.ye{
+    width: 1000px;
+    height: 300px;
+    border: solid 5px black;
+    margin: 0 auto;
+    
+}
+.ye div{
+    width: 235px;
+    height: 300px;
+    margin-right: 20px;
+    float: left;
+    background-color: red;
+}
+.ye .last1{
+    margin-right: 0;
+}

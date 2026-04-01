@@ -44,6 +44,7 @@ section .boxwrap{
     display: flex;
     /*요소간격*/
     gap: 40px;
+    
 }
 section .box_h2_wrap{
     width: 1280px;

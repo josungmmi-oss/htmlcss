@@ -1,0 +1,1302 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI와 일하는 법 — 직장인을 위한 AI 협업 가이드</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800;900&family=Noto+Sans+KR:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════
+   TOKENS
+═══════════════════════════════════ */
+:root {
+  --blue:       #1A6BFF;
+  --blue-dark:  #0050E0;
+  --blue-light: #EEF4FF;
+  --blue-mid:   #DBEAFE;
+  --green:      #00B386;
+  --green-light:#E6FBF5;
+  --orange:     #FF6B2B;
+  --orange-light:#FFF0E9;
+  --dark:       #0E1117;
+  --dark-2:     #1C2230;
+  --gray-700:   #374151;
+  --gray-500:   #6B7280;
+  --gray-400:   #9CA3AF;
+  --gray-200:   #E5E7EB;
+  --gray-100:   #F3F4F6;
+  --gray-50:    #F9FAFB;
+  --white:      #FFFFFF;
+  --radius-lg:  20px;
+  --radius:     14px;
+  --radius-sm:  10px;
+  --shadow:     0 2px 16px rgba(0,0,0,0.07);
+  --shadow-md:  0 6px 32px rgba(0,0,0,0.11);
+  --shadow-lg:  0 16px 56px rgba(0,0,0,0.15);
+  --font: 'Noto Sans KR', 'Pretendard', sans-serif;
+}
+
+/* ═══════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: var(--font);
+  color: var(--dark);
+  background: var(--white);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+a { text-decoration: none; color: inherit; }
+img { display: block; max-width: 100%; }
+
+/* ═══════════════════════════════════
+   NAV
+═══════════════════════════════════ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  height: 64px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 56px;
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid transparent;
+  transition: border-color .3s, box-shadow .3s;
+}
+nav.scrolled {
+  border-bottom-color: var(--gray-200);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  font-weight: 900; font-size: 18px; color: var(--dark); letter-spacing: -0.5px;
+}
+.nav-logo-badge {
+  background: var(--blue); color: #fff;
+  font-size: 11px; font-weight: 800; letter-spacing: .5px;
+  padding: 4px 9px; border-radius: 7px;
+}
+.nav-links { display: flex; align-items: center; gap: 36px; }
+.nav-links a { font-size: 14px; font-weight: 600; color: var(--gray-500); transition: color .2s; }
+.nav-links a:hover { color: var(--dark); }
+.nav-cta-btn {
+  background: var(--blue); color: #fff !important;
+  padding: 9px 20px; border-radius: var(--radius-sm);
+  font-size: 14px !important; font-weight: 700 !important;
+  transition: background .2s, transform .15s, box-shadow .2s !important;
+  cursor: pointer; border: none;
+}
+.nav-cta-btn:hover {
+  background: var(--blue-dark) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(26,107,255,0.3);
+}
+
+/* ═══════════════════════════════════
+   CONTAINER
+═══════════════════════════════════ */
+.wrap { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
+
+/* ═══════════════════════════════════
+   HERO
+═══════════════════════════════════ */
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; text-align: center;
+  padding: 100px 48px 80px;
+  background: linear-gradient(170deg, #F2F6FF 0%, #FAFBFF 55%, #fff 100%);
+  position: relative; overflow: hidden;
+}
+.hero-orb {
+  position: absolute; border-radius: 50%;
+  pointer-events: none; filter: blur(64px);
+}
+.hero-orb-1 {
+  width: 560px; height: 560px;
+  background: radial-gradient(circle, rgba(26,107,255,0.1) 0%, transparent 70%);
+  top: -100px; left: 50%; transform: translateX(-50%);
+  animation: orbFloat1 8s ease-in-out infinite;
+}
+.hero-orb-2 {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(0,179,134,0.08) 0%, transparent 70%);
+  bottom: 80px; right: 10%;
+  animation: orbFloat2 11s ease-in-out infinite;
+}
+@keyframes orbFloat1 { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(-20px)} }
+@keyframes orbFloat2 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(16px)} }
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--blue-light); color: var(--blue);
+  font-size: 13px; font-weight: 700;
+  padding: 7px 16px; border-radius: 100px;
+  border: 1px solid rgba(26,107,255,0.18);
+  margin-bottom: 32px;
+  animation: fadeUp .6s ease both;
+}
+.hero-badge-dot {
+  width: 7px; height: 7px; background: var(--blue);
+  border-radius: 50%; animation: pulse 2.2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(1.5)} }
+
+.hero h1 {
+  font-size: clamp(44px, 5.2vw, 70px);
+  font-weight: 900; letter-spacing: -2.5px; line-height: 1.13;
+  color: var(--dark); max-width: 820px; margin-bottom: 24px;
+  animation: fadeUp .6s ease .08s both;
+}
+.hero h1 em { font-style: normal; color: var(--blue); }
+.hero h1 .word-break { display: block; }
+
+.hero-sub {
+  font-size: 18px; font-weight: 400; color: var(--gray-700);
+  max-width: 500px; line-height: 1.8; margin-bottom: 52px;
+  animation: fadeUp .6s ease .16s both;
+}
+
+.hero-btns {
+  display: flex; gap: 12px; align-items: center;
+  animation: fadeUp .6s ease .24s both;
+}
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--blue); color: #fff;
+  font-size: 16px; font-weight: 800;
+  padding: 17px 34px; border-radius: var(--radius-sm);
+  border: none; cursor: pointer;
+  box-shadow: 0 6px 24px rgba(26,107,255,0.38);
+  transition: background .2s, transform .15s, box-shadow .2s;
+}
+.btn-primary:hover {
+  background: var(--blue-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 32px rgba(26,107,255,0.45);
+}
+.btn-primary svg { transition: transform .2s; }
+.btn-primary:hover svg { transform: translateX(4px); }
+
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 15px; font-weight: 600; color: var(--gray-500);
+  padding: 17px 20px; border-radius: var(--radius-sm);
+  transition: color .2s;
+}
+.btn-ghost:hover { color: var(--dark); }
+
+.hero-stats {
+  display: flex; gap: 0; margin-top: 72px;
+  border: 1px solid var(--gray-200); border-radius: var(--radius);
+  overflow: hidden;
+  background: #fff;
+  box-shadow: var(--shadow);
+  animation: fadeUp .6s ease .32s both;
+}
+.hero-stat {
+  flex: 1; padding: 24px 32px; text-align: center;
+  border-right: 1px solid var(--gray-200);
+}
+.hero-stat:last-child { border-right: none; }
+.hero-stat-num {
+  font-size: 30px; font-weight: 900; color: var(--blue);
+  letter-spacing: -1px; line-height: 1; margin-bottom: 6px;
+}
+.hero-stat-label { font-size: 13px; color: var(--gray-500); font-weight: 500; }
+
+/* ═══════════════════════════════════
+   SECTION COMMON
+═══════════════════════════════════ */
+section { padding: 120px 0; }
+.section-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 12px; font-weight: 800; letter-spacing: 1.2px;
+  text-transform: uppercase; margin-bottom: 20px;
+}
+.section-eyebrow-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+}
+.section-title {
+  font-size: clamp(30px, 3.2vw, 46px);
+  font-weight: 900; letter-spacing: -1.5px; line-height: 1.2;
+  margin-bottom: 14px;
+}
+.section-desc {
+  font-size: 17px; color: var(--gray-500); line-height: 1.8;
+  max-width: 500px; margin-bottom: 60px;
+}
+
+/* ═══════════════════════════════════
+   PROBLEM — 주제 01
+═══════════════════════════════════ */
+.problem-section { background: #fff; }
+.problem-layout {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 72px; align-items: start;
+}
+.problem-core-msg {
+  background: var(--blue-light);
+  border-left: 4px solid var(--blue);
+  padding: 22px 24px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin-bottom: 40px;
+}
+.problem-core-msg p {
+  font-size: 18px; font-weight: 800; color: var(--blue); line-height: 1.65;
+  letter-spacing: -.5px;
+}
+
+.reason-list { display: flex; flex-direction: column; gap: 14px; }
+.reason-item {
+  display: flex; gap: 16px; align-items: flex-start;
+  padding: 20px 22px; border-radius: var(--radius);
+  background: var(--gray-50); border: 1px solid var(--gray-200);
+  transition: border-color .2s, background .2s, transform .2s;
+  cursor: default;
+}
+.reason-item:hover {
+  background: #fff; border-color: var(--blue);
+  transform: translateX(4px);
+  box-shadow: var(--shadow);
+}
+.reason-icon {
+  width: 42px; height: 42px; min-width: 42px;
+  background: #fff; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; box-shadow: var(--shadow);
+}
+.reason-text h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+.reason-text p { font-size: 14px; color: var(--gray-500); line-height: 1.6; }
+
+/* Dark voice card */
+.voice-card {
+  background: var(--dark-2); color: #fff;
+  border-radius: var(--radius-lg); padding: 44px;
+  position: sticky; top: 84px;
+  overflow: hidden;
+}
+.voice-card::before {
+  content: '"';
+  position: absolute; top: -24px; left: 12px;
+  font-size: 220px; font-weight: 900;
+  color: rgba(255,255,255,0.04); line-height: 1;
+  pointer-events: none;
+}
+.voice-card-label {
+  font-size: 11px; font-weight: 800; letter-spacing: 1.5px;
+  text-transform: uppercase; color: rgba(255,255,255,.35);
+  margin-bottom: 28px;
+}
+.voice-quote {
+  font-size: 20px; font-weight: 600; line-height: 1.7;
+  margin-bottom: 36px;
+}
+.voice-quote strong { color: #60A5FA; }
+
+/* Insight mini bars */
+.insight-bars { display: flex; flex-direction: column; gap: 14px; margin-bottom: 32px; }
+.insight-bar-item { }
+.insight-bar-meta {
+  display: flex; justify-content: space-between;
+  font-size: 13px; color: rgba(255,255,255,.6); margin-bottom: 7px;
+}
+.insight-bar-meta strong { color: #fff; font-weight: 700; }
+.insight-bar-track {
+  height: 6px; background: rgba(255,255,255,.1); border-radius: 99px; overflow: hidden;
+}
+.insight-bar-fill {
+  height: 100%; border-radius: 99px; background: var(--blue);
+  width: 0; transition: width 1.2s cubic-bezier(.4,0,.2,1);
+}
+.insight-bar-fill.green { background: var(--green); }
+
+.persona-row { display: flex; flex-direction: column; gap: 10px; }
+.persona-chip {
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(255,255,255,.07); border-radius: 10px;
+  padding: 13px 16px;
+}
+.persona-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(255,255,255,.14);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px;
+}
+.persona-name { font-size: 14px; font-weight: 700; }
+.persona-role { font-size: 12px; color: rgba(255,255,255,.4); }
+
+/* ═══════════════════════════════════
+   SOLUTION — 주제 02
+═══════════════════════════════════ */
+.solution-section { background: var(--gray-50); }
+
+.method-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 18px; margin-bottom: 40px;
+}
+.method-card {
+  background: #fff; border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  border: 1px solid var(--gray-200);
+  transition: border-color .2s, box-shadow .2s, transform .2s;
+  cursor: default;
+}
+.method-card:hover {
+  border-color: var(--blue);
+  box-shadow: 0 8px 36px rgba(26,107,255,0.12);
+  transform: translateY(-5px);
+}
+.method-num {
+  font-size: 11px; font-weight: 900; letter-spacing: 1.4px;
+  color: var(--blue); text-transform: uppercase; margin-bottom: 18px;
+}
+.method-card h3 { font-size: 18px; font-weight: 800; margin-bottom: 10px; letter-spacing: -.4px; }
+.method-card p { font-size: 14px; color: var(--gray-500); line-height: 1.7; }
+.method-tag {
+  display: inline-block; margin-top: 20px;
+  font-size: 12px; font-weight: 700;
+  color: var(--blue); background: var(--blue-light);
+  padding: 5px 12px; border-radius: 6px;
+}
+
+.solution-highlight {
+  background: var(--blue);
+  border-radius: var(--radius-lg);
+  padding: 52px 60px;
+  display: grid; grid-template-columns: 1fr 280px;
+  gap: 52px; align-items: center;
+  color: #fff;
+}
+.sh-eyebrow {
+  font-size: 11px; font-weight: 800; letter-spacing: 1.2px;
+  text-transform: uppercase; color: rgba(255,255,255,.5);
+  margin-bottom: 18px;
+}
+.sh-quote {
+  font-size: 26px; font-weight: 900; line-height: 1.5;
+  letter-spacing: -.8px; margin-bottom: 20px;
+}
+.sh-desc { font-size: 15px; color: rgba(255,255,255,.7); line-height: 1.75; }
+
+.ba-stack { display: flex; flex-direction: column; gap: 10px; }
+.ba-box {
+  background: rgba(255,255,255,.13); border-radius: 12px;
+  padding: 18px 20px;
+}
+.ba-label {
+  font-size: 10px; font-weight: 800; letter-spacing: 1px;
+  text-transform: uppercase; color: rgba(255,255,255,.45);
+  margin-bottom: 6px;
+}
+.ba-text { font-size: 14px; font-weight: 600; line-height: 1.5; }
+.ba-arrow { text-align: center; color: rgba(255,255,255,.35); font-size: 18px; padding: 2px 0; }
+
+/* ═══════════════════════════════════
+   TRANSFORM — 주제 03
+═══════════════════════════════════ */
+.transform-section { background: #fff; }
+.transform-layout {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 72px; align-items: center;
+}
+.transform-timeline { display: flex; flex-direction: column; }
+.tl-item {
+  display: flex; gap: 22px;
+  padding: 28px 0;
+  border-bottom: 1px solid var(--gray-100);
+  position: relative;
+}
+.tl-item:last-child { border-bottom: none; }
+.tl-step {
+  font-size: 30px; font-weight: 900; color: var(--blue);
+  letter-spacing: -1px; line-height: 1; min-width: 36px; padding-top: 2px;
+}
+.tl-content h4 { font-size: 16px; font-weight: 800; margin-bottom: 6px; letter-spacing: -.3px; }
+.tl-content p { font-size: 14px; color: var(--gray-500); line-height: 1.65; }
+
+.transform-right { display: flex; flex-direction: column; gap: 16px; }
+.transform-msg-card {
+  background: var(--dark); color: #fff;
+  border-radius: var(--radius-lg); padding: 44px;
+  text-align: center;
+}
+.tmsg-label {
+  font-size: 11px; font-weight: 800; letter-spacing: 1.2px;
+  text-transform: uppercase; color: rgba(255,255,255,.35);
+  margin-bottom: 20px;
+}
+.tmsg-text {
+  font-size: 22px; font-weight: 800; line-height: 1.6;
+  letter-spacing: -.5px; margin-bottom: 20px;
+}
+.tmsg-text strong { color: #60A5FA; }
+.tmsg-badge {
+  display: inline-block;
+  background: rgba(255,255,255,.1);
+  color: rgba(255,255,255,.65); font-size: 13px; font-weight: 600;
+  padding: 8px 18px; border-radius: 8px;
+}
+.result-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.result-chip {
+  background: var(--blue-light); color: var(--blue);
+  font-size: 14px; font-weight: 700;
+  padding: 11px 18px; border-radius: 10px;
+  border: 1px solid rgba(26,107,255,.18);
+  cursor: default;
+  transition: background .2s, color .2s, transform .15s;
+}
+.result-chip:hover { background: var(--blue); color: #fff; transform: translateY(-2px); }
+
+/* ═══════════════════════════════════
+   INSIGHT (설문 데이터)
+═══════════════════════════════════ */
+.insight-section { background: var(--gray-50); }
+.insight-header { max-width: 600px; margin-bottom: 56px; }
+.insight-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 24px; margin-bottom: 40px;
+}
+.insight-card {
+  background: #fff; border-radius: var(--radius-lg); padding: 36px 32px;
+  border: 1px solid var(--gray-200);
+  transition: box-shadow .2s, transform .2s;
+}
+.insight-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+.ic-tag {
+  display: inline-block;
+  font-size: 11px; font-weight: 800; letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 5px 12px; border-radius: 6px;
+  margin-bottom: 18px;
+}
+.ic-tag.blue { color: var(--blue); background: var(--blue-light); }
+.ic-tag.green { color: var(--green); background: var(--green-light); }
+.ic-tag.orange { color: var(--orange); background: var(--orange-light); }
+.ic-num {
+  font-size: 52px; font-weight: 900; letter-spacing: -2px;
+  line-height: 1; margin-bottom: 8px;
+}
+.ic-num.blue { color: var(--blue); }
+.ic-num.green { color: var(--green); }
+.ic-num.orange { color: var(--orange); }
+.ic-label { font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 10px; }
+.ic-desc { font-size: 13px; color: var(--gray-500); line-height: 1.65; }
+
+.survey-table {
+  width: 100%; border-collapse: separate; border-spacing: 0;
+  border: 1px solid var(--gray-200); border-radius: var(--radius);
+  overflow: hidden; background: #fff;
+}
+.survey-table th {
+  background: var(--dark); color: #fff;
+  font-size: 13px; font-weight: 700;
+  padding: 14px 20px; text-align: left;
+}
+.survey-table td {
+  font-size: 14px; color: var(--gray-700);
+  padding: 13px 20px; border-top: 1px solid var(--gray-200);
+}
+.survey-table tr:nth-child(even) td { background: var(--gray-50); }
+.survey-table .td-pct {
+  font-weight: 900; color: var(--blue); font-size: 15px; white-space: nowrap;
+}
+.survey-table .td-insight {
+  font-size: 13px; color: var(--gray-500);
+}
+
+/* ═══════════════════════════════════
+   PERSONA
+═══════════════════════════════════ */
+.persona-section { background: #fff; }
+.persona-cards {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+}
+.persona-card {
+  background: var(--gray-50); border-radius: var(--radius-lg);
+  border: 1px solid var(--gray-200); overflow: hidden;
+  transition: box-shadow .2s, transform .2s;
+}
+.persona-card:hover { box-shadow: var(--shadow-md); transform: translateY(-4px); }
+.persona-card-head {
+  padding: 32px 36px 28px;
+  border-bottom: 1px solid var(--gray-200);
+  background: var(--blue-light);
+  display: flex; gap: 20px; align-items: flex-start;
+}
+.persona-avatar-lg {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--blue); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; flex-shrink: 0;
+}
+.pc-name { font-size: 18px; font-weight: 900; letter-spacing: -.4px; margin-bottom: 4px; }
+.pc-meta { font-size: 13px; color: var(--gray-500); font-weight: 500; }
+.pc-badge {
+  margin-top: 10px; display: inline-block;
+  background: var(--blue); color: #fff;
+  font-size: 11px; font-weight: 800; letter-spacing: .5px;
+  padding: 4px 10px; border-radius: 6px;
+}
+.persona-card-body { padding: 28px 36px; }
+.pc-row { margin-bottom: 18px; }
+.pc-row:last-child { margin-bottom: 0; }
+.pc-key {
+  font-size: 11px; font-weight: 800; letter-spacing: 1px;
+  text-transform: uppercase; color: var(--gray-400); margin-bottom: 6px;
+}
+.pc-val { font-size: 14px; color: var(--gray-700); line-height: 1.65; }
+.pc-quote-box {
+  background: #fff; border-left: 3px solid var(--orange);
+  padding: 14px 18px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin-top: 20px;
+}
+.pc-quote-box p {
+  font-size: 14px; font-weight: 700; color: var(--orange); line-height: 1.6;
+}
+
+/* ═══════════════════════════════════
+   CTA SECTION
+═══════════════════════════════════ */
+.cta-section {
+  background: linear-gradient(145deg, #0A1628 0%, #0F2156 50%, #162E7A 100%);
+  padding: 130px 0;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.cta-orb-1 {
+  position: absolute;
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(26,107,255,.22) 0%, transparent 65%);
+  top: -200px; left: 50%; transform: translateX(-50%);
+  pointer-events: none;
+}
+.cta-orb-2 {
+  position: absolute;
+  width: 320px; height: 320px;
+  background: radial-gradient(circle, rgba(0,179,134,.12) 0%, transparent 65%);
+  bottom: -80px; right: 15%;
+  pointer-events: none;
+}
+.cta-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,.1); color: rgba(255,255,255,.7);
+  font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  padding: 7px 16px; border-radius: 100px;
+  margin-bottom: 28px;
+}
+.cta-title {
+  font-size: clamp(36px, 4vw, 58px);
+  font-weight: 900; letter-spacing: -2px; line-height: 1.15;
+  color: #fff; margin-bottom: 20px;
+}
+.cta-sub {
+  font-size: 17px; color: rgba(255,255,255,.6);
+  line-height: 1.8; max-width: 460px; margin: 0 auto 52px;
+}
+.cta-btn-main {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: #fff; color: var(--blue);
+  font-size: 17px; font-weight: 900;
+  padding: 20px 44px; border-radius: var(--radius-sm);
+  border: none; cursor: pointer;
+  box-shadow: 0 6px 32px rgba(0,0,0,.25);
+  transition: transform .2s, box-shadow .2s;
+  letter-spacing: -.3px;
+}
+.cta-btn-main:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(0,0,0,.35);
+}
+.cta-note {
+  margin-top: 22px;
+  font-size: 13px; color: rgba(255,255,255,.3); font-weight: 500;
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+}
+.cta-note span { display: flex; align-items: center; gap: 5px; }
+
+/* ═══════════════════════════════════
+   FOOTER
+═══════════════════════════════════ */
+footer {
+  background: var(--gray-50); border-top: 1px solid var(--gray-200);
+  padding: 36px 56px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.footer-logo { font-weight: 900; font-size: 16px; display: flex; align-items: center; gap: 8px; }
+.footer-logo-badge {
+  background: var(--blue); color: #fff;
+  font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 5px;
+}
+footer p { font-size: 13px; color: var(--gray-400); }
+
+/* ═══════════════════════════════════
+   MODAL
+═══════════════════════════════════ */
+.modal-backdrop {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(10,18,40,.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity .28s ease;
+}
+.modal-backdrop.open { opacity: 1; pointer-events: all; }
+
+.modal-box {
+  background: #fff; border-radius: 24px;
+  padding: 52px 52px 44px;
+  width: 100%; max-width: 480px;
+  position: relative;
+  box-shadow: 0 32px 80px rgba(0,0,0,.25);
+  transform: translateY(24px) scale(.97);
+  transition: transform .3s cubic-bezier(.34,1.56,.64,1), opacity .28s ease;
+  opacity: 0;
+  text-align: center;
+}
+.modal-backdrop.open .modal-box {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+.modal-close {
+  position: absolute; top: 20px; right: 20px;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--gray-100); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gray-500); font-size: 18px; line-height: 1;
+  transition: background .2s, color .2s;
+}
+.modal-close:hover { background: var(--gray-200); color: var(--dark); }
+.modal-icon {
+  width: 72px; height: 72px; border-radius: 20px;
+  background: var(--blue-light);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px; margin: 0 auto 28px;
+}
+.modal-title {
+  font-size: 24px; font-weight: 900; letter-spacing: -.6px;
+  color: var(--dark); margin-bottom: 12px;
+}
+.modal-desc {
+  font-size: 15px; color: var(--gray-500); line-height: 1.75;
+  margin-bottom: 36px;
+}
+.modal-action {
+  display: flex; flex-direction: column; gap: 12px;
+}
+.modal-primary-btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  background: var(--blue); color: #fff;
+  font-size: 16px; font-weight: 800;
+  padding: 18px 28px; border-radius: var(--radius-sm);
+  border: none; cursor: pointer;
+  box-shadow: 0 6px 22px rgba(26,107,255,.38);
+  transition: background .2s, transform .15s, box-shadow .2s;
+  text-decoration: none;
+}
+.modal-primary-btn:hover {
+  background: var(--blue-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(26,107,255,.45);
+}
+.modal-cancel-btn {
+  background: none; border: none; cursor: pointer;
+  font-size: 14px; color: var(--gray-400); font-weight: 600;
+  padding: 8px; transition: color .2s;
+}
+.modal-cancel-btn:hover { color: var(--gray-700); }
+.modal-survey-note {
+  margin-top: 20px;
+  font-size: 12px; color: var(--gray-400);
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+}
+
+/* ═══════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  opacity: 0; transform: translateY(36px);
+  transition: opacity .65s ease, transform .65s ease;
+}
+.reveal.in { opacity: 1; transform: translateY(0); }
+.reveal-d1 { transition-delay: .1s; }
+.reveal-d2 { transition-delay: .2s; }
+.reveal-d3 { transition-delay: .3s; }
+.reveal-d4 { transition-delay: .4s; }
+
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav id="nav">
+  <div class="nav-logo">
+    AI WorkLab
+    <span class="nav-logo-badge">BETA</span>
+  </div>
+  <div class="nav-links">
+    <a href="#problem">AI와 나</a>
+    <a href="#solution">협업 방식</a>
+    <a href="#transform">일의 변화</a>
+    <a href="#insight">인사이트</a>
+    <button class="nav-cta-btn" onclick="openModal()">설문 참여하기</button>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+
+  <div class="hero-badge">
+    <span class="hero-badge-dot"></span>
+    직장인을 위한 AI 협업 가이드
+  </div>
+
+  <h1>
+    AI로 일하는 게<br>
+    <em>이렇게 다를 줄</em> 몰랐다
+  </h1>
+
+  <p class="hero-sub">
+    막막하게 느껴지던 AI,<br>
+    실무에서 바로 쓸 수 있는 방법이 있습니다.
+  </p>
+
+  <div class="hero-btns">
+    <button class="btn-primary" onclick="openModal()">
+      지금 시작하기
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+    <a href="#problem" class="btn-ghost">
+      더 알아보기
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    </a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-num">74%</div>
+      <div class="hero-stat-label">직장인이 AI 경험 보유</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">21%</div>
+      <div class="hero-stat-label">실무 지속 활용률</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">89%</div>
+      <div class="hero-stat-label">실전 사례 콘텐츠 수요</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">67%</div>
+      <div class="hero-stat-label">문서 작성 자동화 희망</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PROBLEM 주제01 ═══ -->
+<section class="problem-section" id="problem">
+  <div class="wrap">
+    <div class="problem-layout">
+
+      <div>
+        <div class="reveal">
+          <div class="section-eyebrow" style="color:var(--blue)">
+            <span class="section-eyebrow-dot" style="background:var(--blue)"></span>
+            주제 01
+          </div>
+          <h2 class="section-title">직장인이 AI를<br>어려워하는 진짜 이유</h2>
+          <div class="problem-core-msg">
+            <p>AI가 어렵다는 건 착각이다.<br>막막한 건 방법을 몰라서일 뿐.</p>
+          </div>
+        </div>
+        <div class="reason-list">
+          <div class="reason-item reveal reveal-d1">
+            <div class="reason-icon">🧱</div>
+            <div class="reason-text">
+              <h4>어디서부터 시작해야 할지 모른다</h4>
+              <p>ChatGPT 창을 열었지만 첫 문장을 어떻게 써야 할지 막막한 경험, 모두 겪습니다. 58%가 '질문하는 법'을 모른다고 답했습니다.</p>
+            </div>
+          </div>
+          <div class="reason-item reveal reveal-d2">
+            <div class="reason-icon">😰</div>
+            <div class="reason-text">
+              <h4>기대와 현실의 괴리</h4>
+              <p>"AI면 다 해결된다"는 과도한 기대로 시작했다가, 어설픈 결과물에 실망하고 포기하는 패턴이 반복됩니다.</p>
+            </div>
+          </div>
+          <div class="reason-item reveal reveal-d3">
+            <div class="reason-icon">🔍</div>
+            <div class="reason-text">
+              <h4>내 업무에 맞는 방법을 모른다</h4>
+              <p>유튜브와 블로그 정보는 넘치지만, 정작 마케터·기획자의 실무 흐름에 맞는 활용법은 찾기 어렵습니다.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal reveal-d2">
+        <div class="voice-card">
+          <div class="voice-card-label">설문 · 직장인 120명</div>
+          <p class="voice-quote">
+            AI를 써봤지만 <strong>실무에 계속 활용하는 비율은 21%</strong>에 불과합니다. 나머지 79%는 경험 이후 멈췄습니다.
+          </p>
+
+          <div class="insight-bars">
+            <div class="insight-bar-item">
+              <div class="insight-bar-meta"><span>질문하는 법을 모름</span><strong>58%</strong></div>
+              <div class="insight-bar-track"><div class="insight-bar-fill" data-width="58"></div></div>
+            </div>
+            <div class="insight-bar-item">
+              <div class="insight-bar-meta"><span>결과물 품질 기대 이하</span><strong>34%</strong></div>
+              <div class="insight-bar-track"><div class="insight-bar-fill" data-width="34"></div></div>
+            </div>
+            <div class="insight-bar-item">
+              <div class="insight-bar-meta"><span>실무 적용 사례 필요</span><strong>89%</strong></div>
+              <div class="insight-bar-track"><div class="insight-bar-fill green" data-width="89"></div></div>
+            </div>
+          </div>
+
+          <div class="persona-row">
+            <div class="persona-chip">
+              <div class="persona-avatar">👩</div>
+              <div>
+                <div class="persona-name">김지수 · 마케터 5년차</div>
+                <div class="persona-role">"내 업무에 어떻게 연결하는지 모르겠어요"</div>
+              </div>
+            </div>
+            <div class="persona-chip">
+              <div class="persona-avatar">👨</div>
+              <div>
+                <div class="persona-name">이준혁 · 기획자 3년차</div>
+                <div class="persona-role">"쓰고는 있는데 제대로 쓰는 건지 모르겠어요"</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SOLUTION 주제02 ═══ -->
+<section class="solution-section" id="solution">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="section-eyebrow" style="color:var(--green)">
+        <span class="section-eyebrow-dot" style="background:var(--green)"></span>
+        주제 02
+      </div>
+      <h2 class="section-title">실무에서 바로 쓰는<br>AI 협업 방식</h2>
+      <p class="section-desc">이론이 아닙니다. 내일 당장 업무에서 바로 열 수 있는 방법들입니다.</p>
+    </div>
+
+    <div class="method-grid">
+      <div class="method-card reveal reveal-d1">
+        <div class="method-num">METHOD 01</div>
+        <h3>질문을 설계하는 법</h3>
+        <p>AI에게 좋은 답을 얻으려면 좋은 질문이 먼저입니다. 역할 · 맥락 · 형식 3가지만 지정하면 결과가 달라집니다.</p>
+        <span class="method-tag">프롬프트 설계</span>
+      </div>
+      <div class="method-card reveal reveal-d2">
+        <div class="method-num">METHOD 02</div>
+        <h3>업무 흐름에 끼워 넣기</h3>
+        <p>AI를 따로 쓰지 않아도 됩니다. 기존 업무 프로세스의 특정 단계에 자연스럽게 녹여내는 방법입니다.</p>
+        <span class="method-tag">워크플로우 통합</span>
+      </div>
+      <div class="method-card reveal reveal-d3">
+        <div class="method-num">METHOD 03</div>
+        <h3>결과물 빠르게 검토하기</h3>
+        <p>AI 결과물을 그대로 쓰면 안 됩니다. 5분 안에 품질을 확인하고 수정하는 루틴을 만드세요.</p>
+        <span class="method-tag">품질 관리</span>
+      </div>
+    </div>
+
+    <div class="solution-highlight reveal">
+      <div>
+        <div class="sh-eyebrow">핵심 메시지</div>
+        <p class="sh-quote">좋은 질문 하나가<br>1시간짜리 일을<br>10분으로 바꾼다.</p>
+        <p class="sh-desc">AI 협업의 핵심은 기술이 아니라 커뮤니케이션입니다. 어떻게 물어보느냐가 결과의 80%를 결정합니다.</p>
+      </div>
+      <div class="ba-stack">
+        <div class="ba-box">
+          <div class="ba-label">Before</div>
+          <div class="ba-text">"보고서 써줘"<br><span style="opacity:.5;font-size:12px">결과: 어딘가 어색한 글</span></div>
+        </div>
+        <div class="ba-arrow">↓</div>
+        <div class="ba-box">
+          <div class="ba-label">After</div>
+          <div class="ba-text">"마케팅팀장에게 보고할 3분기 성과 요약을 표와 함께, 500자 이내로 작성해줘"<br><span style="opacity:.5;font-size:12px">결과: 바로 쓸 수 있는 구조화된 보고서</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TRANSFORM 주제03 ═══ -->
+<section class="transform-section" id="transform">
+  <div class="wrap">
+    <div class="transform-layout">
+
+      <div class="reveal">
+        <div class="section-eyebrow" style="color:var(--orange)">
+          <span class="section-eyebrow-dot" style="background:var(--orange)"></span>
+          주제 03
+        </div>
+        <h2 class="section-title">AI를 쓰면 달라지는<br>일의 방식과 결과</h2>
+        <div class="transform-timeline">
+          <div class="tl-item">
+            <div class="tl-step">1</div>
+            <div class="tl-content">
+              <h4>반복 업무에서 해방된다</h4>
+              <p>정형화된 문서 작성, 데이터 정리, 이메일 초안 등 반복 작업을 AI에게 위임하고, 그 시간을 돌려받습니다.</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-step">2</div>
+            <div class="tl-content">
+              <h4>더 빠르게, 더 잘 생각하게 된다</h4>
+              <p>AI와 대화하며 아이디어를 발전시키면 혼자 생각할 때보다 훨씬 빠르게 결론에 도달합니다.</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-step">3</div>
+            <div class="tl-content">
+              <h4>창의적인 일에 더 집중하게 된다</h4>
+              <p>시간이 생기면 진짜 중요한 문제에 에너지를 쏟을 수 있습니다. 일의 질이 달라집니다.</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-step">4</div>
+            <div class="tl-content">
+              <h4>일이 즐거워진다</h4>
+              <p>잘하는 사람 옆에 있으면 일이 즐거운 것처럼, AI 협업은 일의 경험 자체를 바꿉니다.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="transform-right reveal reveal-d2">
+        <div class="transform-msg-card">
+          <div class="tmsg-label">핵심 메시지</div>
+          <p class="tmsg-text">AI는 일을 대신하는 게 아니라,<br><strong>내가 더 잘할 수 있게</strong> 만든다.</p>
+          <span class="tmsg-badge">생산성 × 창의성 × 만족도</span>
+        </div>
+        <div class="result-chips">
+          <div class="result-chip">⏱️ 업무 시간 단축</div>
+          <div class="result-chip">📄 문서 품질 향상</div>
+          <div class="result-chip">💡 아이디어 발굴</div>
+          <div class="result-chip">🎯 의사결정 속도</div>
+          <div class="result-chip">😊 업무 만족도</div>
+          <div class="result-chip">🚀 커리어 차별화</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ INSIGHT 설문 데이터 ═══ -->
+<section class="insight-section" id="insight">
+  <div class="wrap">
+    <div class="insight-header reveal">
+      <div class="section-eyebrow" style="color:var(--blue)">
+        <span class="section-eyebrow-dot" style="background:var(--blue)"></span>
+        User Insight · 설문 n=120
+      </div>
+      <h2 class="section-title">데이터로 보는<br>직장인 AI 현실</h2>
+      <p class="section-desc">직장인 20~40대 120명 설문 결과를 바탕으로 도출한 핵심 인사이트입니다.</p>
+    </div>
+
+    <div class="insight-grid">
+      <div class="insight-card reveal reveal-d1">
+        <span class="ic-tag blue">Insight 01</span>
+        <div class="ic-num blue">58%</div>
+        <div class="ic-label">AI 활용 포기 원인 1위 — "질문을 모르겠다"</div>
+        <div class="ic-desc">진입 장벽은 기술이 아닌 '방법'의 문제입니다. 프롬프트 역량만 갖춰도 결과가 완전히 달라집니다.</div>
+      </div>
+      <div class="insight-card reveal reveal-d2">
+        <span class="ic-tag green">Insight 02</span>
+        <div class="ic-num green">67%</div>
+        <div class="ic-label">AI로 줄이고 싶은 업무 1위 — "문서·보고서 작성"</div>
+        <div class="ic-desc">마케터·기획자 모두 반복적 문서 업무에 가장 큰 피로를 느낍니다. 이 영역이 AI 효과가 가장 즉각적입니다.</div>
+      </div>
+      <div class="insight-card reveal reveal-d3">
+        <span class="ic-tag orange">Insight 03</span>
+        <div class="ic-num orange">89%</div>
+        <div class="ic-label">실무 적용 사례를 구체적으로 알고 싶다</div>
+        <div class="ic-desc">콘텐츠 소비(81%)는 많지만 실행으로 이어지지 않습니다. 바로 따라할 수 있는 실전 예시가 핵심입니다.</div>
+      </div>
+      <div class="insight-card reveal reveal-d4">
+        <span class="ic-tag blue">Insight 04</span>
+        <div class="ic-num blue" style="font-size:40px;letter-spacing:-1px">74→21%</div>
+        <div class="ic-label">경험률 74% vs 지속 활용률 21%</div>
+        <div class="ic-desc">경험 후 계속 쓰는 사람은 4명 중 1명뿐입니다. 첫 시도 이후 포기하지 않는 루틴 설계가 관건입니다.</div>
+      </div>
+    </div>
+
+    <div class="reveal">
+      <table class="survey-table">
+        <thead>
+          <tr>
+            <th style="width:55%">설문 문항</th>
+            <th style="width:15%">응답 비율</th>
+            <th>인사이트 요약</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>업무에서 AI 도구를 사용해본 적 있다</td>
+            <td class="td-pct">74%</td>
+            <td class="td-insight">AI 경험 자체는 다수가 보유</td>
+          </tr>
+          <tr>
+            <td>AI를 실무에 지속적으로 활용 중이다</td>
+            <td class="td-pct">21%</td>
+            <td class="td-insight">경험 → 지속 사용 전환율이 낮음</td>
+          </tr>
+          <tr>
+            <td>어려운 이유 — 어떻게 질문해야 할지 모름</td>
+            <td class="td-pct">58%</td>
+            <td class="td-insight">프롬프트 설계 역량이 핵심 장벽</td>
+          </tr>
+          <tr>
+            <td>어려운 이유 — 결과물 품질이 기대 이하</td>
+            <td class="td-pct">34%</td>
+            <td class="td-insight">활용법 개선으로 해결 가능</td>
+          </tr>
+          <tr>
+            <td>줄이고 싶은 업무 1위 — 문서·보고서 작성</td>
+            <td class="td-pct">67%</td>
+            <td class="td-insight">문서 작성이 최우선 니즈</td>
+          </tr>
+          <tr>
+            <td>AI 관련 콘텐츠를 소비한 적 있다</td>
+            <td class="td-pct">81%</td>
+            <td class="td-insight">관심은 높으나 실행으로 미연결</td>
+          </tr>
+          <tr>
+            <td>실무 적용 사례를 구체적으로 알고 싶다</td>
+            <td class="td-pct">89%</td>
+            <td class="td-insight">이론보다 실전 사례 수요 압도적</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PERSONA ═══ -->
+<section class="persona-section" id="persona">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="section-eyebrow" style="color:var(--gray-500)">
+        <span class="section-eyebrow-dot" style="background:var(--gray-500)"></span>
+        User Persona
+      </div>
+      <h2 class="section-title">이런 분들을 위해<br>만들었습니다</h2>
+      <p class="section-desc" style="margin-bottom:48px">마케터·기획자 직군 중심의 2가지 대표 페르소나입니다.</p>
+    </div>
+
+    <div class="persona-cards">
+      <div class="persona-card reveal reveal-d1">
+        <div class="persona-card-head">
+          <div class="persona-avatar-lg">👩</div>
+          <div>
+            <div class="pc-name">김지수</div>
+            <div class="pc-meta">마케터 5년차 · 31세 · 중견 소비재 브랜드</div>
+            <span class="pc-badge">Persona 01</span>
+          </div>
+        </div>
+        <div class="persona-card-body">
+          <div class="pc-row">
+            <div class="pc-key">주요 업무</div>
+            <div class="pc-val">월간 콘텐츠 캘린더 작성, 성과 리포트, 캠페인 기획안</div>
+          </div>
+          <div class="pc-row">
+            <div class="pc-key">AI 현재 수준</div>
+            <div class="pc-val">ChatGPT 계정은 있지만 간단한 문장 다듬기 용도로만 사용. 프롬프트 설계 개념 없음.</div>
+          </div>
+          <div class="pc-row">
+            <div class="pc-key">Pain Point</div>
+            <div class="pc-val">매달 반복되는 리포트 작성에 3~4시간 소요. 캠페인 기획 초안 잡는 것이 가장 힘들다.</div>
+          </div>
+          <div class="pc-row">
+            <div class="pc-key">원하는 것</div>
+            <div class="pc-val">리포트·기획 초안 시간을 줄이고, 더 창의적인 아이디어 발굴에 집중하고 싶다.</div>
+          </div>
+          <div class="pc-quote-box">
+            <p>"AI가 어렵다기보단, 내 업무에 어떻게 연결하는지를 모르겠어요."</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="persona-card reveal reveal-d2">
+        <div class="persona-card-head">
+          <div class="persona-avatar-lg">👨</div>
+          <div>
+            <div class="pc-name">이준혁</div>
+            <div class="pc-meta">기획자 3년차 · 28세 · 스타트업 서비스기획팀</div>
+            <span class="pc-badge">Persona 02</span>
+          </div>
+        </div>
+        <div class="persona-card-body">
+          <div class="pc-row">
+            <div class="pc-key">주요 업무</div>
+            <div class="pc-val">PRD 작성, 스프린트 회의록, 팀 간 커뮤니케이션 문서 정리</div>
+          </div>
+          <div class="pc-row">
+            <div class="pc-key">AI 현재 수준</div>
+            <div class="pc-val">Claude·ChatGPT 유료 사용 중. 회의록 정리·번역은 잘 쓰지만, 기획 업무 연결은 시도 중.</div>
+          </div>
+          <div class="pc-row">
+            <div class="pc-key">Pain Point</div>
+            <div class="pc-val">AI 결과물이 들쑥날쑥해서 결국 직접 다 고치게 됨. 시간을 아끼려다 더 쓰는 느낌.</div>
+          </div>
+          <div class="pc-row">
+            <div class="pc-key">원하는 것</div>
+            <div class="pc-val">AI를 체계적으로 익혀서 PRD·기획서 작성 시간을 50% 이상 줄이고 싶다.</div>
+          </div>
+          <div class="pc-quote-box">
+            <p>"쓰고는 있는데, 제대로 쓰고 있는 건지 모르겠어요."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA ═══ -->
+<section class="cta-section" id="cta">
+  <div class="cta-orb-1"></div>
+  <div class="cta-orb-2"></div>
+  <div class="wrap">
+    <div class="reveal">
+      <div class="cta-eyebrow">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        지금 시작하기
+      </div>
+      <h2 class="cta-title">직접 경험해보세요</h2>
+      <p class="cta-sub">막막함은 잠깐입니다. 첫 걸음만 내딛으면 달라집니다. 설문에 참여하고 AI 협업 가이드를 받아보세요.</p>
+      <button class="cta-btn-main" onclick="openModal()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h6M12 9v6M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+        설문 참여하기
+      </button>
+      <div class="cta-note">
+        <span>✓ 무료</span>
+        <span>✓ 3분 소요</span>
+        <span>✓ AI 협업 가이드 제공</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-logo">
+    AI WorkLab
+    <span class="footer-logo-badge">BETA</span>
+  </div>
+  <p>© 2026 AI WorkLab · 직장인을 위한 AI 협업 가이드</p>
+</footer>
+
+<!-- ═══ MODAL ═══ -->
+<div class="modal-backdrop" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal-box" id="modal-box">
+    <button class="modal-close" onclick="closeModal()" aria-label="닫기">✕</button>
+    <div class="modal-icon">📋</div>
+    <h2 class="modal-title" id="modal-title">설문조사 바로가기</h2>
+    <p class="modal-desc">
+      AI 협업에 대한 여러분의 경험을 알려주세요.<br>
+      소요 시간은 약 <strong>3분</strong>이며, 참여해 주신 분께<br>
+      <strong>AI 협업 실무 가이드</strong>를 보내드립니다.
+    </p>
+    <div class="modal-action">
+      <a
+        href="https://forms.gle/ECZi7xc3Sook79XCA"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="modal-primary-btn"
+        onclick="closeModal()"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>
+        설문 참여하기 (구글폼)
+      </a>
+      <button class="modal-cancel-btn" onclick="closeModal()">나중에 할게요</button>
+    </div>
+    <div class="modal-survey-note">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      개인정보는 수집하지 않습니다
+    </div>
+  </div>
+</div>
+
+<script>
+/* ─── NAV scroll ─── */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 10);
+}, { passive: true });
+
+/* ─── Reveal on scroll ─── */
+const revealEls = document.querySelectorAll('.reveal');
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
+      revealObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
+revealEls.forEach(el => revealObs.observe(el));
+
+/* ─── Bar chart animate ─── */
+const barObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.insight-bar-fill').forEach(bar => {
+        const w = bar.getAttribute('data-width');
+        bar.style.width = w + '%';
+      });
+      barObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.voice-card').forEach(el => barObs.observe(el));
+
+/* ─── Modal ─── */
+const modal = document.getElementById('modal');
+
+function openModal() {
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  modal.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Backdrop click to close
+modal.addEventListener('click', (e) => {
+  if (e.target === modal) closeModal();
+});
+
+// ESC key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+});
+</script>
+</body>
+</html>

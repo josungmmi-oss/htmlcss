@@ -1,0 +1,60 @@
+@charset "utf-8";
+body{
+    font-family: "맑은고딕";
+}
+*{
+    margin: 0;
+    padding: 0;
+}
+section{
+    width: 100%;
+    height: 843px;
+    background: black;
+    /*배경이미지*/ /*반복없이*/
+    background: url("../images/4.jpg") no-repeat;
+    padding: 300px 0 100px;
+}
+
+
+section .box .imgbox{
+    width: 400px;
+    height: 230px;
+   
+}
+section .box .imgbox img{
+    width: 400px;
+    height: 230px;
+}
+section .box .text{
+    width: 400px;
+    height: 45px;
+    background: #fff;
+    text-align: center;
+    /*위아래 가운데 정열*/
+    line-height: 45px;
+    font-size: 20px;
+    font-weight: 20px;
+    color: #111;
+
+}
+section .boxwrap{
+    width: 1280px;
+    
+    /*부모에 옆으로 배치해주는 css*/
+    display: flex;
+    /*요소간격*/
+    gap: 40px;
+}
+section .box_h2_wrap{
+    width: 1280px;
+    
+    margin: 0 auto;
+    
+}
+section  .box_h2_wrap  h2{
+    font-size: 50px;
+    color: #fff;
+    line-height: 75px;
+    margin-bottom: 50px;
+
+}

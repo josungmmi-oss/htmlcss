@@ -1,0 +1,22 @@
+@charset "utf-8";
+body {
+  font-family: "맑은 고딕";
+}
+.form-group {
+  display: flex;
+  align-items: flex-end; /* 글자와 셀렉트 박스의 하단을 나란히 맞춥니다. */
+  margin-bottom: 10px;
+}
+
+label {
+  margin-right: 5px; /* 글자와 박스 사이의 간격 */
+  font-size: 16px;
+}
+
+select {
+  font-size: 14px;
+}
+
+.submit-btn {
+  margin-top: 10px;
+}

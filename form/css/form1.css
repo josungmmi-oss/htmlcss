@@ -1,0 +1,56 @@
+/* 화면 정중앙 배치 */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f5f5f5;
+    font-family: sans-serif;
+}
+
+form {
+    width: 450px; /* 전체 폼의 너비 */
+}
+
+fieldset {
+    border: 1px solid #ccc;
+    padding: 25px ;
+    margin-bottom: 5px;
+    background-color: #fff;
+    
+}
+
+legend {
+    padding: 0 5px;
+}
+
+/* 입력란 줄 정렬 */
+.input-row {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* 내부 요소들을 가운데로 모음 */
+    margin-bottom: 10px;
+}
+
+/* 텍스트(라벨) 부분 설정 */
+.input-row label {
+    width: 80px;         /* 1. 라벨 너비를 똑같이 맞춰서 */
+    text-align: right;   /* 2. 글자를 오른쪽으로 정렬하면 */
+    margin-right: 4px;  /* 3. 네모칸 시작 위치가 일직선이 됩니다 */
+    font-size: 16px;
+    margin-bottom: 16px;
+}
+
+/* 네모칸(입력란) 부분 설정 */
+.input-row input {
+    width: 160px;        /* 네모칸 길이를 고정 */
+    height: 24px;
+    border: 1px solid #999;
+    padding: 0 10px;
+    margin-bottom: 16px;
+}
+
+.input-row:last-child {
+    margin-bottom: 0;
+}

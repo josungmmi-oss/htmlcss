@@ -1,0 +1,35 @@
+@charset "utf-8";
+body{
+    font-family: "맑은고딕";
+}
+form ol li {
+    list-style: none;
+    margin-bottom: 16px;
+    margin: 0 auto;
+}
+form ul li {
+    list-style: none;
+    margin-bottom: 16px;
+    margin: 0 auto;
+}
+form{
+    width: 700px;
+    margin-bottom: 50px;
+}
+form .idinput{
+    margin-left: 12px;
+}
+
+form input[type="text"],
+input[type="password"] {
+  height: 60px;
+  width: 410px;
+  padding-left: 16px;
+  border-radius: 16px;
+  border: 1px solid #c5ccd2;
+}
+form input[type="submit"], 
+input[type="reset"] {
+    cursor: pointer;
+}
+

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>국가정보원 소개 레이아웃</title>
+<style>
+    /* 기본 초기화 */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+    }
+
+    /* 전체 배경 영역 */
+    .hero-section {
+        width: 100%;
+        height: 843px; /* 전체 페이지 높이 843px */
+        /* 배경 이미지 설정 (요청하신 4.jpg 적용) */
+        background-image: url('4.jpg'); 
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        position: relative; /* 자식 요소의 위치 기준점 */
+    }
+
+    /* 내부 컨텐츠를 감싸는 1280px 컨테이너 */
+    .content-wrapper {
+        width: 1280px; /* 전체 박스 너비 1280px */
+        position: absolute;
+        bottom: 20px; /* 페이지 아래에서 50px 올려서 배치 (기존 100px에서 50px 내림) */
+        left: 50%;
+        transform: translateX(-50%); /* 가로 중앙 정렬 */
+    }
+
+    /* 상단 글자 스타일 */
+    .main-title {
+        font-size: 40px;
+        color: #fff;
+        line-height: 50px;
+        margin-bottom: 45px;
+        font-weight: 600;
+    }
+
+    /* 3개의 카드 박스를 가로로 나열 */
+    .card-container {
+        display: flex;
+        width: 1280px; /* 카드박스 전체 길이 1280px 명시 */
+        gap: 40px; /* 박스 간의 간격 40px */
+    }
+
+    /* 개별 카드 박스 */
+    .card {
+        width: 400px; /* (400px * 3개) + (간격 40px * 2개) = 정확히 1280px */
+        height: 270px; /* 카드박스 전체 높이 270px로 수정 (기존 대비 20px 증가) */
+        background-color: #fff;
+        border-radius: 8px; /* 모서리 둥글게 */
+        overflow: hidden; /* 자식 요소가 둥근 모서리를 벗어나지 않게 설정 */
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* 약간의 그림자 입체감 */
+        display: flex;
+        flex-direction: column;
+        cursor: pointer;
+    }
+
+    /* 카드 내 이미지 영역 */
+    .card-image-wrap {
+        width: 100%;
+        height: 250px; /* 기존 210px에서 20px 증가 (전체 270px - 텍스트 40px) */
+        overflow: hidden; /* 마우스 호버 시 이미지가 카드 밖으로 튀어나가는 것 방지 */
+    }
+
+    .card-image-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* 이미지가 찌그러지지 않고 영역을 꽉 채우도록 */
+        transition: transform 0.4s ease-in-out; /* 부드러운 전환 효과 적용 */
+    }
+
+    /* 마우스 호버 시 이미지 스케일 1.1배 확대 */
+    .card:hover .card-image-wrap img {
+        transform: scale(1.1);
+    }
+
+    /* 카드 하단 텍스트 영역 */
+    .card-text {
+        height: 40px; /* 문단의 높이 40px */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #fff;
+        font-size: 20px; /* 폰트 크기 20px */
+        font-weight: bold;
+        color: #000;
+    }
+</style>
+</head>
+<body>
+
+<div class="hero-section"><img src="./images/4.jpg" alt="배경이미지">
+    <div class="content-wrapper">
+        <!-- 상단 글자 -->
+        <h2 class="main-title">안전하고 평화로운 대한민국을 위해<br>국가정보원이 함께합니다.</h2>
+        
+        <!-- 카드 박스 영역 -->
+        <div class="card-container">
+            
+            <!-- 첫번째 카드 : 직무 -->
+            <div class="card">
+                <div class="card-image-wrap">
+                    <!-- 실제 이미지 파일 대신 시안과 비슷한 느낌의 무료 이미지를 임시로 넣었습니다. -->
+                    <img src="./images/img_about_1.jpg" alt="직무 이미지">
+                </div>
+                <div class="card-text">직무</div>
+            </div>
+            
+            <!-- 두번째 카드 : 국정원 역사 -->
+            <div class="card">
+                <div class="card-image-wrap">
+                    <img src="./images/img_about_2.png" alt="국정원 역사 이미지">
+                </div>
+                <div class="card-text">국정원 역사</div>
+            </div>
+            
+            <!-- 세번째 카드 : 관련 법령 -->
+            <div class="card">
+                <div class="card-image-wrap">
+                    <img src="./images/img_about_3.jpg" alt="관련 법령 이미지">
+                </div>
+                <div class="card-text">관련 법령</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

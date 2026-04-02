@@ -1,0 +1,148 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #efefef;
+  font-family: "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+  color: #222;
+}
+
+a {
+  text-decoration: none;
+}
+
+.community {
+  width: 1200px;
+  margin: 0 auto;
+  padding: 110px 0 80px;
+}
+
+.community-header {
+  text-align: center;
+  margin-bottom: 42px;
+}
+
+.community-header h1 {
+  font-size: 62px;
+  font-weight: 800;
+  letter-spacing: -2px;
+  margin-bottom: 22px;
+  line-height: 1;
+}
+
+.community-header p {
+  font-size: 20px;
+  line-height: 1.7;
+  color: #333;
+  margin-bottom: 40px;
+}
+
+.sns-list {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+}
+
+.sns {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.facebook {
+  background: #3b5aa9;
+  font-size: 32px;
+  font-family: Arial, sans-serif;
+}
+
+.instagram {
+  background: #a87452;
+  font-size: 24px;
+}
+
+.blog {
+  background: #41cc1f;
+  font-size: 20px;
+}
+
+.twitter {
+  background: #35c4ee;
+  font-size: 34px;
+  font-family: Georgia, serif;
+}
+
+.community-grid {
+  width: 920px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 254px 382px 254px;
+  grid-template-rows: 174px 174px 174px;
+  gap: 18px;
+}
+
+.card {
+  background: transparent;
+  border: 1px solid #8a8a8a;
+  padding: 26px 24px;
+  position: relative;
+}
+
+.card h2 {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 18px;
+  color: #1f1f1f;
+}
+
+.card p {
+  font-size: 15px;
+  line-height: 1.65;
+  color: #222;
+}
+
+.card-tall {
+  grid-row: 1 / 4;
+  grid-column: 1 / 2;
+  padding: 0;
+}
+
+.card-wide {
+  grid-column: 2 / 3;
+}
+
+.bottom-card {
+  grid-row: 3 / 4;
+}
+
+.card-small {
+  grid-column: 3 / 4;
+}
+
+.btn-more {
+  display: inline-block;
+  margin-top: 22px;
+  min-width: 74px;
+  height: 24px;
+  line-height: 24px;
+  text-align: center;
+  background: #ff6b00;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 12px;
+  padding: 0 12px;
+}
+
+.image-card {
+  background: transparent;
+}

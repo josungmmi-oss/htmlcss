@@ -1,0 +1,182 @@
+
+@charset "utf-8";
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Thin.woff2') format('woff2');
+    font-weight: 100;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-ExtraLight.woff2') format('woff2');
+    font-weight: 200;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Light.woff2') format('woff2');
+    font-weight: 300;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-SemiBold.woff2') format('woff2');
+    font-weight: 600;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-display: swap;
+}
+;
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-ExtraBold.woff2') format('woff2');
+    font-weight: 800;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Black.woff2') format('woff2');
+    font-weight: 900;
+    font-display: swap;
+}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #eeeeee;
+      font-family: Arial, sans-serif;
+      color: #111;
+    }
+
+    .inner {
+      width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      height: 150px;
+      background: #eeeeee;
+    }
+
+    header .inner {
+      height: 100%;
+      background: #c7d8c6;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0;
+    }
+
+    .top-banner {
+      height: 450px;
+      background: #e6aaaa;
+    }
+
+    main {
+      background: #eeeeee;
+      padding-top: 40px;
+    }
+
+    main .inner {
+      background: transparent;
+    }
+
+    .side-dish-box {
+      width: 100%;
+      height: 1000px;
+      background: #ffff00;
+    }
+
+    .regular-side-dish-box {
+      width: 100%;
+      height: 600px;
+      background: #56d3df;
+    }
+
+    .new-side-dish-box {
+      width: 100%;
+      height: 1000px;
+      background: #5be570;
+    }
+
+    .middle-banner-box {
+      width: 100%;
+      height: 200px;
+      background: #ff4517;
+    }
+
+    .md-pick-box {
+      width: 100%;
+      height: 1000px;
+      background: #9b18ff;
+    }
+
+    .bottom-footer-box {
+      width: 1200px;
+      height: 200px;
+      background: #5be570;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0;
+    }
+
+    .footer-left-box {
+      width: 385px;
+      height: 125px;
+      background: rgba(255, 255, 255, 0.55);
+    }
+
+    .footer-right-box {
+      width: 775px;
+      height: 125px;
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    .search-box {
+      width: 350px;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.65);
+    }
+
+    .logo-box {
+      width: 350px;
+      height: 70px;
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    .right-box {
+      width: 350px;
+      height: 90px;
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    footer {
+      background: #eeeeee;
+    }

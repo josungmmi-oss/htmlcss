@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>커넥츠 이벤트 페이지</title>
+    <!-- 구글 폰트 적용: Noto Sans KR 및 나눔고딕(Nanum Gothic) -->
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* 기본 리셋 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        ul, li {
+            list-style: none;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* 레이아웃 가이드 */
+        .wrap {
+            min-width: 1600px;
+            width: 100%;
+        }
+        .inner {
+            width: 940px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* -------------------------------------------
+           1. Header & Hero Section
+        ------------------------------------------- */
+        .section-hero {
+            /* 가죽 느낌의 배경 설정: 컬러와 패턴 결합 */
+            background-color: #111111;
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(255,255,255,0.03) 0%, transparent 70%),
+                url('https://www.transparenttextures.com/patterns/black-leather.png'); /* 가죽 질감 패턴 */
+            background-repeat: repeat;
+            height: 1050px;
+            color: #fff;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 5px solid #7d3cf2;
+        }
+        
+        /* 상단 네비게이션: 패딩 200px 및 좌/중/우 배치 */
+        .top-nav {
+            position: relative;
+            z-index: 10;
+            padding: 30px 200px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+        }
+        .nav-left {
+            display: flex;
+            gap: 25px;
+            font-weight: 300;
+            color: #ccc;
+        }
+        .nav-center {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #fff;
+        }
+        .nav-right {
+            display: flex;
+            color: #ccc;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            padding-top: 80px;
+        }
+        /* 메인 타이틀: 나눔글꼴 적용 및 72px */
+        .hero-content h1 {
+            font-family: 'Nanum Gothic', sans-serif;
+            font-size: 72px;
+            font-weight: 800;
+            color: #b070ff;
+            line-height: 1.1;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        .hero-content h1 span {
+            color: #fff;
+            display: block;
+        }
+        .hero-content .subtitle {
+            font-size: 20px;
+            margin-top: 15px;
+            opacity: 0.8;
+            font-weight: 300;
+        }
+
+        /* 사은품 이미지 영역 */
+        .product-visual {
+            margin-top: 50px;
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+        .product-visual img {
+            max-width: 900px;
+            width: 100%;
+            height: auto;
+            display: block;
+            /* 그림자 효과로 입체감 부여 */
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.6));
+        }
+        /* 오직 평론가만! 말풍선 */
+        .badge-only {
+            position: absolute;
+            top: 20px;
+            right: 220px;
+            width: 110px;
+            height: 110px;
+            background: #7d3cf2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+            font-weight: bold;
+            line-height: 1.3;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        /* -------------------------------------------
+           2. Intro & Video Section
+        ------------------------------------------- */
+        .section-intro {
+            background: linear-gradient(135deg, #a485ff 0%, #76dbd1 100%);
+            padding: 120px 0;
+            text-align: center;
+            color: #fff;
+        }
+        .intro-title h2 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+        .video-box {
+            width: 800px;
+            height: 450px;
+            background: #000;
+            margin: 60px auto;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+            border: 8px solid rgba(255,255,255,0.2);
+        }
+        .video-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+        }
+        .play-btn {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(5px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s;
+        }
+        .video-box:hover .play-btn {
+            transform: scale(1.1);
+        }
+
+        .step-info {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: rgba(255,255,255,0.3);
+            margin-top: 80px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .step-item {
+            padding: 40px 20px;
+            background: rgba(0,0,0,0.15);
+        }
+        .step-item h4 { font-size: 14px; opacity: 0.6; text-transform: uppercase; margin-bottom: 15px; }
+        .step-item p { font-size: 18px; font-weight: 700; }
+
+        /* -------------------------------------------
+           3. Event Application Section
+        ------------------------------------------- */
+        .section-event {
+            background-color: #2b1d42;
+            padding: 120px 0;
+            color: #fff;
+            text-align: center;
+        }
+        .timer-title {
+            font-size: 32px;
+            margin-bottom: 40px;
+            font-weight: 700;
+        }
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 60px;
+        }
+        .time-box {
+            background: #fff;
+            color: #222;
+            width: 90px;
+            height: 110px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 56px;
+            font-weight: 900;
+            box-shadow: 0 10px 0px #ddd;
+        }
+        .time-sep {
+            font-size: 50px;
+            display: flex;
+            align-items: center;
+            color: #fff;
+            padding-bottom: 10px;
+        }
+        
+        .prize-container {
+            background: #1e1430;
+            padding: 60px 40px;
+            border-radius: 30px;
+            margin-top: 40px;
+        }
+        .prize-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+        .prize-item {
+            background: #fff;
+            color: #333;
+            padding: 30px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+        .prize-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        .prize-item img {
+            width: 100%;
+            height: 140px;
+            object-fit: contain;
+            margin-bottom: 15px;
+        }
+        .prize-name { font-weight: bold; margin-bottom: 8px; font-size: 16px; }
+        .prize-count { color: #7d3cf2; font-weight: 800; font-size: 22px; }
+        
+        .prize-item.disabled {
+            background: #f0f0f0;
+            opacity: 0.6;
+        }
+        .sold-out-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            font-weight: 800;
+            font-size: 20px;
+        }
+
+        .apply-form {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .input-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .input-group input {
+            flex: 1;
+            padding: 20px;
+            border-radius: 8px;
+            border: none;
+            font-size: 18px;
+            background: #f8f8f8;
+        }
+        .apply-btn {
+            background: #7d3cf2;
+            color: #fff;
+            width: 100%;
+            padding: 22px;
+            border: none;
+            border-radius: 8px;
+            font-size: 24px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .apply-btn:hover { background: #662ad1; }
+
+        /* -------------------------------------------
+           4. Board / Winners Section
+        ------------------------------------------- */
+        .section-board {
+            padding: 120px 0;
+            background: #fff;
+        }
+        .board-tabs {
+            display: flex;
+            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 40px;
+        }
+        .tab {
+            padding: 18px 50px;
+            cursor: pointer;
+            font-weight: 700;
+            color: #aaa;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+        .tab.active {
+            color: #7d3cf2;
+            border-bottom: 3px solid #7d3cf2;
+            margin-bottom: -2px;
+        }
+
+        .board-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .board-table th {
+            background: #fbfbfb;
+            padding: 20px;
+            text-align: center;
+            font-size: 15px;
+            border-bottom: 1px solid #eee;
+            color: #666;
+        }
+        .board-table td {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            font-size: 15px;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 50px;
+        }
+        .page-num {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #eee;
+            font-size: 15px;
+            cursor: pointer;
+        }
+        .page-num.active {
+            background: #7d3cf2;
+            color: #fff;
+            border-color: #7d3cf2;
+        }
+
+        /* -------------------------------------------
+           5. Notices & Footer
+        ------------------------------------------- */
+        .section-notice {
+            background: #f4f4f4;
+            padding: 80px 0;
+            font-size: 14px;
+            color: #777;
+        }
+        .notice-list li {
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 20px;
+        }
+        .notice-list li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #aaa;
+        }
+
+        .footer {
+            background: #111;
+            color: #666;
+            padding: 80px 0;
+            text-align: center;
+            font-size: 13px;
+        }
+        .footer-logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 25px;
+            letter-spacing: 2px;
+        }
+        .footer-links {
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+        .footer-links a:hover { color: #fff; }
+    </style>
+</head>
+<body>
+
+    <div class="wrap">
+        
+        <!-- Header & Hero Section -->
+        <section class="section-hero">
+            <!-- 해더: 패딩 200px 및 지정 텍스트 배치 -->
+            <nav class="top-nav">
+                <div class="nav-left">
+                    <a href="#">광고주센터</a>
+                    <a href="#">ROTICON</a>
+                    <a href="#">고객센터</a>
+                </div>
+                <div class="nav-center">CONECTS</div>
+                <div class="nav-right">
+                    <a href="#">로그인/회원가입</a>
+                </div>
+            </nav>
+
+            <div class="inner">
+                <div class="hero-content">
+                    <h1>커넥츠가<br><span>미러리스 밀어줄게</span></h1>
+                    <p class="subtitle">매일 밤 10시, 선착순 100명 당첨 이벤트!</p>
+                    
+                    <div class="product-visual">
+                        <!-- [수정 가능] 아래 src 속성의 파일명을 원하는 상품 이미지 파일명으로 교체하세요 -->
+                        <img src="image_9ac723.jpg" alt="미러리스 카메라 및 사은품 메인 비주얼">
+                        <div class="badge-only">오직<br>평론가만!</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Intro & Video Section -->
+        <section class="section-intro">
+            <div class="inner">
+                <div class="intro-title">
+                    <h2>소중한 경험을 공유하는 여러분을 커넥츠가 응원합니다!</h2>
+                    <p>커넥츠는 여러분의 합격을 위해 최선을 다합니다.<br>매일 밤 찾아오는 놀라운 혜택을 놓치지 마세요.</p>
+                </div>
+
+                <div class="video-box">
+                    <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80&w=1000" alt="비디오 썸네일">
+                    <div class="play-btn">
+                        <svg width="50" height="50" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                </div>
+
+                <div class="step-info">
+                    <div class="step-item">
+                        <h4>STEP 1</h4>
+                        <p>이벤트 페이지 접속</p>
+                    </div>
+                    <div class="step-item">
+                        <h4>STEP 2</h4>
+                        <p>원하는 선물 선택</p>
+                    </div>
+                    <div class="step-item">
+                        <h4>STEP 3</h4>
+                        <p>매일 밤 10시 응모</p>
+                    </div>
+                    <div class="step-item">
+                        <h4>STEP 4</h4>
+                        <p>실시간 당첨 확인</p>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 60px;">
+                    <a href="#" style="display:inline-block; background:#7d3cf2; padding: 20px 60px; border-radius: 40px; font-weight:bold; font-size: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">지금 바로 참여하기</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Event Application Section -->
+        <section class="section-event">
+            <div class="inner">
+                <h3 class="timer-title">내일 밤 10시 이벤트가 시작됩니다!</h3>
+                <div class="countdown">
+                    <div class="time-box">1</div>
+                    <div class="time-box">0</div>
+                    <div class="time-sep">:</div>
+                    <div class="time-box">0</div>
+                    <div class="time-box">0</div>
+                    <div class="time-sep">:</div>
+                    <div class="time-box">0</div>
+                    <div class="time-box">0</div>
+                    <div class="time-sep">:</div>
+                    <div class="time-box">0</div>
+                    <div class="time-box">2</div>
+                </div>
+
+                <div class="prize-container">
+                    <div class="prize-grid">
+                        <div class="prize-item">
+                            <div style="height:140px; background:#f5f5f5; border-radius:10px; margin-bottom:15px; display:flex; align-items:center; justify-content:center; font-size:12px; color:#999;">[소니 카메라]</div>
+                            <p class="prize-name">소니 미러리스 A5100</p>
+                            <p class="prize-count">30개</p>
+                        </div>
+                        <div class="prize-item disabled">
+                            <div style="height:140px; background:#f5f5f5; border-radius:10px; margin-bottom:15px; display:flex; align-items:center; justify-content:center; font-size:12px; color:#999;">[외장하드]</div>
+                            <p class="prize-name">외장하드 1TB</p>
+                            <p class="prize-count">0개</p>
+                            <div class="sold-out-overlay">품절</div>
+                        </div>
+                        <div class="prize-item">
+                            <div style="height:140px; background:#f5f5f5; border-radius:10px; margin-bottom:15px; display:flex; align-items:center; justify-content:center; font-size:12px; color:#999;">[식사권]</div>
+                            <p class="prize-name">신라호텔 식사권</p>
+                            <p class="prize-count">10개</p>
+                        </div>
+                        <div class="prize-item">
+                            <div style="height:140px; background:#f5f5f5; border-radius:10px; margin-bottom:15px; display:flex; align-items:center; justify-content:center; font-size:12px; color:#999;">[만년필]</div>
+                            <p class="prize-name">라미 만년필</p>
+                            <p class="prize-count">30개</p>
+                        </div>
+                        <div class="prize-item">
+                            <div style="height:140px; background:#f5f5f5; border-radius:10px; margin-bottom:15px; display:flex; align-items:center; justify-content:center; font-size:12px; color:#999;">[상품권]</div>
+                            <p class="prize-name">백화점 상품권</p>
+                            <p class="prize-count">20개</p>
+                        </div>
+                        <div class="prize-item">
+                            <div style="height:140px; background:#f5f5f5; border-radius:10px; margin-bottom:15px; display:flex; align-items:center; justify-content:center; font-size:12px; color:#999;">[바나나우유]</div>
+                            <p class="prize-name">바나나맛 우유</p>
+                            <p class="prize-count">100개</p>
+                        </div>
+                    </div>
+
+                    <form class="apply-form">
+                        <div class="input-group">
+                            <input type="text" placeholder="이름을 입력해주세요">
+                            <input type="text" placeholder="휴대폰 번호를 입력해주세요">
+                        </div>
+                        <button type="button" class="apply-btn">지금 응모하기</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Board Section -->
+        <section class="section-board">
+            <div class="inner">
+                <div class="board-tabs">
+                    <div class="tab active">전체 참여 현황</div>
+                    <div class="tab">실시간 당첨자</div>
+                    <div class="tab">나의 응모내역</div>
+                </div>
+
+                <div style="margin-bottom: 25px; display:flex; justify-content: space-between; align-items: flex-end;">
+                    <span style="font-size:16px; color:#555;">실시간 참여자 <strong>2,456</strong>명</span>
+                    <div style="display:flex; gap:8px;">
+                        <input type="text" placeholder="참여자 검색" style="padding:10px 15px; border:1px solid #ddd; border-radius:5px;">
+                        <button style="background:#333; color:#fff; padding:10px 25px; border:none; border-radius:5px; font-weight:bold; cursor:pointer;">검색</button>
+                    </div>
+                </div>
+
+                <table class="board-table">
+                    <thead>
+                        <tr>
+                            <th width="10%">번호</th>
+                            <th width="30%">참여자 정보</th>
+                            <th width="40%">응모 일시</th>
+                            <th width="20%">당첨 여부</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>123</td>
+                            <td>김*수 (010-****-1234)</td>
+                            <td>2023.10.27 22:00:05</td>
+                            <td><span style="background:#7d3cf2; color:#fff; padding:5px 15px; border-radius:20px; font-size:12px;">당첨</span></td>
+                        </tr>
+                        <tr>
+                            <td>122</td>
+                            <td>이*희 (010-****-5678)</td>
+                            <td>2023.10.27 22:00:08</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>121</td>
+                            <td>박*민 (010-****-9012)</td>
+                            <td>2023.10.27 22:00:10</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>120</td>
+                            <td>최*훈 (010-****-3456)</td>
+                            <td>2023.10.27 22:00:15</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>119</td>
+                            <td>정*영 (010-****-7890)</td>
+                            <td>2023.10.27 22:01:02</td>
+                            <td>-</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="pagination">
+                    <div class="page-num active">1</div>
+                    <div class="page-num">2</div>
+                    <div class="page-num">3</div>
+                    <div class="page-num">4</div>
+                    <div class="page-num">5</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Notice Section -->
+        <section class="section-notice">
+            <div class="inner">
+                <h4 style="margin-bottom: 25px; font-weight:bold; color:#333; font-size:18px;">이벤트 유의사항</h4>
+                <ul class="notice-list">
+                    <li>본 이벤트는 로그인 후 참여 가능하며, 한 아이디당 1회 응모 가능합니다.</li>
+                    <li>당첨자는 선착순 기준으로 선정되며, 사전에 고지된 경품 수량이 소진될 경우 조기 종료될 수 있습니다.</li>
+                    <li>기프티콘 사은품은 기입하신 휴대폰 번호로 발송되며, 번호 오기입으로 인한 재발송은 지원하지 않습니다.</li>
+                    <li>부정한 방법(매크로 사용, 다중 계정 등)으로 참여 시 당첨이 취소될 수 있습니다.</li>
+                    <li>경품 제세공과금은 당사에서 부담하며, 당첨자에게는 개별 연락을 통해 추가 정보를 요청할 수 있습니다.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="inner">
+                <div class="footer-logo">CONECTS</div>
+                <div class="footer-links">
+                    <a href="#">회사소개</a>
+                    <a href="#">이용약관</a>
+                    <a href="#" style="font-weight:bold; color:#fff;">개인정보처리방침</a>
+                    <a href="#">고객센터</a>
+                </div>
+                <p style="margin-bottom: 10px;">에스티유니타스 | 대표이사 : 홍길동 | 사업자등록번호 : 123-45-67890</p>
+                <p>Copyright © ST Unitas. All Rights Reserved.</p>
+            </div>
+        </footer>
+
+    </div>
+
+</body>
+</html>

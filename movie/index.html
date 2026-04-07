@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>동영상 삽입</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <h1>홍보/마케팅 동영상</h1>
+    <div class="imgbox">
+        <img src="./images/1.png" alt="샘플이미지">
+    </div>
+    <!--동영상 삽입-->
+    <div class="movie_wrap">
+        <div class="movie">
+            <!--video tag-->
+            <!--loop는 반복실행-->
+            <!--controls는 재생정지(제어)버튼-->
+            <video autoplay muted loop controls="true">
+                <source src="./movie/1.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="movie">
+            <video autoplay muted loop>
+                <source src="./movie/2.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="movie">
+            <video autoplay muted loop>
+                <source src="./movie/3.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="movie">
+            <video autoplay muted loop>
+                <source src="./movie/4.mp4" type="video/mp4">
+            </video>
+        </div>
+    </div>
+
+    
+</body>
+</html>

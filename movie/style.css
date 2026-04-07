@@ -1,0 +1,31 @@
+@charset "utf-8";
+body{
+font-family: "맑은고딕";
+}
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.imgbox{
+    width: 400px;
+    height: 400px;
+    background: pink;
+}
+.imgbox img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+/*동영상부모*/
+.movie_wrap{
+    width: 1216px;
+    height: 1016px;
+    display: flex;
+    /*부모요소크기에 맞으면 다음줄로 넘김*/
+    flex-wrap: wrap;
+    /* background: black; */
+    gap: 16px;
+    margin: 0 auto;
+}
+

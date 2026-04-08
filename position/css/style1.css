@@ -1,0 +1,113 @@
+@charset "utf-8";
+body{
+    font-family: "맑은고딕";
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #e5e5e5;
+}
+
+.container {
+  position: relative;
+  width: 1000px;
+  height: 1000px;
+  margin: 0 auto;
+  background: #87ceea;
+}
+
+/* 공통 작은 박스 */
+.box {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+}
+
+/* 보라 */
+.purple {
+  background: purple;
+}
+
+.purple1 {
+  top: 0;
+  left: 0;
+}
+
+.purple2 {
+  top: 0;
+  right: 0;
+}
+
+.purple3 {
+  bottom: 0;
+  left: 0;
+}
+
+.purple4 {
+  bottom: 0;
+  right: 0;
+}
+
+/* 노랑 */
+.yellow {
+  background: yellow;
+}
+
+.yellow1 {
+  top: 100px;
+  left: 100px;
+}
+
+.yellow2 {
+  top: 100px;
+  right: 100px;
+}
+
+.yellow3 {
+  bottom: 100px;
+  left: 100px;
+}
+
+.yellow4 {
+  bottom: 100px;
+  right: 100px;
+}
+
+/* 빨강 */
+.red {
+  background: red;
+}
+
+.red1 {
+  top: 200px;
+  left: 200px;
+}
+
+.red2 {
+  top: 200px;
+  right: 200px;
+}
+
+.red3 {
+  bottom: 200px;
+  left: 200px;
+}
+
+.red4 {
+  bottom: 200px;
+  right: 200px;
+}
+
+/* 중앙 검정 */
+.black {
+  background: black;
+  top: 400px;
+  left: 400px;
+}
+
+

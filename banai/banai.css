@@ -1,0 +1,428 @@
+@charset "utf-8";
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Thin.woff2")
+    format("woff2");
+  font-weight: 100;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-ExtraLight.woff2")
+    format("woff2");
+  font-weight: 200;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Light.woff2")
+    format("woff2");
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Regular.woff2")
+    format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Medium.woff2")
+    format("woff2");
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-SemiBold.woff2")
+    format("woff2");
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Bold.woff2")
+    format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-ExtraBold.woff2")
+    format("woff2");
+  font-weight: 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Black.woff2")
+    format("woff2");
+  font-weight: 900;
+  font-display: swap;
+}
+
+body {
+  font-family: "Pretendard";
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+header {
+  width: 1200px;
+  height: 150px;
+  background:grey;
+  margin: 0 auto;
+  /* 박스 옆으로 배치 */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header .search {
+  width: 350px;
+  height: 60px;
+  background: red;
+}
+
+header .logo {
+  width: 350px;
+  height: 70px;
+  background: blue;
+}
+
+header .right {
+  width: 350px;
+  height: 90px;
+  background: yellow;
+}
+
+#slider {
+  width: 100%;
+  height: 450px;
+  background: palegoldenrod;
+}
+
+main {
+  width: 1200px;
+  /* 최소 높이 */
+  min-height: 600px;
+  margin: 0 auto;
+}
+
+main .title {
+  text-align: center;
+}
+
+main .title h2 {
+  margin-bottom: 16px;
+  font-size: 28px;
+  font-weight: 600;
+  color: #111;
+}
+
+main .title p {
+  margin-bottom: 42px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #505050;
+}
+
+main .banchan {
+  width: 100%;
+  height: 1256px;
+  padding: 50px 16px 16px;
+}
+
+main .banchan .product {
+  width: 100%;
+  /* 자식 요소 옆으로 배치 */
+  display: flex;
+  /* 카드 사이 여백 */
+  gap: 16px;
+  /* 사이즈가 넘칠 경우 줄바꿈 */
+  flex-wrap: wrap;
+}
+
+main .banchan .product .card {
+  width: 280px;
+}
+
+main .banchan .product .card .imgbox {
+  width: 100%;
+  height: 370px;
+}
+
+main .banchan .product .card .imgbox img {
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  /* 이미지 왜곡방지  */
+  object-fit: cover;
+}
+
+main .banchan .product .card .info {
+  width: 100%;
+  height: 162px;
+  padding: 16px 2px;
+  background: #fff;
+}
+
+main .banchan .product .card .info .tag-new {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #753936;
+  background: #f5dede;
+  padding: 4px 4px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+main .banchan .product .card .info .tag-hot {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #136a18;
+  background: #dbe6dc;
+  padding: 4px 4px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+main .banchan .product .card .info .tag-spicy {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #ba8b3f;
+  background: #fdf0dc;
+  padding: 4px 4px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+main .banchan .product .card .info h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #111;
+}
+
+main .banchan .product .card .info p {
+  font-size: 16px;
+  font-weight: 400;
+  margin-bottom: 8px;
+  color: #b4b4b4;
+}
+
+main .banchan .product .card .info h4 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #111;
+}
+
+main .banchan .product .card .info .sale {
+  font-size: 18px;
+  font-weight: bold;
+  color: #bd2420;
+  margin-bottom: 8px;
+}
+
+main .banchan .product .card .info .price {
+  font-size: 14px;
+  font-weight: 400;
+  color: #767676;
+  text-decoration: line-through;
+}
+
+/*-----------------------------------*/
+
+/* 하늘색 박스 전체 배경 영역 */
+.day-banchan {
+  width: 100%;
+  padding-top: 40px;    /* 위쪽 여백은 기존대로 유지 (필요시 수정 가능) */
+  padding-bottom: 1px; /* 카드박스 아래쪽 여백을 16px로 수정 */
+  /* background-color: #87e8f5;  */
+
+}
+
+/* 제목 영역 중앙 정렬 */
+.day-banchan .tit {
+  text-align: center;
+  margin-bottom: 40px;
+  gap: 16px;
+}
+.day-banchan .tit h2 {
+  margin: 0; /* 기본 마진 제거 */
+  margin-bottom: 16px; /* h2와 p 사이 간격을 16px로 설정 */
+}
+
+.day-banchan .tit p {
+  margin: 0; /* 기본 마진 제거 (정확한 간격 계산을 위해) */
+}
+
+/* 상품 리스트 컨테이너 (전체 가로 1168px 및 중앙 정렬) */
+.day-banchan .product {
+  width: 1168px; /* 전체 가로 사이즈 */
+  margin: 0 auto; /* 부모 박스의 중앙에 위치 */
+  
+  display: flex;
+  gap: 16px; /* 카드 간격 16px */
+}
+
+/* 개별 카드 사이즈 설정 */
+.day-banchan .card {
+  width: 280px; /* 개별 카드 가로 사이즈 */
+  height: 538px; /* 개별 카드 세로 사이즈 */
+  background-color: #fff;
+  box-sizing: border-box;
+  overflow: hidden; /* 모서리가 둥글 경우 이미지가 삐져나오지 않게 함 */
+  border-radius: 6px;
+}
+
+/* 이미지 박스 (포지션 기준점) */
+.day-banchan .imgbox {
+  position: relative; /* 자식 요소의 absolute 위치 기준점이 됨 */
+  width: 100%;
+  height: 380px; /* 이미지가 들어갈 부분의 높이 */
+  overflow: hidden;
+}
+
+/* 메인 상품 이미지 꽉 차게 설정 */
+.day-banchan .imgbox img.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 이미지가 380px 높이에 맞춰 비율 유지하며 꽉 차도록 처리 */
+  display: block;
+}
+
+/* sale 아이콘 위치 (상단 위, 왼쪽 끝에서 16px) */
+.day-banchan .sale {
+  position: absolute;
+  top: 16; /* 상단 위 */
+  left: 16px; /* 왼쪽 끝에서 16px */
+  z-index: 10;
+}
+
+/* lock 아이콘 위치 (하단 아래, 오른쪽 끝에서 16px) */
+.day-banchan .lock {
+  position: absolute;
+  bottom: 16; /* 하단 아래 */
+  right: 16px; /* 오른쪽 끝에서 16px */
+  z-index: 10;
+}
+
+/* 하단 정보 텍스트 영역 */
+.day-banchan .info {
+  padding: 20px 16px;
+}
+
+/* 텍스트 스타일링 (기존 디자인 유지) */
+.day-banchan .info h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.day-banchan .info p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+.day-banchan .info h4 {
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.day-banchan .info .discount {
+  color: #ff4d4f;
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.day-banchan .info .price {
+  text-decoration: line-through;
+  color: #999;
+  font-size: 14px;
+}
+
+.day-banchan .info .new {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #753936;
+  background: #f5dede;
+  padding: 4px 4px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+.day-banchan .info .spicy {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #ba8b3f;
+  background: #fdf0dc;
+  padding: 4px 4px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+
+/*-----------------------------------------*/
+
+/* 신제품 반찬 */
+main .new-banchan {
+  width: 100%;
+  height: 1000px;
+  border: 5px solid red;
+}
+
+main .banner {
+  width: 100%;
+  height: 200px;
+  border: 5px solid green;
+}
+
+main .md-banchan {
+  width: 100%;
+  height: 1000px;
+  border: 5px solid yellow;
+}
+
+footer {
+  width: 1200px;
+  height: 200px;
+  background: #777;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+footer .footer-left {
+  width: 385px;
+  height: 125px;
+  background: rgb(199, 102, 102);
+}
+
+footer .footer-right {
+  width: 775px;
+  height: 125px;
+  background: rgb(98, 73, 148);
+}

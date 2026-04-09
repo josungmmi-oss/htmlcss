@@ -256,9 +256,8 @@ main .banchan .product .card .info .price {
 /* 하늘색 박스 전체 배경 영역 */
 .day-banchan {
   width: 100%;
-  padding-top: 40px;    /* 위쪽 여백은 기존대로 유지 (필요시 수정 가능) */
-  padding-bottom: 1px; /* 카드박스 아래쪽 여백을 16px로 수정 */
-  /* background-color: #87e8f5;  */
+  padding: 40px 8px;
+  /* background-color: #87e8f5; 시안의 하늘색 배경 */
 
 }
 
@@ -266,22 +265,15 @@ main .banchan .product .card .info .price {
 .day-banchan .tit {
   text-align: center;
   margin-bottom: 40px;
-  gap: 16px;
 }
-.day-banchan .tit h2 {
-  margin: 0; /* 기본 마진 제거 */
-  margin-bottom: 16px; /* h2와 p 사이 간격을 16px로 설정 */
-}
-
-.day-banchan .tit p {
-  margin: 0; /* 기본 마진 제거 (정확한 간격 계산을 위해) */
+.day-banchan .tit h2{
+    margin-bottom: 16px;
 }
 
 /* 상품 리스트 컨테이너 (전체 가로 1168px 및 중앙 정렬) */
 .day-banchan .product {
   width: 1168px; /* 전체 가로 사이즈 */
   margin: 0 auto; /* 부모 박스의 중앙에 위치 */
-  
   display: flex;
   gap: 16px; /* 카드 간격 16px */
 }
@@ -315,7 +307,7 @@ main .banchan .product .card .info .price {
 /* sale 아이콘 위치 (상단 위, 왼쪽 끝에서 16px) */
 .day-banchan .sale {
   position: absolute;
-  top: 16; /* 상단 위 */
+  top: 16px; /* 상단 위 */
   left: 16px; /* 왼쪽 끝에서 16px */
   z-index: 10;
 }
@@ -323,7 +315,7 @@ main .banchan .product .card .info .price {
 /* lock 아이콘 위치 (하단 아래, 오른쪽 끝에서 16px) */
 .day-banchan .lock {
   position: absolute;
-  bottom: 16; /* 하단 아래 */
+  bottom: 16px; /* 하단 아래 */
   right: 16px; /* 오른쪽 끝에서 16px */
   z-index: 10;
 }
@@ -334,10 +326,32 @@ main .banchan .product .card .info .price {
 }
 
 /* 텍스트 스타일링 (기존 디자인 유지) */
+
 .day-banchan .info h3 {
   font-size: 18px;
   margin-bottom: 8px;
 }
+.day-banchan .info .new {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #136a18;
+  background: #dbe6dc;
+  padding: 4px 4px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+.day-banchan .info .spicy {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #ba8b3f;
+  background: #fdf0dc;
+  padding: 4px 4px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
 
 .day-banchan .info p {
   font-size: 14px;
@@ -360,27 +374,6 @@ main .banchan .product .card .info .price {
   text-decoration: line-through;
   color: #999;
   font-size: 14px;
-}
-
-.day-banchan .info .new {
-  display: inline-block;
-  font-size: 13px;
-  font-weight: 600;
-  color: #753936;
-  background: #f5dede;
-  padding: 4px 4px;
-  border-radius: 4px;
-  margin-bottom: 8px;
-}
-.day-banchan .info .spicy {
-  display: inline-block;
-  font-size: 13px;
-  font-weight: 600;
-  color: #ba8b3f;
-  background: #fdf0dc;
-  padding: 4px 4px;
-  border-radius: 4px;
-  margin-bottom: 8px;
 }
 
 

@@ -1,0 +1,114 @@
+
+@charset "utf-8";
+
+body{
+    font-family: "맑은고딕";
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.box{
+    width: 1000px;
+    height: 1003px;
+    border: 5px solid red;
+    margin: 100px auto 0;
+    position: relative;
+
+}
+.box .tit{
+    position: absolute;
+    /*가로세로 가운데*/
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.box .left{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-top: -501.5px;
+    margin-left: -73px;
+    animation: left-ani 2s ease-in-out forwards;
+}
+/*애니 설정*/
+@keyframes left-ani {
+    0%{
+    left: 50%;
+    }
+    100%{
+    left: 20%;
+    }
+}
+
+
+.box .right{
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    margin-right: -73px;
+    margin-top: -501.5px;
+    animation: right-ani 2s ease-in-out forwards;
+
+}
+
+@keyframes right-ani {
+    from {right: 50%;}
+    to {right: 20%;}
+}
+
+.box .tit h2{
+    font-size: 36px;
+    color: #333;
+    font-weight: 900;
+    opacity: 0;
+    animation: h2-ani 1s ease-in-out forwards 2s;
+}
+
+@keyframes h2-ani {
+    0%{ 
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
+    }
+}
+
+.box .tit p{
+    font-size: 18px;
+    color: #ccc;
+    font-weight: 600;
+    margin: 24px 0;
+    opacity: 0;
+    animation: p-ani 1s ease-in-out forwards 2.5s;
+}
+
+@keyframes p-ani {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+button{
+    background: none;
+    border: none;
+    cursor: pointer;
+    opacity: 0;
+    animation: btn-ani 1s ease-in-out forwards 3s;
+}
+@keyframes btn-ani {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}

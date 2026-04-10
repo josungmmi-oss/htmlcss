@@ -1,0 +1,33 @@
+@charset "utf-8";
+body{
+    font-family: "맑은고딕";
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+div{
+    width: 100px;
+    height: 100px;
+    background: red;
+    /*중간 과정 만들기 원래 요소*/
+    /*호버에 명령하지말고 원래요소에 명령-부드럽게 처리*/
+    /* transition: all 3s; */
+    /*가속도*/
+    /* transition: all 3s ease-in-out; */
+    /*지연시간,처리시간-지연시간*/
+    /* transition: all 3s ;
+    transition-delay: 2s; */
+    transition: all 0.5s ease-in-out 1s;
+    /*--cross browsing--*/
+    -webkit-transition: all 3s;
+    /*--모두 적용--*/
+    -o-transition: all 3s;
+}
+
+div:hover{
+    width: 1500px;
+
+}

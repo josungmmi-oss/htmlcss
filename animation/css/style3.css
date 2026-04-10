@@ -1,0 +1,98 @@
+
+@charset "utf-8";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.box {
+  width: 1000px;
+  height: 300px;
+  border: 1px solid blue;
+  margin: 50px auto;
+  position: relative;
+}
+
+.boxx {
+  width: 100px;
+  height: 100px;
+  background: purple;
+  position: absolute;
+  left: 0;
+  top: 0;
+  animation: box-ani 2s ease-in-out infinite forwards;
+}
+
+/* 애니메이션 설정 */
+@keyframes box-ani {
+  0% {
+    left: 0;
+    top: 0;
+  }
+  25% {
+    left: 900px;
+    top: 0;
+  }
+  50% {
+    left: 900px;
+    top: 200px;
+  }
+  75% {
+    left: 0;
+    top: 200px;
+  }
+  100% {
+    left: 0;
+    top: 0;
+  }
+}
+
+.box1 {
+  width: 1000px;
+  height: 300px;
+  border: 3px solid red;
+  margin: 100px auto 0;
+  position: relative;
+}
+
+.boxx1 {
+  width: 100px;
+  height: 100px;
+  background: yellow;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  animation: box2-ani 2s ease-in-out forwards ;
+}
+
+@keyframes box2-ani {
+   0% {
+    left: 0;
+    top: 0;
+  }
+  20% {
+    left: 900px;
+    top: 0;
+  }
+  40% {
+    left: 900px;
+    top: 200px;
+  }
+  60% {
+    left: 0;
+    top: 200px;
+  }
+  80% {
+    left: 0;
+    top: 0;
+  }
+  100% {
+    left: -102px;
+    top: 0;
+  }
+}
+
+
+

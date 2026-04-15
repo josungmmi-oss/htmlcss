@@ -1,0 +1,82 @@
+@charset "utf-8";
+body { font-family: "맑은고딕";
+}
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+/*pc기기일때*/
+.wrap{
+    width: 1000px;
+    margin: 0 auto;
+}
+.wrap .blue-green{
+    width: 100%;
+    display: flex;
+}
+.wrap .red{
+    width: 100%;
+    height: 150px;
+    background: red;
+}
+.wrap .blue{
+    width: 50%;
+    height: 120px;
+    background: blue;
+}
+.wrap .green{
+    width: 50%;
+    height: 120px;
+    background: green;
+}
+
+/*notebook일때 기기의 해상도*/
+@media ( min-width:992px ) and ( max-width:1119px ) {
+    .wrap{
+        width: 100%;
+    }
+    body{
+        padding: 0 24px;
+    }
+}
+
+/*tablet일때 기기의 해상도*/
+@media ( min-width:768px ) and ( max-width:991px ) {
+    .wrap{
+        width: 100%;
+    }
+    .wrap .blue-green .blue{
+        height: 300px;
+    }
+    .wrap .blue-green .green{
+        height: 300px;
+    }
+}
+
+/*mobile일때*/
+@media ( min-width:320px ) and ( max-width:767px ) {
+    .wrap{
+        width: 100%;
+    }
+    .wrap .blue-green .red{
+        height: 300px;
+        
+    }
+    .wrap .blue-green .blue{
+        height: 300px;
+        width: 100%;
+        
+    }
+    .wrap .blue-green .green{
+        height: 300px;
+        width: 100%;
+    
+    }
+    .wrap .blue-green {
+        flex-direction: column;
+    }
+
+    
+    }
+

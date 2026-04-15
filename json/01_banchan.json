@@ -1,0 +1,79 @@
+[
+ {
+
+    "id":1,
+    "name":"쭈꾸미 풋마늘",
+    "descr": "푹 익혀서 먹기 편해요",
+    "price":2800,
+    "img": "images/01_banchan/banchan1.jpg"
+
+ }
+  {
+
+    "id":2,
+    "name":"쭈꾸미 미나리",
+    "descr": "미나리의 향기",
+    "price":2800,
+    "img": "images/01_banchan/banchan2.jpg"
+    
+ }
+   {
+
+    "id":3,
+    "name":"잡채",
+    "descr": "보들보들 맛있어요",
+    "price":2800,
+    "img": "images/01_banchan/banchan3.jpg"
+    
+ }
+   {
+
+    "id":4,
+    "name":"제육볶음",
+    "descr": "매콤 든든",
+    "price":3800,
+    "img": "images/01_banchan/banchan4.jpg"
+    
+ }
+   {
+
+    "id":5,
+    "name":"된장국",
+    "descr": "미나리의 향기",
+    "price":3800,
+    "img": "images/01_banchan/banchan5.jpg"
+    
+ }
+ {
+
+    "id":6,
+    "name":"맑은 순두부",
+    "descr": "미나리의 향기",
+    "price":4800,
+    "img": "images/01_banchan/banchan5.jpg"
+    
+ }
+
+ {
+
+    "id":7,
+    "name":"계란덮밥",
+    "descr": "미나리의 향기",
+    "price":4800,
+    "img": "images/01_banchan/banchan5.jpg"
+    
+ }
+
+ {
+
+    "id":8,
+    "name":"한우 야채 카레덮밥",
+    "descr": "미나리의 향기",
+    "price":3800,
+    "img": "images/01_banchan/banchan5.jpg"
+    
+ }
+
+
+
+]

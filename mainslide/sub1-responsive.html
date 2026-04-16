@@ -11,59 +11,13 @@
   <body>
     <div class="header-wrapper">
       <header class="block-red">
-        <a href="./index-responsive.html" class="logo-link mobile-logo-link">
-          <div class="box-logo">
-            <img
-              src="./imgi_13_logo_pc.svg"
-              alt="집반찬연구소 로고"
-              class="logo-img"
-            />
-            <span class="logo-text">집반찬연구소</span>
-          </div>
-        </a>
-
-        <div class="mobile-top-row">
-          <button type="button" class="mobile-search-toggle" aria-expanded="false" aria-label="검색 열기">
-            <img
-              src="./icons/imgi_27_icon-search-f5f5f5-18.svg"
-              alt="검색"
-              class="icon-search"
-            />
-          </button>
-
-          <a href="./index-responsive.html" class="logo-link desktop-logo-link">
-            <div class="box-logo">
-              <img
-                src="./imgi_13_logo_pc.svg"
-                alt="집반찬연구소 로고"
-                class="logo-img"
-              />
-            </div>
-          </a>
-
-          <div class="mobile-header-actions">
-            <div class="right-top-bar">
-              <span class="top-link">로그인</span>
-              <span class="top-link">회원가입</span>
-              <span class="top-link top-link-my">내정보</span>
-            </div>
-            <button type="button" class="mobile-menu-toggle" aria-expanded="false" aria-label="메뉴 열기">
-              <img
-                src="./icons/imgi_30_icon-list-d4d4d4-28 1.png"
-                alt="메뉴"
-                class="icon-util"
-              />
-            </button>
-          </div>
-        </div>
-
         <div class="box-search">
           <input
             type="text"
             placeholder="반찬을 입력해주세요"
             class="search-input"
           />
-          <button class="search-btn" type="button">
+          <button class="search-btn" type="button" aria-label="검색">
             <img
               src="./icons/imgi_27_icon-search-f5f5f5-18.svg"
               alt="검색"
@@ -71,17 +25,25 @@
             />
           </button>
         </div>
-
+        <a href="./index-responsive.html" aria-label="집반찬연구소 홈">
+          <div class="box-logo">
+            <img
+              src="./imgi_13_logo_pc.svg"
+              alt="집반찬연구소 로고"
+              class="logo-img"
+            />
+          </div>
+        </a>
         <div class="box-right">
           <div class="right-top-bar">
-            <span class="top-link">로그인</span>
-            <span class="top-link">회원가입</span>
-            <span class="top-link">내정보</span>
+            <span>로그인</span>
+            <span>회원가입</span>
+            <span>내정보</span>
           </div>
           <div class="right-bottom-bar">
             <span class="util-item"
               ><img
-                src="./icons/imgi_28_icon-tel2.svg"
+                src="./icons/icon-tel2.svg"
                 alt="전화주문"
                 class="icon-util"
               />
@@ -105,16 +67,16 @@
             >
             <span class="util-item"
               ><img
-                src="./icons/imgi_20_icon-cart-0d5611-14.svg"
+                src="./icons/imgi_31_icon-cart-d4d4d4-28 1.png"
                 alt="장바구니"
                 class="icon-util"
               />
               장바구니</span
             >
           </div>
+          <button class="mobile-menu-toggle" type="button" aria-label="메뉴 열기"></button>
         </div>
-
-        <div class="mobile-util-menu" hidden>
+        <div class="mobile-drawer">
           <span class="util-item"
             ><img
               src="./icons/imgi_28_icon-tel2.svg"
@@ -141,7 +103,7 @@
           >
           <span class="util-item"
             ><img
-              src="./icons/imgi_20_icon-cart-0d5611-14.svg"
+              src="./icons/imgi_31_icon-cart-d4d4d4-28 1.png"
               alt="장바구니"
               class="icon-util"
             />
@@ -189,7 +151,9 @@
     </section>
 
     <section class="review-summary">
-      <p><span class="star">★</span><strong>4.9</strong><span> 6,936명의 고객님이 인정한 집반찬</span></p>
+      <p><span class="star">★&nbsp;</span><strong>&nbsp;&nbsp;4.9&nbsp;&nbsp;</strong>
+        <span> 6,936명의 고객님이 인정한 집반찬</span>
+      </p>
     </section>
 
     <nav class="tab-bar">
@@ -200,7 +164,7 @@
 
     <section class="detail-section detail-section--description" id="detail">
       <div class="detail-image-block">
-        <img src="./04_md_banchan/2426_ZIP_P_0173_S_33.png" alt="한끼 한돈제육_완조리 상세 이미지">
+        <img src="./home/2426_ZIP_P_0173_S_3.png" alt="한끼 한돈제육_완조리 상세 이미지">
       </div>
 
       <div class="detail-copy">
@@ -366,39 +330,68 @@
     </div>
   
   
+    
     <script>
-      (function () {
-        const menuToggle = document.querySelector('.mobile-menu-toggle');
-        const menu = document.querySelector('.mobile-util-menu');
-        const searchToggle = document.querySelector('.mobile-search-toggle');
-        const searchBox = document.querySelector('.box-search');
+      document.addEventListener("DOMContentLoaded", function () {
+        var headerWrapper = document.querySelector(".header-wrapper");
+        var menuButton = document.querySelector(".mobile-menu-toggle");
+        var searchButton = document.querySelector(".search-btn");
+        var searchInput = document.querySelector(".search-input");
 
-        if (menuToggle && menu) {
-          menuToggle.addEventListener('click', function () {
-            const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
-            menuToggle.setAttribute('aria-expanded', String(!expanded));
-            menu.hidden = expanded;
+        function isMobileViewport() {
+          return window.matchMedia("(max-width: 767px)").matches;
+        }
+
+        function closeMobileMenu() {
+          if (!headerWrapper || !menuButton) return;
+          headerWrapper.classList.remove("is-open");
+          menuButton.setAttribute("aria-label", "메뉴 열기");
+        }
+
+        function closeMobileSearch() {
+          if (!headerWrapper || !searchButton) return;
+          headerWrapper.classList.remove("is-search-open");
+          searchButton.setAttribute("aria-label", "검색 열기");
+        }
+
+        if (headerWrapper && menuButton) {
+          menuButton.addEventListener("click", function () {
+            if (isMobileViewport()) {
+              closeMobileSearch();
+            }
+            headerWrapper.classList.toggle("is-open");
+            var opened = headerWrapper.classList.contains("is-open");
+            menuButton.setAttribute("aria-label", opened ? "메뉴 닫기" : "메뉴 열기");
           });
         }
 
-        if (searchToggle && searchBox) {
-          searchToggle.addEventListener('click', function () {
-            if (window.innerWidth > 767) return;
-            const expanded = searchToggle.getAttribute('aria-expanded') === 'true';
-            searchToggle.setAttribute('aria-expanded', String(!expanded));
-            searchBox.classList.toggle('is-open', !expanded);
+        if (headerWrapper && searchButton) {
+          searchButton.addEventListener("click", function (event) {
+            if (!isMobileViewport()) {
+              return;
+            }
+
+            event.preventDefault();
+            closeMobileMenu();
+            headerWrapper.classList.toggle("is-search-open");
+            var opened = headerWrapper.classList.contains("is-search-open");
+            searchButton.setAttribute("aria-label", opened ? "검색 닫기" : "검색 열기");
+
+            if (opened && searchInput) {
+              window.setTimeout(function () {
+                searchInput.focus();
+              }, 50);
+            }
           });
         }
 
-        window.addEventListener('resize', function () {
-          if (window.innerWidth > 767) {
-            if (menu) menu.hidden = true;
-            if (menuToggle) menuToggle.setAttribute('aria-expanded', 'false');
-            if (searchBox) searchBox.classList.remove('is-open');
-            if (searchToggle) searchToggle.setAttribute('aria-expanded', 'false');
+        window.addEventListener("resize", function () {
+          if (!isMobileViewport()) {
+            closeMobileMenu();
+            closeMobileSearch();
           }
         });
-      })();
+      });
     </script>
 
   </body>

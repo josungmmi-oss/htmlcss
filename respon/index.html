@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nature Skin - Aromatherapy</title>
+    <!-- 구글 폰트 불러오기: 로고용 필기체, 본문 및 제목용 고딕체 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* =========================================
+           Reset & Base Styles
+           ========================================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            /* 바깥쪽 배경색 설정 (상단에서 아래로 갈수록 점점 어두워지는 그라데이션 효과) */
+            background: linear-gradient(to bottom, #d8cabd 0%, #a69687 100%);
+            background-attachment: fixed; /* 스크롤 시에도 배경 그라데이션 고정 */
+            min-height: 100vh; /* 화면 전체 높이 확보 */
+            font-family: 'Noto Sans KR', sans-serif;
+            color: #333;
+            /* 기본 패딩을 제거하고 container의 margin으로 전체 여백을 제어합니다. */
+            padding: 0; 
+        }
+
+        /* 흰색 콘텐츠 영역 */
+        .container {
+            background-color: #ffffff;
+            /* [모바일 기본] 좌우 여백 16px 적용 (width:100% 제거) */
+            margin: 20px 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* 필기체 공통 클래스 */
+        .cursive-font {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        /* =========================================
+           Header & Navigation (Mobile First)
+           ========================================= */
+        .site-header {
+            position: relative;
+        }
+
+        .visual-bg {
+            position: relative;
+            height: 500px; /* 헤더 튤립 배경 이미지 높이 기존 450px에서 500px로 증가 */
+            background-image: url('./images/main_img02.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* 로고: 모바일에서는 우측 상단 */
+        .logo {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 32px;
+            color: #111;
+        }
+
+        /* 네비게이션: 모바일에서는 배경 이미지 중앙에 띄우고 간격 추가 */
+        .gnb {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            display: flex;
+            flex-direction: column; /* 모바일에서는 세로로 배열 */
+            gap: 12px;
+        }
+
+        .gnb a {
+            display: block;
+            background-color: rgba(255, 0, 0, 0.5); /* 네비게이션 바 투명도 적용 */
+            color: #ffffff;
+            text-align: center;
+            padding: 12px;
+            border-radius: 8px; /* 모서리 둥글기 추가 */
+            border-bottom: none; /* 하단 선 제거 */
+            text-decoration: none;
+            font-size: 15px;
+            transition: background-color 0.3s;
+        }
+
+        .gnb a:hover {
+            background-color: rgba(255, 0, 0, 0.8);
+        }
+
+        /* =========================================
+           Main Content (Mobile First)
+           ========================================= */
+        main {
+            padding: 30px 16px; /* 모바일 메인 영역 좌우 여백 16px */
+        }
+
+        .main-title {
+            text-align: center;
+            font-size: 25.2px;
+            margin-bottom: 25px;
+        }
+
+        .sub-title {
+            font-size: 20.8px;
+            margin-bottom: 15px;
+        }
+
+        .text-area p {
+            font-size: 14px;
+            line-height: 1.7;
+            color: #444;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .image-gallery {
+            display: flex;
+            flex-direction: column;
+            gap: 16px; /* 이미지 간격 16px */
+            margin-top: 16px; /* 위 여백 16px */
+            margin-bottom: 16px; /* 아래 여백 16px */
+        }
+
+        .img-box {
+            width: 100%;
+            aspect-ratio: 16 / 9; /* 이미지 비율 통일 */
+            overflow: hidden;
+        }
+
+        .img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* 기본 상태를 흑백으로 설정 */
+            filter: grayscale(100%); 
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+        
+        .img-box:hover img {
+            transform: scale(1.05);
+            /* 마우스 오버 시 컬러로 전환 */
+            filter: grayscale(0%);
+        }
+
+        /* =========================================
+           Footer
+           ========================================= */
+        footer {
+            background-color: #3b3b3b;
+            color: #cccccc;
+            text-align: center;
+            padding: 20px;
+            font-size: 13px;
+        }
+
+        /* =========================================
+           Media Query: Tablet (768px 이상)
+           ========================================= */
+        @media screen and (min-width: 768px) {
+            .container {
+                /* [태블릿] 좌우 여백 24px 적용 */
+                margin: 40px 24px; 
+            }
+
+            .visual-bg {
+                height: 400px; /* 태블릿 화면 이미지 높이 기존 350px에서 400px로 증가 */
+            }
+
+            /* 로고: 태블릿부터는 배경 이미지 상하 중앙으로 이동 */
+            .logo {
+                top: 50%;
+                bottom: auto;
+                right: 30px;
+                transform: translateY(-50%);
+                font-size: 38px;
+            }
+
+            /* 네비게이션: 헤더 이미지 위 하단에 겹치도록 절대 위치로 변경 */
+            .gnb {
+                position: absolute;
+                top: auto; /* 모바일의 top:50% 속성 초기화 */
+                bottom: 0;
+                left: 0;
+                transform: none;
+                width: 100%;
+                height: 50px; /* 네비게이션 높이 50px 지정 */
+                flex-direction: row;
+                gap: 0;
+                background-color: rgba(255, 0, 0, 0.5); /* 태블릿/PC 네비게이션 바 투명도 적용 */
+            }
+
+            .gnb a {
+                flex: 1;
+                padding: 0; /* 기존 padding 제거 */
+                line-height: 50px; /* 50px 높이에 맞춰 글자 수직 중앙 정렬 */
+                border-radius: 0;
+                background-color: transparent;
+                border-right: 1px solid rgba(255, 255, 255, 0.2);
+                font-size: 16px;
+            }
+
+            .gnb a:last-child {
+                border-right: none;
+            }
+
+            main {
+                padding: 40px 24px; /* 태블릿 메인 영역 좌우 여백 24px */
+            }
+
+            /* 이미지 갤러리: 3개 가로 배열 */
+            .image-gallery {
+                flex-direction: row;
+                justify-content: space-between;
+                /* 위, 아래 여백 및 사이 간격을 16px로 통일 */
+                gap: 16px;
+                margin-top: 16px;
+                margin-bottom: 16px;
+            }
+
+            .img-box {
+                /* 간격(16px * 2 = 32px)을 제외하고 3등분 */
+                width: calc((100% - 32px) / 3);
+                aspect-ratio: 4 / 3;
+            }
+        }
+
+        /* =========================================
+           Media Query: PC (960px 이상)
+           ========================================= */
+        @media screen and (min-width: 960px) {
+            .container {
+                /* [PC] inner size 960px 고정, 상하 여백 0 및 가운데 정렬 */
+                max-width: 960px; 
+                margin: 0 auto; 
+            }
+
+            main {
+                padding: 16px; /* PC 버전 메인 영역 상하좌우 여백 16px */
+            }
+
+            /* 콘텐츠 영역: 텍스트(좌) / 이미지(우) 2단 레이아웃 (7:3 비율) */
+            .content-wrapper {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+            }
+
+            .text-area {
+                /* 가로 70% 차지 */
+                width: 70%; 
+                padding-right: 40px;
+            }
+            
+            .main-title {
+                font-size: 29.4px;
+                margin-bottom: 35px;
+                /* text-area 내부에서 중앙 정렬 */
+                text-align: center;
+            }
+
+            .text-area p {
+                font-size: 15px;
+            }
+
+            /* 이미지 갤러리: 우측에 세로로 배열 */
+            .image-gallery {
+                /* 가로 30% 차지 */
+                width: 30%;
+                flex-direction: column;
+                /* PC에서는 main의 상하 여백이 16px이므로 추가 margin을 없앰 */
+                margin-top: 0;
+                margin-bottom: 0;
+                /* 세로 이미지 사이 간격 16px */
+                gap: 16px;
+            }
+
+            .img-box {
+                width: 100%;
+                aspect-ratio: 16 / 10;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- 헤더 영역 -->
+        <header class="site-header">
+            <!-- 배경 이미지 및 로고 -->
+            <div class="visual-bg">
+                <h1 class="logo cursive-font">
+                    <a href="index.html" style="color: inherit; text-decoration: none;">Nature Skin</a>
+                </h1>
+            </div>
+            
+            <!-- 네비게이션 메뉴 -->
+            <nav class="gnb">
+                <a href="#">Nature Skin</a>
+                <a href="#">Guide Info</a>
+                <a href="#">Reservation</a>
+                <a href="#">Custom</a>
+            </nav>
+        </header>
+
+        <!-- 메인 콘텐츠 영역 -->
+        <main>
+            <div class="content-wrapper">
+                <!-- 좌측 텍스트 영역 (PC 기준 좌측, 모바일/태블릿 기준 상단) -->
+                <article class="text-area">
+                    <!-- 필기체(cursive-font) 클래스를 제거하여 고딕체로 변경, 텍스트 영역 안으로 이동 -->
+                    <h2 class="main-title">About Nature Skin</h2>
+                    <h3 class="sub-title">What is Aromatherapy</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione dolor veniam cum sunt ipsam, esse asperiores quas, sed eveniet, delectus ad! Rerum commodi assumenda iure reiciendis distinctio laborum, quod odit.</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita obcaecati, repellendus incidunt voluptate, esse eaque dolor ducimus ab pariatur architecto distinctio! Autem quia labore necessitatibus aperiam accusamus. Repudiandae, iusto, accusantium.</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit mollitia itaque eum libero ab dignissimos nostrum facere illum necessitatibus! Deleniti illum quibusdam dignissimos dolore earum fugiat pariatur, tempora nam sunt.</p>
+                </article>
+
+                <!-- 우측 (또는 하단) 이미지 갤러리 -->
+                <aside class="image-gallery">
+                    <div class="img-box">
+                        <img src="./images/subimg01.png" alt="아로마 오일 병과 식물">
+                    </div>
+                    <div class="img-box">
+                        <img src="./images/subimg02.png" alt="말린 꽃잎과 손">
+                    </div>
+                    <div class="img-box">
+                        <img src="./images/subimg03.png" alt="꽃이 담긴 유리병">
+                    </div>
+                </aside>
+            </div>
+        </main>
+
+        <!-- 푸터 영역 -->
+        <footer>
+            <p>&copy; Nature Skin.</p>
+        </footer>
+    </div>
+
+</body>
+</html>

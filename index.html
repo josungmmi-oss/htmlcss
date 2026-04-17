@@ -1,322 +1,51 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COMMUNITY - 삼양식품</title>
-    <!-- 웹폰트: Noto Sans KR -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <style>
-        /* 초기화 및 기본 설정 */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Noto Sans KR', sans-serif;
-            color: #333;
-            background-color: #fff;
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* 전체 컨테이너 */
-        .container {
-            max-width: 1178px; /* 내부 컨텐츠 1138px + 좌우 패딩 40px */
-            margin: 0 auto;
-            padding: 80px 20px;
-        }
-
-        /* 상단 헤더 섹션 */
-        .header-section {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-
-        .header-section h1 {
-            font-size: 36px;
-            font-weight: 700;
-            color: #222;
-            margin-bottom: 15px;
-            letter-spacing: 1px;
-        }
-
-        .header-section p {
-            font-size: 16px;
-            color: #555;
-            line-height: 1.5;
-            margin-bottom: 30px;
-        }
-
-        /* 소셜 아이콘 링크 */
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-        }
-
-        .social-btn {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            text-decoration: none;
-            font-size: 20px;
-            font-weight: bold;
-            transition: transform 0.2s;
-        }
-
-        .social-btn:hover {
-            transform: translateY(-3px);
-        }
-
-        /* 각 소셜 미디어 색상 */
-        .btn-facebook { background-color: #4267B2; }
-        .btn-instagram { background-color: #8C5A3E; }
-        .btn-blog { background-color: #03C75A; font-size: 14px; }
-        .btn-twitter { background-color: #1DA1F2; font-family: serif; font-style: italic;}
-
-        /* 소셜 아이콘용 SVG (단순화) */
-        .social-btn svg {
-            width: 20px;
-            height: 20px;
-            fill: currentColor;
-        }
-
-        /* Flexbox 레이아웃 (정확한 픽셀값 사용) */
-        .flex-container {
-            display: flex;
-            justify-content: center;
-            gap: 19px; /* 칸 사이 여백 19px */
-            width: 100%;
-        }
-
-        /* 왼쪽 열 */
-        .flex-col-left {
-            width: 313px; /* 가로 313px */
-            height: 655px; /* 세로 655px */
-            flex-shrink: 0;
-            border: 1px solid #777;
-            background-color: #fff;
-            transition: background-color 0.3s ease;
-        }
-
-        .flex-col-left:hover {
-            background-color: #FFE0B2; /* 오렌지색 */
-        }
-
-        /* 가운데 열 */
-        .flex-col-middle {
-            width: 474px; /* 가로 474px */
-            flex-shrink: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 19px; /* 칸 사이 여백 19px */
-        }
-
-        /* 오른쪽 열 */
-        .flex-col-right {
-            width: 313px; /* 가로 313px */
-            flex-shrink: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 19px; /* 칸 사이 여백 19px */
-        }
-
-        /* 박스 공통 스타일 */
-        .box-item {
-            width: 100%;
-            border: 1px solid #777;
-            background-color: #fff;
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            justify-content: center;
-            overflow: hidden;
-            transition: background-color 0.3s ease;
-        }
-
-        /* ==============================
-           각 칸별 정확한 세로(Height) 명시 
-           ============================== */
-        
-        /* 가운데 칸 */
-        .box-promo {
-            height: 428px; /* 가운데 상 428px */
-            justify-content: flex-start;
-            padding-top: 38px;
-        }
-        .box-inquiry {
-            height: 207px; /* 가운데 하 207px */
-        }
-
-        /* 오른쪽 칸 */
-        .box-share {
-            height: 212px; /* 오른쪽 상 212px */
-        }
-        .box-notice {
-            height: 196px; /* 오른쪽 중 196px */
-        }
-        .box-mall {
-            height: 207px; /* 오른쪽 하 207px */
-        }
-
-        /* ==============================
-           호버 배경색 설정 
-           ============================== */
-        .box-promo:hover { background-color: #F5F5DC; } /* 베이지색 */
-        .box-share:hover { background-color: #FFF9C4; } /* 연노랑색 */
-        .box-notice:hover { background-color: #FFD54F; } /* 진노랑색 */
-        .box-inquiry:hover { background-color: #D7CCC8; } /* 브라운색 */
-        .box-mall:hover { background-color: #DCEDC8; } /* 연두색 */
-
-
-        /* 텍스트 타이포그래피 */
-        .box-item h3 {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 15px;
-            color: #111;
-        }
-
-        .box-item p {
-            font-size: 15px;
-            color: #111;
-            line-height: 1.5;
-            margin-bottom: 20px;
-            word-break: keep-all;
-        }
-
-        /* '자세히 보기' 버튼 공통 스타일 */
-        .btn-more {
-            display: inline-block;
-            background-color: #f15a24;
-            color: #fff;
-            padding: 5px 18px;
-            border-radius: 20px;
-            border: 1px solid #f15a24; /* 호버 시에 버튼 형태를 유지하기 위해 기본 테두리 추가 */
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 500;
-            transition: all 0.3s ease; /* 모든 속성(배경, 글자색) 부드럽게 전환 */
-        }
-
-        .btn-more:hover {
-            background-color: #fff; /* 마우스 호버 시 흰 배경 */
-            color: #f15a24; /* 오렌지색 글자 */
-        }
-
-        /* 반응형 모바일 최적화 (1150px 이하일 때 고정픽셀 해제) */
-        @media screen and (max-width: 1150px) {
-            .flex-container {
-                flex-direction: column;
-            }
-            .flex-col-left, .flex-col-middle, .flex-col-right {
-                width: 100%; /* 고정 너비 해제 */
-                height: auto;
-            }
-            .flex-col-left {
-                min-height: 350px;
-            }
-            .box-promo, .box-inquiry, .box-share, .box-notice, .box-mall {
-                height: auto; /* 고정 높이 해제 */
-                min-height: 200px;
-            }
-            .box-promo {
-                min-height: 300px;
-            }
-        }
-
-        @media screen and (max-width: 600px) {
-            .header-section h1 {
-                font-size: 28px;
-            }
-            .header-section p {
-                font-size: 14px;
-            }
-        }
-    </style>
+    <title>DOM객체 제어</title>
 </head>
 <body>
+    <ul id="list" > <!--class를 넣어도돼!-->
+        <lavel for="" id="">출생월</lavel>
+        <select name="" id="month">
 
-    <div class="container">
-        <!-- 헤더 및 소셜 링크 영역 -->
-        <div class="header-section">
-            <h1>COMMUNITY</h1>
-            <p>
-                삼양식품은 혁신적인 기술과 포용적인 사고로 여러분과 함께<br>
-                새로운 식문화를 만들어갑니다.
-            </p>
-            <div class="social-links">
-                <a href="#" class="social-btn btn-facebook" aria-label="Facebook">
-                    <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
-                </a>
-                <a href="#" class="social-btn btn-instagram" aria-label="Instagram">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-                </a>
-                <a href="#" class="social-btn btn-blog" aria-label="Blog">
-                    <span>blog</span>
-                </a>
-                <a href="#" class="social-btn btn-twitter" aria-label="Twitter">
-                    <span style="font-style: normal; font-family: sans-serif;">t</span>
-                </a>
-            </div>
-        </div>
+        </select>
+    </ul>
+    <script>
+        //ul을 자바로 가져올때 메모리 변수 기억
+        let list =document.getElementById("list")
+        console.log(list)
+        let output = "";
+        //지역변수
+        for(let i = 1; i <= 100; i++) {
+        output = output + `<li>data${i}</li>`;
+        }
+        list.innerHTML=output;
+        let month = document.getElementById(month);
+        console.log(month);
+        //지역변수
+        let output2 = "";
+        for(let i = 1;i<=12;i++) {
+        output2 = output2 +  `<option>${i}월</option>`
+        }
+        month.innerHTML=output2
 
-        <!-- 메인 콘텐츠 div 중첩 영역 (Flexbox 활용) -->
-        <div class="flex-container">
-            
-            <!-- 왼쪽 열 -->
-            <div class="flex-col-left">
-                <!-- 이미지 또는 비디오가 들어갈 자리 -->
-            </div>
+    </script>
+    <select id="year"></select>
 
-            <!-- 가운데 열 (홍보영상, 고객 문의) -->
-            <div class="flex-col-middle">
-                <!-- 홍보영상 -->
-                <div class="box-item box-promo">
-                    <h3>홍보영상</h3>
-                    <p>삼양식품의 다채로운 스토리를<br>영상으로 보여드립니다.</p>
-                    <a href="#" class="btn-more">자세히 보기</a>
-                </div>
-                <!-- 고객 문의 -->
-                <div class="box-item box-inquiry">
-                    <h3>고객 문의</h3>
-                    <p>삼양식품에게<br>여러분의 다양한 의견을 남겨주세요.</p>
-                    <a href="#" class="btn-more">자세히 보기</a>
-                </div>
-            </div>
+<script>
+    // select를 자바스크립트로 가져와서 메모리 변수에 기억
+    let year = document.getElementById("year");
+    console.log(year);
 
-            <!-- 오른쪽 열 (맛있는 나눔, 공지사항, 공식몰) -->
-            <div class="flex-col-right">
-                <!-- 맛있는 나눔 -->
-                <div class="box-item box-share">
-                    <h3>맛있는 나눔</h3>
-                    <p>모두가 행복한 맛있는 세상</p>
-                    <a href="#" class="btn-more">자세히 보기</a>
-                </div>
-                <!-- 공지사항 -->
-                <div class="box-item box-notice">
-                    <h3>공지사항</h3>
-                    <p>삼양식품 개인정보취급방침 개정 안내</p>
-                    <a href="#" class="btn-more">자세히 보기</a>
-                </div>
-                <!-- 삼양식품 공식몰 -->
-                <div class="box-item box-mall">
-                    <h3>삼양식품 공식몰</h3>
-                    <p>삼양식품의<br>다양한 제품을 만나보세요.</p>
-                    <a href="#" class="btn-more">자세히 보기</a>
-                </div>
-            </div>
+    // 지역변수
+    let output3 = "";
+    for (let i = 2026; i >= 1900; i--) {
+        output3 = output3 + `<option>${i}년</option>`;
+    }
 
-        </div>
-    </div>
-
+    year.innerHTML = output3;
+</script>
 </body>
 </html>

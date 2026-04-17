@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>자전거 여행 & 날씨 앱</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* 부드러운 화면 전환을 위한 애니메이션 */
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* 글래스모피즘 효과 커스텀 클래스 */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        /* 스크롤바 숨기기 */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-800 flex justify-center items-center h-screen m-0 font-sans">
+
+    <!-- 모바일 앱 컨테이너 (정확히 375px * 812px 사이즈 고정) -->
+    <div class="w-[375px] h-[812px] bg-white relative overflow-hidden shadow-2xl flex flex-col">
+
+        <!-- ========================================== -->
+        <!-- 1. 메인 홈 화면 (Main View) -->
+        <!-- ========================================== -->
+        <!-- 하단 네비게이션 높이(80px = pb-20)를 제외한 영역 -->
+        <div id="main-view" class="flex-1 flex flex-col h-full overflow-y-auto no-scrollbar relative z-10 pb-20">
+            
+            <!-- 상단 헤더 & 이미지 롤링 슬라이더 영역 (정확히 높이 375px) -->
+            <div class="relative w-full h-[375px] shrink-0 rounded-b-[2rem] overflow-hidden flex flex-col justify-between group">
+                
+                <!-- 슬라이더 컨테이너 (이미지 3개 + 1개 클론, 무한 롤링을 위해 400% 너비 적용) -->
+                <div class="absolute inset-0 z-0 overflow-hidden bg-gray-200">
+                    <div id="slider-track" class="flex w-[400%] h-full">
+                        <!-- ▼▼▼ 여기에 본인의 이미지 주소 1, 2, 3을 넣으세요 ▼▼▼ -->
+                        <!-- 슬라이드 1 -->
+                        <img src="./images/riding1.png" alt="슬라이드 1" class="w-1/4 h-full object-cover">
+                        <!-- 슬라이드 2 -->
+                        <img src="./images/riding2.png" alt="슬라이드 2" class="w-1/4 h-full object-cover">
+                        <!-- 슬라이드 3 -->
+                        <img src="./images/riding3.png" alt="슬라이드 3" class="w-1/4 h-full object-cover">
+                        <!-- 슬라이드 1 (무한 루프를 위한 복사본) -->
+                        <img src="./images/riding2.png" alt="슬라이드 1 클론" class="w-1/4 h-full object-cover">
+                        <!-- ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ -->
+                    </div>
+                </div>
+                
+                <!-- 텍스트 가독성을 위한 고정 그라데이션 오버레이 -->
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/40 z-0 pointer-events-none"></div>
+
+                <!-- 20px 좌/우 슬라이드 이동 버튼 (사이드 중간) -->
+                <button onclick="prevSlide()" class="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-[20px] h-[20px] flex items-center justify-center bg-white/30 backdrop-blur-sm rounded-full text-white hover:bg-white/50 transition">
+                    <i data-lucide="chevron-left" class="w-4 h-4 -ml-0.5"></i>
+                </button>
+                <button onclick="nextSlide()" class="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-[20px] h-[20px] flex items-center justify-center bg-white/30 backdrop-blur-sm rounded-full text-white hover:bg-white/50 transition">
+                    <i data-lucide="chevron-right" class="w-4 h-4 -mr-0.5"></i>
+                </button>
+
+                <!-- 상태바 더미 공간 -->
+                <div class="relative z-10 h-12 w-full flex justify-between items-center px-6 pt-2">
+                    <span class="text-white font-bold text-sm">9:41</span>
+                    <div class="flex gap-1 text-white">
+                        <i data-lucide="signal" class="w-4 h-4"></i>
+                        <i data-lucide="wifi" class="w-4 h-4"></i>
+                        <i data-lucide="battery-full" class="w-4 h-4"></i>
+                    </div>
+                </div>
+
+                <!-- 환영 메시지 -->
+                <div class="relative z-10 p-6 pb-12 mt-auto pointer-events-none">
+                    <div class="text-white/90 text-sm mb-1 font-medium">안녕하세요!</div>
+                    <h1 class="text-2xl font-extrabold text-white drop-shadow-lg break-keep">홍길동 님 가입을 환영합니다.</h1>
+                </div>
+            </div>
+
+            <!-- 하단 컨텐츠 영역 (남은 공간을 Flex로 여백 없이 균등 분할 배분) -->
+            <div class="flex-1 flex flex-col justify-around px-5 pt-3 pb-2">
+                
+                <!-- 날씨 요약 위젯 -->
+                <div class="relative z-20 cursor-pointer transform transition active:scale-95 w-full" onclick="toggleView('weather-view')">
+                    <div class="bg-gradient-to-r from-orange-400 to-yellow-400 rounded-t-2xl p-2.5 pb-8 shadow-lg">
+                        <h2 class="text-white font-bold text-[17px] px-2">날씨 정보</h2>
+                    </div>
+                    <!-- 하얀색 겹치는 카드들 -->
+                    <div class="flex gap-3 -mt-6">
+                        <!-- 왼쪽: 날씨 아이콘과 온도 (기본 텍스트 김포시 장기동 설정) -->
+                        <div class="bg-white rounded-xl shadow-md p-3 flex-1 flex flex-col justify-between border border-gray-100 h-[88px]">
+                            <div id="mainWidgetDesc" class="text-[11px] text-gray-500 font-bold mb-1 line-clamp-1">김포시 장기동</div>
+                            <div class="flex justify-between items-end mt-1">
+                                <span id="mainWidgetTemp" class="text-3xl font-extrabold text-orange-400 leading-none">20°</span>
+                                <i data-lucide="sun" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i>
+                            </div>
+                        </div>
+                        <!-- 오른쪽: 완주코스 및 이동거리 -->
+                        <div class="flex-1 flex flex-col gap-2 h-[88px]">
+                            <div class="bg-white rounded-xl shadow-md px-3 py-2 flex justify-between items-center border border-gray-100 flex-1">
+                                <span class="text-[11px] text-gray-700 font-bold">완주코스</span>
+                                <span class="text-sm font-extrabold text-gray-800">1<span class="text-gray-400 text-[10px] font-medium ml-0.5">/10</span></span>
+                            </div>
+                            <div class="bg-white rounded-xl shadow-md px-3 py-2 flex justify-between items-center border border-gray-100 flex-1">
+                                <span class="text-[11px] text-gray-700 font-bold">이동거리</span>
+                                <span class="text-sm font-extrabold text-gray-800">15<span class="text-gray-400 text-[10px] font-medium ml-0.5">km</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 메뉴 아이콘 그리드 (여백 없이 배치) -->
+                <div class="grid grid-cols-4 gap-y-5 gap-x-1 w-full">
+                    <!-- 코스 -->
+                    <div class="flex flex-col items-center gap-1.5 cursor-pointer">
+                        <div class="w-[42px] h-[42px] rounded-full bg-blue-50 text-blue-500 flex justify-center items-center">
+                            <i data-lucide="map" class="w-5 h-5"></i>
+                        </div>
+                        <span class="text-[11px] text-gray-600 font-medium">코스</span>
+                    </div>
+                    <!-- 수화물 -->
+                    <div class="flex flex-col items-center gap-1.5 cursor-pointer">
+                        <div class="w-[42px] h-[42px] rounded-full bg-blue-50 text-blue-500 flex justify-center items-center">
+                            <i data-lucide="briefcase" class="w-5 h-5"></i>
+                        </div>
+                        <span class="text-[11px] text-gray-600 font-medium">수화물</span>
+                    </div>
+                    <!-- 인증확인 -->
+                    <div class="flex flex-col items-center gap-1.5 cursor-pointer">
+                        <div class="w-[42px] h-[42px] rounded-full bg-blue-50 text-blue-500 flex justify-center items-center">
+                            <i data-lucide="stamp" class="w-5 h-5"></i>
+                        </div>
+                        <span class="text-[11px] text-gray-600 font-medium">인증확인</span>
+                    </div>
+                    <!-- 숙소 -->
+                    <div class="flex flex-col items-center gap-1.5 cursor-pointer">
+                        <div class="w-[42px] h-[42px] rounded-full bg-blue-50 text-blue-500 flex justify-center items-center">
+                            <i data-lucide="hotel" class="w-5 h-5"></i>
+                        </div>
+                        <span class="text-[11px] text-gray-600 font-medium">숙소</span>
+                    </div>
+                    <!-- 보급소 -->
+                    <div class="flex flex-col items-center gap-1.5 cursor-pointer">
+                        <div class="w-[42px] h-[42px] rounded-full bg-blue-50 text-blue-500 flex justify-center items-center">
+                            <i data-lucide="utensils" class="w-5 h-5"></i>
+                        </div>
+                        <span class="text-[11px] text-gray-600 font-medium">보급소</span>
+                    </div>
+                    <!-- GPX -->
+                    <div class="flex flex-col items-center gap-1.5 cursor-pointer">
+                        <div class="w-[42px] h-[42px] rounded-full bg-blue-50 text-blue-500 flex justify-center items-center">
+                            <i data-lucide="activity" class="w-5 h-5"></i>
+                        </div>
+                        <span class="text-[11px] text-gray-600 font-medium">GPX</span>
+                    </div>
+                    <!-- 갤러리 -->
+                    <div class="flex flex-col items-center gap-1.5 cursor-pointer">
+                        <div class="w-[42px] h-[42px] rounded-full bg-blue-50 text-blue-500 flex justify-center items-center">
+                            <i data-lucide="image" class="w-5 h-5"></i>
+                        </div>
+                        <span class="text-[11px] text-gray-600 font-medium">갤러리</span>
+                    </div>
+                    <!-- 공지사항 -->
+                    <div class="flex flex-col items-center gap-1.5 cursor-pointer">
+                        <div class="w-[42px] h-[42px] rounded-full bg-blue-50 text-blue-500 flex justify-center items-center">
+                            <i data-lucide="alert-circle" class="w-5 h-5 fill-blue-500 text-white"></i>
+                        </div>
+                        <span class="text-[11px] text-gray-600 font-medium">공지사항</span>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- 하단 고정 네비게이션 바 -->
+        <div id="bottom-nav" class="absolute bottom-0 w-full h-20 bg-white border-t border-gray-100 flex justify-around items-center px-2 pb-4 z-20">
+            <button class="flex flex-col items-center gap-1 text-blue-600 w-16">
+                <i data-lucide="home" class="w-6 h-6"></i>
+                <span class="text-[10px] font-bold">홈</span>
+            </button>
+            <button class="flex flex-col items-center gap-1 text-gray-400 w-16">
+                <i data-lucide="search" class="w-6 h-6"></i>
+                <span class="text-[10px] font-medium">검색</span>
+            </button>
+            <button class="flex flex-col items-center gap-1 text-gray-400 w-16">
+                <i data-lucide="user" class="w-6 h-6"></i>
+                <span class="text-[10px] font-medium">My</span>
+            </button>
+            <!-- 둥근 스캔 버튼 강조 -->
+            <button class="flex flex-col items-center justify-center -mt-8 relative group">
+                <div class="w-14 h-14 bg-blue-600 rounded-full flex justify-center items-center text-white shadow-lg border-4 border-white transition-transform group-active:scale-95">
+                    <i data-lucide="scan-line" class="w-7 h-7"></i>
+                </div>
+            </button>
+        </div>
+
+
+        <!-- ========================================== -->
+        <!-- 2. 날씨 상세 화면 (Weather View - 서브시안) -->
+        <!-- ========================================== -->
+        <div id="weather-view" class="absolute inset-0 z-50 hidden bg-gradient-to-br from-pink-300 via-purple-300 to-blue-200 flex flex-col fade-in">
+            
+            <!-- 상단 헤더 & 뒤로가기 -->
+            <div class="h-14 flex items-center px-4 pt-4 mb-4">
+                <button onclick="toggleView('main-view')" class="text-white p-2 -ml-2 rounded-full hover:bg-white/20 active:bg-white/30 transition">
+                    <i data-lucide="chevron-left" class="w-7 h-7"></i>
+                </button>
+            </div>
+
+            <!-- 메인 컨텐츠 영역 -->
+            <div class="px-6 flex-1">
+                <!-- 타이틀 및 내위치 버튼 -->
+                <div class="flex justify-between items-start mb-6">
+                    <div>
+                        <h1 class="text-3xl text-white font-extrabold mb-1 tracking-tight">전세계 날씨</h1>
+                        <p class="text-white/90 text-[11px] font-medium">현재위치 + 도시검색으로 전세계 날씨 조회 서비스</p>
+                    </div>
+                    <button onclick="mockLocationWeather()" class="glass-panel text-white text-[11px] font-bold px-3 py-2 rounded-lg active:scale-95 transition">
+                        내위치
+                    </button>
+                </div>
+                
+                <!-- 검색 바 -->
+                <div class="glass-panel rounded-2xl p-1.5 flex items-center mb-8 shadow-sm">
+                    <div class="flex-1 flex items-center px-3">
+                        <i data-lucide="search" class="w-5 h-5 text-white/80 mr-2"></i>
+                        <input type="text" id="cityInput" 
+                               placeholder="도시명을 입력하세요(Seoul, NY, Gimpo)" 
+                               class="bg-transparent border-none outline-none text-white placeholder-white/70 w-full text-sm font-medium"
+                               onkeypress="handleKeyPress(event)">
+                    </div>
+                    <button onclick="searchWeather()" class="glass-panel border-none bg-white/20 hover:bg-white/30 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition active:scale-95">
+                        검색
+                    </button>
+                </div>
+
+                <!-- 상세 날씨 정보 카드 -->
+                <div class="glass-panel rounded-3xl p-5 shadow-xl text-white">
+                    <!-- 상단: 도시명 및 온도 -->
+                    <div class="flex justify-between items-start mb-6 border-b border-white/20 pb-5">
+                        <div>
+                            <h2 id="cityName" class="text-2xl font-extrabold mb-1 tracking-wide">김포시 장기동</h2>
+                            <p id="weatherDesc" class="text-[11px] text-white/80">날씨 정보를 가져오는 중...</p>
+                        </div>
+                        <div id="mainTemp" class="text-5xl font-light tracking-tighter">20°</div>
+                    </div>
+
+                    <!-- 하단: 2x2 상세 정보 그리드 -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <!-- 풍속 -->
+                        <div class="glass-panel rounded-2xl p-4 flex flex-col justify-between h-[85px]">
+                            <div class="text-[11px] text-white/80 font-medium">풍속</div>
+                            <div class="text-2xl font-bold"><span id="windSpeed">0.00</span><span class="text-xs font-medium ml-1 opacity-80">m/s</span></div>
+                        </div>
+                        <!-- 습도 -->
+                        <div class="glass-panel rounded-2xl p-4 flex flex-col justify-between h-[85px]">
+                            <div class="text-[11px] text-white/80 font-medium">습도</div>
+                            <div class="text-2xl font-bold"><span id="humidity">0</span><span class="text-xs font-medium ml-1 opacity-80">%</span></div>
+                        </div>
+                        <!-- 체감기온 -->
+                        <div class="glass-panel rounded-2xl p-4 flex flex-col justify-between h-[85px]">
+                            <div class="text-[11px] text-white/80 font-medium">체감기온</div>
+                            <div class="text-2xl font-bold"><span id="feelsLike">0</span><span class="text-xs font-medium ml-1 opacity-80">°C</span></div>
+                        </div>
+                        <!-- 오존 -->
+                        <div class="glass-panel rounded-2xl p-4 flex flex-col justify-between h-[85px]">
+                            <div class="text-[11px] text-white/80 font-medium">오존(O₃)</div>
+                            <div class="text-2xl font-bold"><span id="ozone">0</span><span class="text-[10px] font-medium ml-1 opacity-80">µg/m³</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 로직 스크립트 -->
+    <script>
+        // 1. 아이콘 초기화
+        lucide.createIcons();
+
+        // 1.5 메인 이미지 롤링(슬라이더) 스크립트 (무한 루프 적용)
+        let currentSlide = 0;
+        const totalSlides = 3;
+        const track = document.getElementById('slider-track');
+        let slideInterval;
+        let isTransitioning = false;
+
+        function updateSliderPosition(animate = true) {
+            if (animate) {
+                track.style.transition = 'transform 0.5s ease-in-out';
+            } else {
+                track.style.transition = 'none';
+            }
+            track.style.transform = `translateX(-${currentSlide * 25}%)`; // 4개의 이미지가 있으므로 1칸당 25% 이동
+        }
+
+        function nextSlide() {
+            if (isTransitioning) return;
+            isTransitioning = true;
+            currentSlide++;
+            updateSliderPosition(true);
+
+            // 마지막 슬라이드(클론)에 도달했을 때
+            if (currentSlide === totalSlides) {
+                setTimeout(() => {
+                    currentSlide = 0;
+                    updateSliderPosition(false); // 실제 1번 슬라이드로 몰래(애니메이션 없이) 이동
+                    isTransitioning = false;
+                }, 500); // CSS 트랜지션 시간(0.5s) 대기
+            } else {
+                setTimeout(() => { isTransitioning = false; }, 500);
+            }
+            resetSlideInterval();
+        }
+
+        function prevSlide() {
+            if (isTransitioning) return;
+            isTransitioning = true;
+            
+            // 첫 슬라이드에서 이전으로 갈 때
+            if (currentSlide === 0) {
+                currentSlide = totalSlides;
+                updateSliderPosition(false); // 몰래 마지막 클론 슬라이드로 이동
+                
+                // DOM 업데이트 강제 실행
+                void track.offsetWidth; 
+                
+                currentSlide--;
+                updateSliderPosition(true); // 실제 마지막 슬라이드로 애니메이션 이동
+            } else {
+                currentSlide--;
+                updateSliderPosition(true);
+            }
+            setTimeout(() => { isTransitioning = false; }, 500);
+            resetSlideInterval();
+        }
+
+        function resetSlideInterval() {
+            clearInterval(slideInterval);
+            slideInterval = setInterval(nextSlide, 3500); // 3.5초마다 롤링
+        }
+        
+        // 슬라이더 자동 회전 시작
+        updateSliderPosition(false); // 초기 위치 세팅
+        slideInterval = setInterval(nextSlide, 3500);
+
+
+        // 2. 화면 전환 함수
+        function toggleView(viewId) {
+            const mainView = document.getElementById('main-view');
+            const weatherView = document.getElementById('weather-view');
+            const bottomNav = document.getElementById('bottom-nav');
+
+            if (viewId === 'weather-view') {
+                // 날씨 화면 보여주기
+                mainView.classList.add('hidden');
+                bottomNav.classList.add('hidden');
+                weatherView.classList.remove('hidden');
+            } else {
+                // 메인 화면 보여주기
+                weatherView.classList.add('hidden');
+                mainView.classList.remove('hidden');
+                bottomNav.classList.remove('hidden');
+                // 검색바 초기화
+                document.getElementById('cityInput').value = '';
+            }
+        }
+
+        // 3. OpenWeather API 설정
+        // 따옴표("") 안에 발급받으신 API 키를 정확히 입력해주세요. (예: "a1b2c3d4e5f6g7h8i9j0")
+        const WEATHER_API_KEY = "db231f0b580561670c219475e5abc2ff"; 
+
+        // API 공통 UI 업데이트 함수
+        const updateUI = (data, displayName) => {
+            document.getElementById('cityName').textContent = displayName;
+            document.getElementById('weatherDesc').textContent = data.desc;
+            document.getElementById('mainTemp').textContent = data.temp + '°';
+            document.getElementById('windSpeed').textContent = data.wind;
+            document.getElementById('humidity').textContent = data.hum;
+            document.getElementById('feelsLike').textContent = data.feels;
+            document.getElementById('ozone').textContent = data.oz;
+            
+            // 메인 화면 위젯도 동시에 업데이트 (위치는 displayName 유지)
+            const mainDescEl = document.getElementById('mainWidgetDesc');
+            const mainTempEl = document.getElementById('mainWidgetTemp');
+            if(mainDescEl) mainDescEl.textContent = displayName;
+            if(mainTempEl) mainTempEl.textContent = data.temp + '°';
+        };
+
+        // 4. 날씨 검색 함수
+        async function searchWeather() {
+            const inputVal = document.getElementById('cityInput').value.trim();
+            
+            if (!inputVal) {
+                alert("도시명을 입력해주세요.");
+                return;
+            }
+            
+            const apiKey = WEATHER_API_KEY.trim();
+
+            if (apiKey === "YOUR_API_KEY_HERE" || !apiKey) {
+                alert("OpenWeather API 키가 설정되지 않았습니다. 소스 코드의 WEATHER_API_KEY 변수에 키를 입력해주세요.");
+                return;
+            }
+
+            try {
+                const encodedCity = encodeURIComponent(inputVal);
+                const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodedCity}&appid=${apiKey}&units=metric&lang=kr`);
+                
+                if (!res.ok) {
+                    if (res.status === 401) throw new Error("유효하지 않은 API 키입니다.\n\n※ 새 키는 발급 후 1~2시간이 지나야 서버에 반영됩니다.");
+                    if (res.status === 404) throw new Error(`'${inputVal}' 도시를 찾을 수 없습니다. 영문 도시명(예: Seoul)으로 검색해보세요.`);
+                    throw new Error(`날씨 정보를 불러오는 중 오류가 발생했습니다. (상태 코드: ${res.status})`);
+                }
+
+                const data = await res.json();
+                let ozone = 0; 
+
+                try {
+                    const lat = data.coord.lat;
+                    const lon = data.coord.lon;
+                    const airRes = await fetch(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`);
+                    
+                    if (airRes.ok) {
+                        const airData = await airRes.json();
+                        ozone = airData?.list?.[0]?.components?.o3 || 0;
+                    }
+                } catch (airErr) {
+                    console.warn("대기질(오존) API 호출 실패:", airErr);
+                }
+
+                const displayName = data.name ? data.name.toUpperCase() : inputVal.toUpperCase();
+
+                updateUI({
+                    temp: Math.round(data.main.temp),
+                    desc: data.weather[0].description,
+                    wind: data.wind.speed.toFixed(2),
+                    hum: data.main.humidity,
+                    feels: Math.round(data.main.feels_like),
+                    oz: Math.round(ozone)
+                }, displayName);
+
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+
+        // 엔터키 입력 지원
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') {
+                searchWeather();
+            }
+        }
+
+        // 5. 앱 실행 시 기본 날씨 로드 (김포시 장기동 좌표 기준)
+        async function loadDefaultWeather() {
+            const apiKey = WEATHER_API_KEY.trim();
+            if (apiKey === "YOUR_API_KEY_HERE" || !apiKey) return;
+
+            try {
+                // 김포시 장기동의 대략적인 위도/경도
+                const lat = 37.6445;
+                const lon = 126.6675;
+                
+                const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=kr`);
+                
+                if (res.ok) {
+                    const data = await res.json();
+                    let ozone = 0;
+
+                    try {
+                        const airRes = await fetch(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`);
+                        if (airRes.ok) {
+                            const airData = await airRes.json();
+                            ozone = airData?.list?.[0]?.components?.o3 || 0;
+                        }
+                    } catch (airErr) {}
+
+                    // 위젯 및 상세화면 정보 업데이트 (이름은 '김포시 장기동'으로 고정)
+                    updateUI({
+                        temp: Math.round(data.main.temp),
+                        desc: data.weather[0].description,
+                        wind: data.wind.speed.toFixed(2),
+                        hum: data.main.humidity,
+                        feels: Math.round(data.main.feels_like),
+                        oz: Math.round(ozone)
+                    }, "김포시 장기동");
+                }
+            } catch (error) {
+                console.warn("초기 날씨 정보를 불러오지 못했습니다.", error);
+            }
+        }
+
+        // 브라우저 로딩 후 기본 날씨 호출
+        document.addEventListener('DOMContentLoaded', loadDefaultWeather);
+
+        // 내 위치 버튼 클릭 시 동작
+        function mockLocationWeather() {
+            const apiKey = WEATHER_API_KEY.trim();
+
+            if (apiKey === "YOUR_API_KEY_HERE" || !apiKey) {
+                alert("OpenWeather API 키가 설정되지 않았습니다.");
+                return;
+            }
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(async (position) => {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    
+                    try {
+                        const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=kr`);
+                        
+                        if (!res.ok) {
+                            if (res.status === 401) throw new Error("유효하지 않은 API 키입니다.\n\n※ 새 키는 발급 후 1~2시간이 지나야 서버에 반영됩니다.");
+                            throw new Error("위치 기반 날씨를 가져오는데 실패했습니다.");
+                        }
+
+                        const data = await res.json();
+                        let ozone = 0;
+
+                        try {
+                            const airRes = await fetch(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`);
+                            if (airRes.ok) {
+                                const airData = await airRes.json();
+                                ozone = airData?.list?.[0]?.components?.o3 || 0;
+                            }
+                        } catch (airErr) {
+                            console.warn("대기질(오존) API 호출 실패:", airErr);
+                        }
+
+                        document.getElementById('cityInput').value = data.name;
+                        
+                        updateUI({
+                            temp: Math.round(data.main.temp),
+                            desc: data.weather[0].description,
+                            wind: data.wind.speed.toFixed(2),
+                            hum: data.main.humidity,
+                            feels: Math.round(data.main.feels_like),
+                            oz: Math.round(ozone)
+                        }, data.name.toUpperCase());
+
+                    } catch (error) {
+                        alert(error.message);
+                    }
+                }, () => {
+                    alert("위치 정보 제공 동의가 필요하거나 정보를 가져올 수 없습니다.");
+                });
+            } else {
+                alert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
+            }
+        }
+    </script>
+</body>
+</html>

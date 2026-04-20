@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>부산 맛집 정보 서비스</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./script/app.js">
+    <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=e863a55497769d28bf4f9b55634187ff"></script>
+</head>
+<body>
+
+    <div class="app-container">
+        <header>
+            <div class="header-top">
+                <div class="title-group">
+                    <h1>부산 맛집 서비스</h1>
+                    <p class="total-count">전체 <span id="count">0</span>건</p>
+                </div>
+                <div class="header-icons">
+                    <span class="top-icon" onclick="location.reload()">⟳</span>
+                    <span class="top-icon">♡</span>
+                </div>
+            </div>
+            <div class="search-bar">
+                <span class="search-icon">○</span>
+                <input type="text" id="searchInput" placeholder="상호명/주소/메뉴로 검색">
+            </div>
+        </header>
+
+        <main id="restaurantList">
+            </main>
+
+        <div id="pagination" class="pagination-container"></div>
+
+        <nav class="bottom-nav">
+            <button class="nav-item active">맛집</button>
+            <button class="nav-item">즐겨찾기</button>
+        </nav>
+    </div>
+
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div id="modalBody">
+                <img id="detailImg" src="" alt="맛집 이미지" class="detail-img">
+                <div class="detail-info">
+                    <div class="info-row"><span class="badge">상호명</span> <h2 id="detailTitle"></h2></div>
+                    <div class="info-row"><span class="badge">주소</span> <p id="detailAddr"></p></div>
+                    <div class="info-row"><span class="badge">대표메뉴</span> <p id="detailMenu"></p></div>
+                    <div class="info-row"><span class="badge">연락처</span> <p id="detailTel"></p></div>
+                </div>
+                
+                <div class="map-container">
+                    <div id="map"></div>
+                    <a id="roadLink" href="#" target="_blank" class="road-btn">카카오맵에서 길찾기</a>
+                </div>
+
+                <div class="review-section">
+                    <h3>리뷰 작성</h3>
+                    <textarea id="reviewInput" placeholder="맛집에 대한 후기를 남겨주세요."></textarea>
+                    <button class="submit-btn" onclick="saveReview()">리뷰 등록</button>
+                    <ul id="reviewList"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./script/app.js"></script>
+</body>
+</html>

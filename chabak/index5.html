@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>CAMBAK 통합 앱</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#5B73A7',
+            secondary: '#F3F4F6',
+            textMain: '#374151',
+            textSub: '#9CA3AF'
+          },
+          fontFamily: {
+            sans: ['"Noto Sans KR"', 'Pretendard', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=e863a55497769d28bf4f9b55634187ff"></script>
+
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Noto Sans KR', 'Pretendard', sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    #app-container {
+      width: 100%;
+      max-width: 440px;
+      height: 100vh;
+      max-height: 900px;
+      background-color: white;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    .app-screen {
+      position: absolute;
+      inset: 0;
+      background: #fff;
+      transition: opacity .35s ease, transform .35s ease;
+    }
+    .hidden-screen {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(14px);
+    }
+    .visible-screen {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(0);
+    }
+
+    .common-header {
+      position: absolute;
+      top: 0; left: 0; width: 100%;
+      z-index: 40;
+      background: rgba(255,255,255,.95);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid #eef1f5;
+    }
+    .header-search {
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .search-box {
+      flex: 1;
+      background-color: #f0f2f8;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+    }
+    .search-box input {
+      border: none;
+      background: none;
+      outline: none;
+      width: 100%;
+      margin-left: 10px;
+      font-size: 15px;
+    }
+    .head-icon {
+      font-size: 24px;
+      color: #5a70b3;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .head-icon.heart { color: #ff5252; }
+
+    .search-screen-wrap { height: 100%; display: flex; flex-direction: column; }
+    .search-body { flex: 1; overflow-y: auto; padding-top: 70px; padding-bottom: 80px; }
+    .keyword-container { padding: 20px; flex-shrink: 0; }
+    .section-title { font-size: 16px; color: #333; margin-bottom: 12px; font-weight: 700; }
+    .chip-group { display: flex; gap: 8px; flex-wrap: wrap; }
+    .chip { padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 500; cursor: pointer; }
+    .chip.dark { background-color: #444; color: #fff; }
+    .chip.light { background-color: #e8ebf5; color: #5a70b3; }
+
+    .banner-wrapper { position: relative; width: 100%; margin-top: auto; margin-bottom: auto; overflow: hidden; }
+    .banner-image { width: 100%; height: 350px; object-fit: cover; display: block; filter: brightness(0.7); }
+    .banner-text {
+      position: absolute; top: 20%; left: 30%; transform: translate(-50%, -50%);
+      width: 100%; color: #fff; font-size: 28px; font-weight: 500; text-align: center;
+      text-shadow: 0 4px 15px rgba(0,0,0,0.5); letter-spacing: -0.5px; z-index: 2;
+      pointer-events: none;
+    }
+
+    #listTitle { padding: 20px 20px 5px; font-size: 18px; font-weight: 800; color: #222; display: none; }
+    .list-item { display: flex; padding: 15px 20px; border-bottom: 1px solid #f5f5f5; gap: 15px; cursor: pointer; position: relative; }
+    .list-img { width: 90px; height: 90px; border-radius: 12px; object-fit: cover; flex-shrink: 0; background-color: #eee; }
+    .list-info { flex: 1; display: flex; flex-direction: column; justify-content: center; overflow: hidden; padding-right: 30px; }
+    .list-title { font-size: 16px; font-weight: 700; color: #222; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .list-addr { font-size: 13px; color: #777; line-height: 1.4; word-break: keep-all; }
+    .like-btn { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); font-size: 24px; color: #ddd; padding: 10px; cursor: pointer; transition: color 0.2s; }
+    .like-btn.liked { color: #ff5252; }
+
+    .bottom-nav {
+      position: absolute;
+      bottom: 0; left: 0; width: 100%;
+      z-index: 35;
+      display: flex; justify-content: space-around;
+      padding: 12px 0;
+      background: #fff;
+      border-top: 1px solid #eee;
+      padding-bottom: calc(12px + env(safe-area-inset-bottom));
+    }
+    .nav-item { display: flex; flex-direction: column; align-items: center; color: #ccc; font-size: 11px; gap: 5px; cursor: pointer; }
+    .nav-item.active { color: #5a70b3; }
+    .nav-item i { font-size: 22px; }
+
+    .map-wrap { height: 100%; position: relative; }
+    #kakaoMap { width: 100%; height: 100%; }
+    .map-back-btn {
+      position: absolute; top: 20px; z-index: 100; background: #fff; width: 44px; height: 44px; border-radius: 50%;
+      display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.15); cursor: pointer; font-size: 20px; color: #333;
+    }
+    .back-left { left: 20px; }
+    .home-left { left: 72px; }
+
+    .bottom-sheet {
+      position: absolute; bottom: -120%; left: 0; width: 100%; background: #fff; border-radius: 24px 24px 0 0; padding: 24px;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.1); transition: bottom 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); z-index: 200; display: flex; gap: 16px; cursor: pointer;
+    }
+    .bottom-sheet.show { bottom: 0; }
+    .sheet-img { width: 80px; height: 80px; border-radius: 16px; object-fit: cover; flex-shrink: 0; }
+    .sheet-info { display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
+    .sheet-title { font-size: 17px; font-weight: 700; color: #222; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }
+    .sheet-addr { font-size: 13px; color: #777; margin-bottom: 8px; }
+    .sheet-link { font-size: 14px; color: #5a70b3; font-weight: 700; }
+
+    .detail-scroll { height: 100%; overflow-y: auto; padding-bottom: 40px; }
+    .detail-header { position: relative; height: 300px; width: 100%; flex-shrink: 0; }
+    .detail-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .detail-content { padding: 24px; }
+    .detail-title { font-size: 24px; font-weight: 700; color: #111; margin-bottom: 10px; }
+    .detail-addr { font-size: 14px; color: #666; margin-bottom: 24px; display: flex; align-items: center; gap: 6px; }
+    .btn-reserve {
+      width: 100%; padding: 16px; background: #5a70b3; color: #fff; border-radius: 12px; font-size: 16px; font-weight: 700;
+      text-align: center; margin-bottom: 30px; cursor: pointer; box-shadow: 0 4px 10px rgba(90, 112, 179, 0.3); transition: transform 0.1s;
+    }
+    .btn-reserve:active { transform: scale(0.98); }
+    .fac-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top:12px; }
+    .fac-grid img { width: 100%; height: 130px; object-fit: cover; border-radius: 12px; }
+
+    .reserve-top-bar {
+      display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid #eee;
+    }
+    .reserve-content { padding: 24px; }
+    .form-group { margin-bottom: 24px; }
+    .form-group label { display: block; font-size: 14px; font-weight: 700; color: #555; margin-bottom: 10px; }
+    .reserve-input {
+      width: 100%; padding: 14px 16px; border: 1px solid #e0e0e0; border-radius: 10px; font-size: 15px; outline: none; background: #fafafa; color: #333; appearance: none;
+    }
+    .reserve-input:focus { border-color: #5a70b3; background: #fff; }
+    .bottom-fixed-btn {
+      position: absolute; bottom: 0; left: 0; width: 100%; padding: 20px; background: #222; color: #fff; font-size: 18px; font-weight: 700;
+      text-align: center; cursor: pointer; padding-bottom: calc(20px + env(safe-area-inset-bottom)); z-index: 100;
+    }
+
+    .status-chip {
+      position: absolute; top: 16px; right: 16px;
+      background: rgba(255,255,255,.9); color: #5B73A7; font-size: 12px; font-weight: 700;
+      padding: 7px 10px; border-radius: 999px;
+    }
+
+    .home-hero-slider { position: relative; height: calc(16rem + 40px); overflow: hidden; background: #1f2937; width: 100%; margin: 0; padding: 0; line-height: 0; }
+    .home-hero-track { display: flex; width: 100%; height: 100%; margin: 0; padding: 0; will-change: transform; transition: transform .55s ease; }
+    .home-hero-slide { position: relative; flex: 0 0 100%; min-width: 100%; height: 100%; margin: 0; padding: 0; line-height: 0; }
+    .home-hero-slide img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; margin: 0; padding: 0; border: 0; border-radius: 0; background: #111827; image-rendering: auto; }
+    .home-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.8), rgba(0,0,0,.15)); }
+    .home-hero-copy { position: absolute; left: 1.5rem; bottom: 1.5rem; color: #fff; z-index: 2; }
+    .home-hero-dots { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); display: flex; gap: 8px; z-index: 3; }
+    .home-hero-dot { width: 8px; height: 8px; border-radius: 999px; background: rgba(255,255,255,.45); transition: all .3s ease; }
+    .home-hero-dot.active { width: 20px; background: #fff; }
+    #screen-home, #screen-home .flex-1 { margin: 0; padding-left: 0; padding-right: 0; }
+  </style>
+</head>
+<body>
+<div id="app-container">
+  <!-- Splash -->
+  <div id="screen-splash" class="app-screen visible-screen flex flex-col items-center justify-center z-50">
+    <img src="./images/logo.png" alt="CAMBAK 로고" class="w-32 h-auto mx-auto mb-10">
+    <div class="w-[100px] h-[100px] flex flex-col items-center justify-center">
+      <div id="loading-text" class="text-primary font-bold text-sm mb-2 tabular-nums">0%</div>
+      <div class="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden mt-2">
+        <div id="loading-progress" class="bg-primary h-full w-0 transition-all ease-linear" style="transition-duration: 3000ms;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Onboarding -->
+  <div id="screen-onboarding" class="app-screen hidden-screen z-40 flex flex-col h-full pt-12 pb-8">
+    <div class="swiper mySwiper w-full flex-1 min-h-0 relative">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide flex flex-col text-left">
+          <div class="mb-8 shrink-0 px-6">
+            <h2 class="text-3xl font-bold text-primary leading-tight mb-4">차박,<br>어디로 <span class="font-normal text-xl">떠나야 할지 모르겠나요?</span></h2>
+            <p class="text-primary text-opacity-70 text-sm leading-relaxed">지도기반 위치 앱 및 키워드 검색으로<br>내가 원하는 장소를 한번에</p>
+          </div>
+          <div class="w-full flex-1 bg-white relative overflow-hidden mb-8 flex justify-center items-center">
+            <img src="./images/Group 1.png" alt="work1" class="absolute inset-0 w-full h-full object-cover rounded-none">
+          </div>
+        </div>
+        <div class="swiper-slide flex flex-col text-left">
+          <div class="mb-8 shrink-0 px-6">
+            <h2 class="text-primary font-normal text-xl mb-1">차만 있다면</h2>
+            <h2 class="text-3xl font-bold text-primary leading-tight mb-4">장비는 <span class="font-normal text-xl">부담적은 </span>렌탈로</h2>
+            <p class="text-primary text-opacity-70 text-sm leading-relaxed">차박에 필요한 물품들을 용도별로 둘러보세요</p>
+          </div>
+          <div class="w-full flex-1 bg-white relative overflow-hidden mb-8 flex justify-center items-center">
+            <img src="./images/Group 2.png" alt="work2" class="absolute inset-0 w-full h-full object-cover rounded-none">
+          </div>
+        </div>
+        <div class="swiper-slide flex flex-col text-left">
+          <div class="mb-8 shrink-0 px-6">
+            <h2 class="text-primary font-normal text-xl mb-1">일상이 바쁠땐 실시간</h2>
+            <h2 class="text-3xl font-bold text-primary leading-tight mb-4">라이브로 대리만족 <span class="font-normal text-xl">하세요</span></h2>
+            <p class="text-primary text-opacity-70 text-sm leading-relaxed">라이브로 나를 뽐내고 시청자들과 소통하는<br>즐거움</p>
+          </div>
+          <div class="w-full flex-1 bg-white relative overflow-hidden mb-8 flex justify-center items-center">
+            <img src="./images/Group 3.png" alt="work3" class="absolute inset-0 w-full h-full object-cover rounded-none">
+          </div>
+        </div>
+      </div>
+      <div class="swiper-pagination mb-2"></div>
+    </div>
+    <div class="mt-auto pt-6 shrink-0 z-10 w-full relative px-6">
+      <button id="btn-start" class="w-full bg-primary text-white py-4 rounded-xl font-medium text-lg active:bg-blue-800 transition-colors shadow-md">시작하기</button>
+    </div>
+  </div>
+
+  <!-- Login -->
+  <div id="screen-login" class="app-screen hidden-screen z-30 flex flex-col items-center pt-24 px-8">
+    <div class="text-center text-primary mb-16">
+      <img src="./images/logo.png" alt="CAMBAK 로고" class="w-24 h-auto mx-auto mb-4">
+      <h1 class="text-2xl font-bold tracking-wider"></h1>
+    </div>
+    <div class="w-full space-y-6">
+      <div class="border-b border-gray-300 pb-2">
+        <label class="text-sm text-primary mb-1 block">아이디</label>
+        <input type="text" class="w-full outline-none text-gray-700 bg-transparent" />
+      </div>
+      <div class="border-b border-gray-300 pb-2">
+        <label class="text-sm text-primary mb-1 block">비밀번호</label>
+        <input type="password" class="w-full outline-none text-gray-700 bg-transparent" />
+      </div>
+    </div>
+    <div class="w-full mt-10 space-y-3">
+      <button id="btn-login" class="w-full bg-primary text-white py-3.5 rounded-xl font-medium text-lg active:bg-blue-800 transition-colors shadow-md">로그인</button>
+      <button class="w-full bg-blue-50 text-primary border border-primary py-3.5 rounded-xl font-medium text-lg active:bg-blue-100 transition-colors">회원가입</button>
+    </div>
+    <div class="flex space-x-4 text-sm text-primary mt-6">
+      <a href="#" class="hover:underline">아이디찾기</a>
+      <span class="text-gray-300">|</span>
+      <a href="#" class="hover:underline">비밀번호찾기</a>
+      <span class="text-gray-300">|</span>
+      <a href="#" class="hover:underline">둘러보기</a>
+    </div>
+    <div class="w-full mt-auto mb-10">
+      <div class="flex items-center justify-center mb-6">
+        <div class="border-t border-gray-300 flex-grow"></div>
+        <span class="px-3 text-xs text-primary font-medium">간편 로그인</span>
+        <div class="border-t border-gray-300 flex-grow"></div>
+      </div>
+      <div class="flex justify-center space-x-6">
+        <div class="w-10 h-10 rounded-full bg-yellow-400 flex items-center justify-center text-amber-900 cursor-pointer hover:opacity-80"><i class="fa-solid fa-comment"></i></div>
+        <div class="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white cursor-pointer hover:opacity-80"><i class="fa-solid fa-n"></i></div>
+        <div class="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-red-500 cursor-pointer hover:opacity-80"><i class="fa-brands fa-google"></i></div>
+        <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white cursor-pointer hover:opacity-80"><i class="fa-brands fa-facebook-f"></i></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Home -->
+  <div id="screen-home" class="app-screen hidden-screen z-20 bg-white flex flex-col">
+    <div class="flex-1 overflow-y-auto pb-20 hide-scrollbar">
+      <div class="home-hero-slider" id="homeHeroSlider">
+        <div class="home-hero-track" id="homeHeroTrack">
+          <div class="home-hero-slide" data-clone="last">
+            <img src="./images/b3.png" alt="테마별 배너 3">
+            <div class="home-hero-overlay"></div>
+            <div class="home-hero-copy">
+              <h2 class="text-2xl font-regular leading-snug">캠핑 장비와 장소를 한번에 보고<br>편하게 준비해보세요</h2>
+            </div>
+          </div>
+          <div class="home-hero-slide" data-index="0">
+            <img src="./images/b1.png" alt="테마별 배너 1">
+            <div class="home-hero-overlay"></div>
+            <div class="home-hero-copy">
+              <h2 class="text-2xl font-regular leading-snug">다양한 즐길 거리를 찾아<br>차박캠핑을 준비해보세요</h2>
+            </div>
+          </div>
+          <div class="home-hero-slide" data-index="1">
+            <img src="./images/b2.png" alt="테마별 배너 2">
+            <div class="home-hero-overlay"></div>
+            <div class="home-hero-copy">
+              <h2 class="text-2xl font-regular leading-snug">감성적인 캠핑 명소를 찾아<br>나만의 여행을 떠나보세요</h2>
+            </div>
+          </div>
+          <div class="home-hero-slide" data-index="2">
+            <img src="./images/b3.png" alt="테마별 배너 3">
+            <div class="home-hero-overlay"></div>
+            <div class="home-hero-copy">
+              <h2 class="text-2xl font-regular leading-snug">캠핑 장비와 장소를 한번에 보고<br>편하게 준비해보세요</h2>
+            </div>
+          </div>
+          <div class="home-hero-slide" data-clone="first">
+            <img src="./images/b1.png" alt="테마별 배너 1">
+            <div class="home-hero-overlay"></div>
+            <div class="home-hero-copy">
+              <h2 class="text-2xl font-regular leading-snug">다양한 즐길 거리를 찾아<br>차박캠핑을 준비해보세요</h2>
+            </div>
+          </div>
+        </div>
+        <div class="home-hero-dots" id="homeHeroDots">
+          <span class="home-hero-dot active"></span>
+          <span class="home-hero-dot"></span>
+          <span class="home-hero-dot"></span>
+        </div>
+      </div>
+
+      <div class="px-4 py-6">
+        <h3 class="text-primary font-bold text-lg mb-4">테마별 카테고리</h3>
+        <div class="grid grid-cols-4 gap-y-6 text-center">
+          <div class="flex flex-col items-center cursor-pointer hover:opacity-70"><div class="text-3xl mb-2">🌸</div><span class="text-xs text-gray-600 font-medium">꽃놀이</span></div>
+          <div class="flex flex-col items-center cursor-pointer hover:opacity-70"><div class="text-3xl mb-2">🔥</div><span class="text-xs text-gray-600 font-medium">불멍</span></div>
+          <div class="flex flex-col items-center cursor-pointer hover:opacity-70"><div class="text-3xl mb-2">🏙️</div><span class="text-xs text-gray-600 font-medium">도심</span></div>
+          <div class="flex flex-col items-center cursor-pointer hover:opacity-70"><div class="text-3xl mb-2">⛺</div><span class="text-xs text-gray-600 font-medium">별감상</span></div>
+          <div class="flex flex-col items-center cursor-pointer hover:opacity-70"><div class="text-3xl mb-2">🐶</div><span class="text-xs text-gray-600 font-medium">반려견</span></div>
+          <div class="flex flex-col items-center cursor-pointer hover:opacity-70"><div class="text-3xl mb-2">⛰️</div><span class="text-xs text-gray-600 font-medium">오지</span></div>
+          <div class="flex flex-col items-center cursor-pointer hover:opacity-70"><div class="text-3xl mb-2">🥩</div><span class="text-xs text-gray-600 font-medium">바베큐</span></div>
+          <div class="flex flex-col items-center cursor-pointer hover:opacity-70"><div class="text-3xl mb-2">🧳</div><span class="text-xs text-gray-600 font-medium">장비</span></div>
+        </div>
+      </div>
+
+      <div class="flex px-4 mb-8" style="gap: 14px;">
+        <button class="flex-1 bg-blue-100 text-primary py-3 rounded-lg flex items-center justify-center font-medium active:bg-blue-200 transition-colors"><i class="fa-solid fa-ticket mr-2"></i> 쿠폰</button>
+        <button class="flex-1 bg-blue-100 text-primary py-3 rounded-lg flex items-center justify-center font-medium active:bg-blue-200 transition-colors"><i class="fa-solid fa-gift mr-2"></i> 이벤트</button>
+        <button class="flex-1 bg-blue-100 text-primary py-3 rounded-lg flex items-center justify-center font-medium active:bg-blue-200 transition-colors"><i class="fa-solid fa-box-open mr-2"></i> 혜택</button>
+      </div>
+
+      <div class="px-4 mb-6">
+        <h3 class="text-primary font-bold text-lg mb-4 text-center">장소 랭킹 Top 10</h3>
+        <div class="grid grid-cols-2 gap-3 pb-4 h-[350px] overflow-y-auto hide-scrollbar">
+          <div class="w-full h-28 bg-blue-900 rounded-xl overflow-hidden relative shadow-sm cursor-pointer"><img src="./images/t1.png" class="w-full h-full object-cover object-center opacity-80" alt=""><div class="absolute bottom-2 left-2 text-white text-xs font-bold">1위 은하수 캠핑장</div></div>
+          <div class="w-full h-28 bg-green-900 rounded-xl overflow-hidden relative shadow-sm cursor-pointer"><img src="./images/t2.png" class="w-full h-full object-cover object-center opacity-80" alt=""><div class="absolute bottom-2 left-2 text-white text-xs font-bold">2위 포레스트 파크</div></div>
+          <div class="w-full h-28 bg-orange-900 rounded-xl overflow-hidden relative shadow-sm cursor-pointer"><img src="./images/t3.png" class="w-full h-full object-cover object-center opacity-80" alt=""><div class="absolute bottom-2 left-2 text-white text-xs font-bold">3위 불멍 캠핑장</div></div>
+          <div class="w-full h-28 bg-gray-900 rounded-xl overflow-hidden relative shadow-sm cursor-pointer"><img src="./images/t4.png" class="w-full h-full object-cover object-center opacity-80" alt=""><div class="absolute bottom-2 left-2 text-white text-xs font-bold">4위 마운틴 뷰</div></div>
+          <div class="w-full h-28 bg-cyan-900 rounded-xl overflow-hidden relative shadow-sm cursor-pointer"><img src="./images/t5.png" class="w-full h-full object-cover object-center opacity-80" alt=""><div class="absolute bottom-2 left-2 text-white text-xs font-bold">5위 리버사이드</div></div>
+          <div class="w-full h-28 bg-purple-900 rounded-xl overflow-hidden relative shadow-sm cursor-pointer"><img src="./images/t6.png" class="w-full h-full object-cover object-center opacity-80" alt=""><div class="absolute bottom-2 left-2 text-white text-xs font-bold">6위 차박 성지</div></div>
+          <div class="w-full h-28 bg-teal-900 rounded-xl overflow-hidden relative shadow-sm cursor-pointer"><img src="./images/t7.png" class="w-full h-full object-cover object-center opacity-80" alt=""><div class="absolute bottom-2 left-2 text-white text-xs font-bold">7위 오션 뷰 파크</div></div>
+          <div class="w-full h-28 bg-indigo-900 rounded-xl overflow-hidden relative shadow-sm cursor-pointer"><img src="./images/t8.png" class="w-full h-full object-cover object-center opacity-80" alt=""><div class="absolute bottom-2 left-2 text-white text-xs font-bold">8위 힐링 계곡</div></div>
+          <div class="w-full h-28 bg-red-900 rounded-xl overflow-hidden relative shadow-sm cursor-pointer"><img src="./images/t9.png" class="w-full h-full object-cover object-center opacity-80" alt=""><div class="absolute bottom-2 left-2 text-white text-xs font-bold">9위 선셋 파크</div></div>
+          <div class="w-full h-28 bg-slate-900 rounded-xl overflow-hidden relative shadow-sm cursor-pointer"><img src="./images/t10.png" class="w-full h-full object-cover object-center opacity-80" alt=""><div class="absolute bottom-2 left-2 text-white text-xs font-bold">10위 윈터 스노우</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="absolute bottom-0 w-full bg-white h-16 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] flex items-center justify-between px-6 z-50">
+      <div class="flex flex-col items-center text-primary cursor-pointer" onclick="showScreen('screen-home')">
+        <i class="fa-solid fa-house text-lg mb-1"></i>
+        <span class="text-[10px] font-bold">홈</span>
+      </div>
+      <div class="flex flex-col items-center text-gray-400 hover:text-primary cursor-pointer transition-colors" onclick="goToSearchHome()">
+        <i class="fa-solid fa-magnifying-glass text-lg mb-1"></i>
+        <span class="text-[10px]">검색</span>
+      </div>
+      <div class="flex flex-col items-center text-gray-400 hover:text-primary cursor-pointer transition-colors">
+        <i class="fa-solid fa-users text-lg mb-1"></i>
+        <span class="text-[10px]">모임</span>
+      </div>
+      <div class="flex flex-col items-center text-gray-400 hover:text-primary cursor-pointer transition-colors">
+        <i class="fa-brands fa-youtube text-lg mb-1"></i>
+        <span class="text-[10px]">라이브</span>
+      </div>
+      <div class="flex flex-col items-center text-gray-400 hover:text-primary cursor-pointer transition-colors">
+        <i class="fa-regular fa-user text-lg mb-1"></i>
+        <span class="text-[10px]">My</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search Home -->
+  <div id="screen-search-home" class="app-screen hidden-screen z-25">
+    <div class="search-screen-wrap">
+      <div class="common-header">
+        <div class="header-search">
+          <div class="search-box">
+            <i class="fas fa-search" style="color: #a0aabf;"></i>
+            <input type="text" id="searchInput" placeholder="캠핑장 이름을 검색해보세요" onkeypress="handleSearch(event)">
+          </div>
+          <i class="fas fa-heart head-icon heart" onclick="showFavorites()"></i>
+          <i class="fas fa-map head-icon" onclick="openNationwideMap()"></i>
+        </div>
+      </div>
+
+      <div class="search-body hide-scrollbar">
+        <div class="keyword-container">
+          <div class="section-title">최근 검색어</div>
+          <div class="chip-group" id="recentSearches"></div>
+        </div>
+        <div class="keyword-container">
+          <div class="section-title">인기 테마</div>
+          <div class="chip-group">
+            <div class="chip light" onclick="searchCamping('차박')"># 차박명소</div>
+            <div class="chip light" onclick="searchCamping('글램핑')"># 감성글램핑</div>
+            <div class="chip light" onclick="searchCamping('계곡')"># 계곡캠핑</div>
+          </div>
+        </div>
+        <div class="banner-wrapper">
+          <img src="./images/image 3.png" alt="프로모션 배너" class="banner-image">
+          <div class="banner-text">얼리버드 예약 <br> 30%할인 행사</div>
+        </div>
+      </div>
+
+      <div class="bottom-nav">
+        <div class="nav-item" onclick="showScreen('screen-home')"><i class="fas fa-home"></i><span>홈</span></div>
+        <div class="nav-item active" onclick="goToSearchHome()"><i class="fas fa-magnifying-glass"></i><span>검색</span></div>
+        <div class="nav-item" onclick="showFavorites()"><i class="far fa-heart"></i><span>찜</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- List -->
+  <div id="screen-list" class="app-screen hidden-screen z-26">
+    <div class="search-screen-wrap">
+      <div class="common-header">
+        <div class="header-search">
+          <div class="search-box">
+            <i class="fas fa-search" style="color: #a0aabf;"></i>
+            <input type="text" id="searchInputList" placeholder="캠핑장 이름을 검색해보세요" onkeypress="handleSearchFromList(event)">
+          </div>
+          <i class="fas fa-heart head-icon heart" onclick="showFavorites()"></i>
+          <i class="fas fa-map head-icon" onclick="openNationwideMap()"></i>
+        </div>
+      </div>
+      <div class="search-body hide-scrollbar">
+        <div id="listTitle">검색 결과</div>
+        <div id="resultList"></div>
+      </div>
+      <div class="bottom-nav">
+        <div class="nav-item" onclick="showScreen('screen-home')"><i class="fas fa-home"></i><span>홈</span></div>
+        <div class="nav-item active" onclick="goToSearchHome()"><i class="fas fa-magnifying-glass"></i><span>검색</span></div>
+        <div class="nav-item" onclick="showFavorites()"><i class="far fa-heart"></i><span>찜</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Map -->
+  <div id="screen-map" class="app-screen hidden-screen z-27">
+    <div class="map-wrap">
+      <div class="map-back-btn back-left" onclick="goBackFromMap()"><i class="fas fa-arrow-left"></i></div>
+      <div class="map-back-btn home-left" onclick="showScreen('screen-home')"><i class="fas fa-home"></i></div>
+      <div id="kakaoMap"></div>
+      <div class="bottom-sheet" id="mapBottomSheet"></div>
+    </div>
+  </div>
+
+  <!-- Detail -->
+  <div id="screen-detail" class="app-screen hidden-screen z-28">
+    <div class="detail-scroll hide-scrollbar">
+      <div class="detail-header">
+        <div class="map-back-btn back-left" onclick="showScreen('screen-map')"><i class="fas fa-arrow-left"></i></div>
+        <div class="map-back-btn home-left" onclick="showScreen('screen-home')"><i class="fas fa-home"></i></div>
+        <img src="" class="detail-img" id="detailMainImg" alt="캠핑장">
+        <div class="status-chip">상세 정보</div>
+      </div>
+      <div class="detail-content">
+        <div class="detail-title" id="detailTitle">캠핑장 이름</div>
+        <div class="detail-addr"><i class="fas fa-map-marker-alt" style="color:#5a70b3;"></i> <span id="detailAddr">주소</span></div>
+        <div class="btn-reserve" onclick="openReserveScreen()">예약하기</div>
+        <div style="font-size: 18px; font-weight: 700; color: #222; margin-bottom: 5px;">시설 갤러리</div>
+        <div class="fac-grid">
+          <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=300&q=80">
+          <img src="https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&w=300&q=80">
+          <img src="./images/Frame 51.png" alt="">
+          <img src="./images/Frame 52.png" alt="">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reserve -->
+  <div id="screen-reserve" class="app-screen hidden-screen z-29">
+    <div class="reserve-top-bar">
+      <div style="font-size:20px; cursor:pointer; padding:5px;" onclick="showScreen('screen-detail')"><i class="fas fa-arrow-left"></i></div>
+      <div style="font-size: 17px; font-weight: 700;">예약하기</div>
+      <div style="font-size:20px; cursor:pointer; padding:5px;" onclick="showScreen('screen-home')"><i class="fas fa-home"></i></div>
+    </div>
+    <div class="h-full overflow-y-auto hide-scrollbar" style="padding-bottom: 80px;">
+      <div class="reserve-content">
+        <h2 id="reserveCampName" style="margin-bottom: 24px; color: #111; font-size: 22px;">캠핑장 이름</h2>
+        <div class="form-group">
+          <label><i class="far fa-calendar-alt"></i> 캠핑 일정</label>
+          <div style="display:flex; gap: 10px; align-items: center;">
+            <input type="date" class="reserve-input" id="checkin">
+            <span style="font-weight: bold; color: #777;">~</span>
+            <input type="date" class="reserve-input" id="checkout">
+          </div>
+        </div>
+        <div class="form-group">
+          <label><i class="fas fa-campground"></i> 사이트 유형 선택</label>
+          <select class="reserve-input">
+            <option value="">유형을 선택해주세요</option>
+            <option>파쇄석 사이트 (오토캠핑/차박가능)</option>
+            <option>데크 사이트 (텐트 전용)</option>
+            <option>노지 구역 (차박 전용)</option>
+            <option>감성 글램핑</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label><i class="fas fa-users"></i> 이용 인원 및 차량</label>
+          <div style="display:flex; gap: 10px; margin-bottom:10px;">
+            <input type="number" class="reserve-input" placeholder="성인 (명)" min="1" value="2">
+            <input type="number" class="reserve-input" placeholder="아동 (명)" min="0" value="0">
+          </div>
+          <input type="number" class="reserve-input" placeholder="차량 (대)" min="1" value="1">
+          <p style="font-size: 12px; color: #888; margin-top: 8px;">* 기본 차량 1대 외 추가 차량은 현장 결제가 발생할 수 있습니다.</p>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-fixed-btn" onclick="completeReservation()">예약 확정하기</div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+  const GO_CAMPING_API_KEY = "7fb32307d1084916efd402f8c7df555b7c616c5148ff08a6ca84f0d350bd4572"; // 공공데이터 API 키 입력
+  let swiperInstance = null;
+  let isTransitioningToLogin = false;
+  let mapInstance = null;
+  let mapMarkers = [];
+  let currentMapMode = 'nationwide';
+  let currentMapItem = null;
+  let selectedCampForReserve = null;
+  let previousScreenBeforeMap = 'screen-list';
+  let homeHeroIndex = 0;
+  let homeHeroTimerId = null;
+  let homeHeroRafId = null;
+
+  const dummyData = [
+    { facltNm: "가평 별빛 오토캠핑장", addr1: "경기도 가평군 북면", mapY: 37.8812, mapX: 127.5492, firstImageUrl: "https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?auto=format&fit=crop&w=300&q=80" },
+    { facltNm: "평창 흥정계곡 캠핑장", addr1: "강원도 평창군 봉평면", mapY: 37.6167, mapX: 128.3223, firstImageUrl: "https://images.unsplash.com/photo-1537565266751-34fd38d100fb?auto=format&fit=crop&w=300&q=80" },
+    { facltNm: "제주 애월 바당 캠핑장", addr1: "제주특별자치도 제주시 애월읍", mapY: 33.4623, mapX: 126.3197, firstImageUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=300&q=80" },
+    { facltNm: "부산 오션뷰 캠핑장", addr1: "부산광역시 기장군", mapY: 35.2448, mapX: 129.2223, firstImageUrl: "https://images.unsplash.com/photo-1504851149312-7a075b496cc7?auto=format&fit=crop&w=300&q=80" },
+    { facltNm: "전주 힐링 캠프", addr1: "전북특별자치도 완주군", mapY: 35.8242, mapX: 127.148, firstImageUrl: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=300&q=80" },
+    { facltNm: "강릉 바다숲 야영장", addr1: "강원특별자치도 강릉시", mapY: 37.7519, mapX: 128.8761, firstImageUrl: "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=300&q=80" }
+  ];
+
+  document.addEventListener('DOMContentLoaded', () => {
+    loadRecentSearches();
+    initSplashFlow();
+    startHomeHeroSlider();
+
+    document.getElementById('btn-start').addEventListener('click', goToLogin);
+    document.getElementById('btn-login').addEventListener('click', () => showScreen('screen-home'));
+  });
+
+  function startHomeHeroSlider() {
+    const slider = document.getElementById('homeHeroSlider');
+    const track = document.getElementById('homeHeroTrack');
+    const dots = document.querySelectorAll('#homeHeroDots .home-hero-dot');
+    if (!slider || !track || !dots.length) return;
+
+    if (homeHeroTimerId) clearInterval(homeHeroTimerId);
+    if (homeHeroRafId) cancelAnimationFrame(homeHeroRafId);
+
+    const totalRealSlides = 3;
+    let currentIndex = 1;
+
+    const updateDots = (realIndex) => {
+      dots.forEach((dot, idx) => dot.classList.toggle('active', idx === realIndex));
+    };
+
+    const moveTo = (index, withTransition = true) => {
+      track.style.transition = withTransition ? 'transform .55s ease' : 'none';
+      track.style.transform = `translateX(-${index * 100}%)`;
+    };
+
+    moveTo(currentIndex, false);
+    updateDots(0);
+
+    const nextSlide = () => {
+      currentIndex += 1;
+      moveTo(currentIndex, true);
+    };
+
+    homeHeroTimerId = setInterval(nextSlide, 2800);
+
+    track.addEventListener('transitionend', () => {
+      if (currentIndex === totalRealSlides + 1) {
+        currentIndex = 1;
+        moveTo(currentIndex, false);
+      } else if (currentIndex === 0) {
+        currentIndex = totalRealSlides;
+        moveTo(currentIndex, false);
+      }
+      updateDots((currentIndex - 1 + totalRealSlides) % totalRealSlides);
+    });
+
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => moveTo(currentIndex, false), 120);
+    });
+  }
+
+  function initSplashFlow() {
+    const loadingProgress = document.getElementById('loading-progress');
+    const loadingText = document.getElementById('loading-text');
+
+    setTimeout(() => {
+      loadingProgress.style.width = '100%';
+      let startTime = null;
+      const duration = 3000;
+      function animatePercentage(timestamp) {
+        if (!startTime) startTime = timestamp;
+        const progress = timestamp - startTime;
+        const percent = Math.min(Math.floor((progress / duration) * 100), 100);
+        loadingText.innerText = percent + '%';
+        if (progress < duration) requestAnimationFrame(animatePercentage);
+      }
+      requestAnimationFrame(animatePercentage);
+    }, 50);
+
+    setTimeout(() => {
+      showScreen('screen-onboarding');
+      initSwiper();
+    }, 3000);
+  }
+
+  function initSwiper() {
+    swiperInstance = new Swiper(".mySwiper", {
+      autoplay: { delay: 1000, disableOnInteraction: false, stopOnLastSlide: true },
+      pagination: { el: ".swiper-pagination", clickable: true },
+      loop: false,
+      on: {
+        reachEnd: function () {
+          setTimeout(() => { goToLogin(); }, 1500);
+        }
+      }
+    });
+  }
+
+  function goToLogin() {
+    if (isTransitioningToLogin) return;
+    isTransitioningToLogin = true;
+    if (swiperInstance) swiperInstance.destroy();
+    showScreen('screen-login');
+  }
+
+  function showScreen(screenId) {
+    document.querySelectorAll('.app-screen').forEach(screen => {
+      screen.classList.remove('visible-screen');
+      screen.classList.add('hidden-screen');
+    });
+    const target = document.getElementById(screenId);
+    target.classList.remove('hidden-screen');
+    target.classList.add('visible-screen');
+  }
+
+  function goToSearchHome() {
+    showScreen('screen-search-home');
+    document.getElementById('searchInput').focus();
+  }
+
+  function loadRecentSearches() {
+    const history = JSON.parse(localStorage.getItem('camping_history') || '[]');
+    const container = document.getElementById('recentSearches');
+    container.innerHTML = '';
+    history.forEach(keyword => {
+      const chip = document.createElement('div');
+      chip.className = 'chip dark';
+      chip.textContent = keyword;
+      chip.onclick = () => {
+        document.getElementById('searchInput').value = keyword;
+        searchCamping(keyword);
+      };
+      container.appendChild(chip);
+    });
+  }
+
+  function saveKeyword(keyword) {
+    if (!keyword) return;
+    let history = JSON.parse(localStorage.getItem('camping_history') || '[]');
+    history = history.filter(item => item !== keyword);
+    history.unshift(keyword);
+    if (history.length > 5) history.pop();
+    localStorage.setItem('camping_history', JSON.stringify(history));
+    loadRecentSearches();
+  }
+
+  function handleSearch(e) {
+    if (e.key === 'Enter') {
+      const keyword = e.target.value.trim();
+      if (keyword) {
+        saveKeyword(keyword);
+        searchCamping(keyword);
+      }
+    }
+  }
+
+  function handleSearchFromList(e) {
+    if (e.key === 'Enter') {
+      const keyword = e.target.value.trim();
+      if (keyword) {
+        saveKeyword(keyword);
+        searchCamping(keyword);
+      }
+    }
+  }
+
+  async function searchCamping(keyword) {
+    document.getElementById('searchInput').value = keyword;
+    document.getElementById('searchInputList').value = keyword;
+    showScreen('screen-list');
+
+    const listContainer = document.getElementById('resultList');
+    document.getElementById('listTitle').style.display = 'none';
+    listContainer.innerHTML = '<div style="padding:50px 20px; text-align:center; color:#777;">데이터를 불러오는 중입니다...</div>';
+
+    if (!GO_CAMPING_API_KEY || GO_CAMPING_API_KEY === "YOUR_GO_CAMPING_API_KEY") {
+      const filtered = dummyData.filter(item =>
+        item.facltNm.includes(keyword) || (item.addr1 || '').includes(keyword)
+      );
+      setTimeout(() => renderList(filtered.length ? filtered : dummyData, false), 300);
+      return;
+    }
+
+    try {
+      const url = `https://apis.data.go.kr/B551011/GoCamping/searchList?numOfRows=30&pageNo=1&MobileOS=ETC&MobileApp=AppTest&serviceKey=${GO_CAMPING_API_KEY}&_type=json&keyword=${encodeURIComponent(keyword)}`;
+      const response = await fetch(url);
+      const data = await response.json();
+      if (data.response && data.response.body && data.response.body.items && data.response.body.items !== "") {
+        let items = data.response.body.items.item;
+        if (!Array.isArray(items)) items = [items];
+        renderList(items, false);
+      } else {
+        listContainer.innerHTML = '<div style="padding:50px 20px; text-align:center; color:#777;">검색 결과가 없습니다.</div>';
+      }
+    } catch (error) {
+      renderList(dummyData, false);
+    }
+  }
+
+  function showFavorites() {
+    let likes = JSON.parse(localStorage.getItem('liked_camps') || '[]');
+    renderList(likes, true);
+    showScreen('screen-list');
+  }
+
+  function renderList(items, isFavoriteView = false) {
+    const listContainer = document.getElementById('resultList');
+    const listTitle = document.getElementById('listTitle');
+    listContainer.innerHTML = '';
+
+    if (isFavoriteView) {
+      listTitle.style.display = 'block';
+      listTitle.textContent = `❤️ 내가 찜한 캠핑장 (${items.length})`;
+    } else {
+      listTitle.style.display = 'none';
+    }
+
+    if (!items.length) {
+      listContainer.innerHTML = '<div style="padding:50px 20px; text-align:center; color:#777;">목록이 비어있습니다.</div>';
+      return;
+    }
+
+    let likes = JSON.parse(localStorage.getItem('liked_camps') || '[]');
+
+    items.forEach(item => {
+      const isLiked = likes.some(c => c.facltNm === item.facltNm);
+      const heartClass = isLiked ? 'fas fa-heart like-btn liked' : 'far fa-heart like-btn';
+      const div = document.createElement('div');
+      div.className = 'list-item';
+      const imgUrl = item.firstImageUrl || "https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?auto=format&fit=crop&w=150&q=80";
+
+      div.innerHTML = `
+        <img src="${imgUrl}" class="list-img" alt="썸네일">
+        <div class="list-info">
+          <div class="list-title">${item.facltNm}</div>
+          <div class="list-addr">${item.addr1 || ((item.doNm || '') + ' ' + (item.sigunguNm || ''))}</div>
+        </div>
+        <i class="${heartClass}"></i>
+      `;
+
+      const likeBtn = div.querySelector('.like-btn');
+      likeBtn.onclick = (e) => {
+        e.stopPropagation();
+        toggleLikeLogic(e.target, item);
+      };
+
+      div.onclick = () => openSingleMap(item);
+      listContainer.appendChild(div);
+    });
+  }
+
+  function toggleLikeLogic(targetEl, item) {
+    let likes = JSON.parse(localStorage.getItem('liked_camps') || '[]');
+    const index = likes.findIndex(c => c.facltNm === item.facltNm);
+
+    if (index > -1) {
+      likes.splice(index, 1);
+      targetEl.className = 'far fa-heart like-btn';
+    } else {
+      likes.push(item);
+      targetEl.className = 'fas fa-heart like-btn liked';
+    }
+
+    localStorage.setItem('liked_camps', JSON.stringify(likes));
+
+    const listTitle = document.getElementById('listTitle');
+    if (listTitle.style.display === 'block') showFavorites();
+  }
+
+  async function openNationwideMap() {
+    previousScreenBeforeMap = document.querySelector('.visible-screen')?.id || 'screen-search-home';
+    currentMapMode = 'nationwide';
+    currentMapItem = null;
+    showScreen('screen-map');
+    document.getElementById('mapBottomSheet').classList.remove('show');
+
+    let items = dummyData;
+    if (GO_CAMPING_API_KEY && GO_CAMPING_API_KEY !== "YOUR_GO_CAMPING_API_KEY") {
+      try {
+        const url = `https://apis.data.go.kr/B551011/GoCamping/basedList?numOfRows=100&pageNo=1&MobileOS=ETC&MobileApp=AppTest&serviceKey=${GO_CAMPING_API_KEY}&_type=json`;
+        const response = await fetch(url);
+        const data = await response.json();
+        if (data.response && data.response.body && data.response.body.items && data.response.body.items.item) {
+          let fetched = data.response.body.items.item;
+          if (!Array.isArray(fetched)) fetched = [fetched];
+          items = fetched.filter(item => item.mapY && item.mapX);
+        }
+      } catch (e) {
+        items = dummyData;
+      }
+    }
+
+    drawMapWithMarkers(items, null);
+  }
+
+  function openSingleMap(item) {
+    previousScreenBeforeMap = 'screen-list';
+    currentMapMode = 'single';
+    currentMapItem = item;
+    showScreen('screen-map');
+    drawMapWithMarkers([item], item);
+    setTimeout(() => openBottomSheet(item), 350);
+  }
+
+  function goBackFromMap() {
+    if (currentMapMode === 'single') {
+      showScreen(previousScreenBeforeMap || 'screen-list');
+    } else {
+      showScreen(previousScreenBeforeMap || 'screen-search-home');
+    }
+    document.getElementById('mapBottomSheet').classList.remove('show');
+  }
+
+  function ensureMap(centerLat = 36.5, centerLng = 127.8, level = 12) {
+    if (typeof kakao === 'undefined' || !kakao.maps) return null;
+    const container = document.getElementById('kakaoMap');
+    const center = new kakao.maps.LatLng(centerLat, centerLng);
+    if (!mapInstance) {
+      mapInstance = new kakao.maps.Map(container, { center, level });
+    } else {
+      mapInstance.relayout();
+      mapInstance.setCenter(center);
+      mapInstance.setLevel(level);
+    }
+    return mapInstance;
+  }
+
+  function clearMarkers() {
+    mapMarkers.forEach(marker => marker.setMap(null));
+    mapMarkers = [];
+  }
+
+  function drawMapWithMarkers(items, focusItem = null) {
+    const defaultLat = focusItem && focusItem.mapY ? parseFloat(focusItem.mapY) : 36.5;
+    const defaultLng = focusItem && focusItem.mapX ? parseFloat(focusItem.mapX) : 127.8;
+    const level = focusItem ? 5 : 13;
+    const map = ensureMap(defaultLat, defaultLng, level);
+    if (!map) return;
+
+    clearMarkers();
+    items.forEach(item => {
+      if (!item.mapY || !item.mapX) return;
+      const markerPosition = new kakao.maps.LatLng(parseFloat(item.mapY), parseFloat(item.mapX));
+      const marker = new kakao.maps.Marker({ position: markerPosition, map });
+      mapMarkers.push(marker);
+      kakao.maps.event.addListener(marker, 'click', () => {
+        currentMapMode = 'single';
+        currentMapItem = item;
+        openBottomSheet(item);
+        map.setCenter(markerPosition);
+        map.setLevel(5);
+      });
+    });
+  }
+
+  function openBottomSheet(item) {
+    const sheet = document.getElementById('mapBottomSheet');
+    const imgUrl = item.firstImageUrl || "https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?auto=format&fit=crop&w=150&q=80";
+    sheet.innerHTML = `
+      <img src="${imgUrl}" class="sheet-img">
+      <div class="sheet-info">
+        <div class="sheet-title">${item.facltNm}</div>
+        <div class="sheet-addr">${item.addr1 || ''}</div>
+        <div class="sheet-link">상세페이지로 이동 ➔</div>
+      </div>
+    `;
+    sheet.classList.add('show');
+    sheet.onclick = () => openDetailScreen(item);
+  }
+
+  function openDetailScreen(item) {
+    selectedCampForReserve = item;
+    showScreen('screen-detail');
+    document.getElementById('mapBottomSheet').classList.remove('show');
+    const imgUrl = item.firstImageUrl || "https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?auto=format&fit=crop&w=800&q=80";
+    document.getElementById('detailMainImg').src = imgUrl;
+    document.getElementById('detailTitle').textContent = item.facltNm;
+    document.getElementById('detailAddr').textContent = item.addr1 || '';
+  }
+
+  function openReserveScreen() {
+    if (!selectedCampForReserve) return;
+    document.getElementById('reserveCampName').textContent = selectedCampForReserve.facltNm;
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    document.getElementById('checkin').value = today.toISOString().split('T')[0];
+    document.getElementById('checkout').value = tomorrow.toISOString().split('T')[0];
+    showScreen('screen-reserve');
+  }
+
+  function completeReservation() {
+    alert('예약이 성공적으로 완료되었습니다!\n즐거운 캠핑 되세요🏕️');
+    showScreen('screen-home');
+  }
+</script>
+</body>
+</html>

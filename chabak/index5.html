@@ -432,7 +432,7 @@
         <div class="header-search">
           <div class="search-box">
             <i class="fas fa-search" style="color: #a0aabf;"></i>
-            <input type="text" id="searchInput" placeholder="캠핑장 이름을 검색해보세요" onkeypress="handleSearch(event)">
+            <input type="text" id="searchInput" type="search" inputmode="search" enterkeyhint="search" autocomplete="off" placeholder="캠핑장 이름을 검색해보세요" onkeydown="handleSearch(event)" onsearch="triggerSearchFromInput('searchInput')">
           </div>
           <i class="fas fa-heart head-icon heart" onclick="showFavorites()"></i>
           <i class="fas fa-map head-icon" onclick="openNationwideMap()"></i>
@@ -473,7 +473,7 @@
         <div class="header-search">
           <div class="search-box">
             <i class="fas fa-search" style="color: #a0aabf;"></i>
-            <input type="text" id="searchInputList" placeholder="캠핑장 이름을 검색해보세요" onkeypress="handleSearchFromList(event)">
+            <input type="text" id="searchInputList" type="search" inputmode="search" enterkeyhint="search" autocomplete="off" placeholder="캠핑장 이름을 검색해보세요" onkeydown="handleSearchFromList(event)" onsearch="triggerSearchFromInput('searchInputList')">
           </div>
           <i class="fas fa-heart head-icon heart" onclick="showFavorites()"></i>
           <i class="fas fa-map head-icon" onclick="openNationwideMap()"></i>
@@ -735,8 +735,20 @@
     loadRecentSearches();
   }
 
+
+  function triggerSearchFromInput(inputId) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+    const keyword = input.value.trim();
+    if (keyword) {
+      saveKeyword(keyword);
+      searchCamping(keyword);
+    }
+  }
+
   function handleSearch(e) {
-    if (e.key === 'Enter') {
+    if ((e.key === 'Enter' || e.keyCode === 13) && !e.isComposing) {
+      e.preventDefault();
       const keyword = e.target.value.trim();
       if (keyword) {
         saveKeyword(keyword);
@@ -746,7 +758,8 @@
   }
 
   function handleSearchFromList(e) {
-    if (e.key === 'Enter') {
+    if ((e.key === 'Enter' || e.keyCode === 13) && !e.isComposing) {
+      e.preventDefault();
       const keyword = e.target.value.trim();
       if (keyword) {
         saveKeyword(keyword);

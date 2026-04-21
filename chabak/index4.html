@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CAMBAK - 차박 앱</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5B73A7', // 메인 블루 컬러
+                        secondary: '#F3F4F6',
+                        textMain: '#374151',
+                        textSub: '#9CA3AF'
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans KR"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- 폰트 및 아이콘 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* 모바일 뷰포트 컨테이너 */
+        #app-container {
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            max-height: 850px;
+            background-color: white;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        /* Swiper 커스텀 스타일 */
+        .swiper-pagination-bullet {
+            background-color: #cbd5e1;
+            opacity: 1;
+        }
+        .swiper-pagination-bullet-active {
+            background-color: #5B73A7;
+        }
+        
+        .bottom-nav-shadow {
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        }
+
+        /* 숨김 스크롤바 */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 앱 메인 컨테이너 -->
+    <div id="app-container">
+
+        <!-- 1. Splash Screen -->
+        <div id="screen-splash" class="absolute inset-0 z-50 flex flex-col items-center justify-center bg-white transition-opacity duration-500 opacity-100">
+            <div class="text-center text-primary mb-10">
+                <i class="fa-solid fa-caravan text-6xl mb-2"></i>
+                <h1 class="text-3xl font-bold tracking-wider">CAMBAK</h1>
+            </div>
+            
+            <!-- 로딩 바 -->
+            <div class="w-48 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                <div id="loading-progress" class="bg-primary h-full w-0 transition-all ease-linear" style="transition-duration: 3000ms;"></div>
+            </div>
+        </div>
+
+        <!-- 2. Onboarding Screen (Swiper) -->
+        <div id="screen-onboarding" class="absolute inset-0 z-40 bg-white flex flex-col h-full pt-12 pb-8 px-6 transition-opacity duration-500 opacity-0 hidden">
+            
+            <!-- Swiper 영역 (Flex 제어로 하단 버튼 안 밀리게 처리) -->
+            <div class="swiper mySwiper w-full flex-1 min-h-0 relative">
+                <div class="swiper-wrapper">
+                    <!-- Slide 1 -->
+                    <div class="swiper-slide flex flex-col text-left">
+                        <div class="mb-8 shrink-0">
+                            <h2 class="text-3xl font-bold text-primary leading-tight mb-4">차박,<br>어디로 <span class="font-normal text-xl">떠나야 할지 모르겠나요?</span></h2>
+                            <p class="text-primary text-opacity-70 text-sm leading-relaxed">지도기반 위치 앱 및 키워드 검색으로<br>내가 원하는 장소를 한번에</p>
+                        </div>
+                        <div class="flex-1 flex justify-center items-center rounded-3xl bg-blue-50 relative overflow-hidden mb-8">
+                            <img src="./images/Group 1.png" alt="">
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 2 -->
+                    <div class="swiper-slide flex flex-col text-left">
+                        <div class="mb-8 shrink-0">
+                            <h2 class="text-primary font-normal text-xl mb-1">차만 있다면</h2>
+                            <h2 class="text-3xl font-bold text-primary leading-tight mb-4">장비는 <span class="font-normal text-xl">부담적은 </span>렌탈로</h2>
+                            <p class="text-primary text-opacity-70 text-sm leading-relaxed">차박에 필요한 물품들을 용도별로 둘러보세요</p>
+                        </div>
+                        <div class="flex-1 flex justify-center items-center rounded-3xl bg-blue-50 relative overflow-hidden mb-8">
+                            <img src="./images/Group 2.png" alt="">
+                        </div>
+                    </div>
+
+                    <!-- Slide 3 -->
+                    <div class="swiper-slide flex flex-col text-left">
+                        <div class="mb-8 shrink-0">
+                            <h2 class="text-primary font-normal text-xl mb-1">일상이 바쁠땐 실시간</h2>
+                            <h2 class="text-3xl font-bold text-primary leading-tight mb-4">라이브로 대리만족 <span class="font-normal text-xl">하세요</span></h2>
+                            <p class="text-primary text-opacity-70 text-sm leading-relaxed">라이브로 나를 뽐내고 시청자들과 소통하는<br>즐거움</p>
+                        </div>
+                        <div class="flex-1 flex justify-center items-center rounded-3xl bg-blue-50 relative overflow-hidden mb-8">
+                            <img src="./images/Group 3.png" alt="">
+                        </div>
+                    </div>
+                </div>
+                <!-- Pagination -->
+                <div class="swiper-pagination mb-2"></div>
+            </div>
+
+            <!-- 시작하기 버튼 (하단 고정) -->
+            <div class="mt-auto pt-6 shrink-0 z-10 w-full relative">
+                <button id="btn-start" class="w-full bg-primary text-white py-4 rounded-xl font-medium text-lg active:bg-blue-800 transition-colors shadow-md">
+                    시작하기
+                </button>
+            </div>
+        </div>
+
+        <!-- 3. Login Screen -->
+        <div id="screen-login" class="absolute inset-0 z-30 bg-white flex flex-col items-center pt-24 px-8 transition-opacity duration-500 opacity-0 hidden">
+            <div class="text-center text-primary mb-16">
+                <i class="fa-solid fa-caravan text-5xl mb-2"></i>
+                <h1 class="text-2xl font-bold tracking-wider">CAMBAK</h1>
+            </div>
+
+            <div class="w-full space-y-6">
+                <div class="border-b border-gray-300 pb-2">
+                    <label class="text-sm text-primary mb-1 block">아이디</label>
+                    <input type="text" class="w-full outline-none text-gray-700 bg-transparent" />
+                </div>
+                <div class="border-b border-gray-300 pb-2">
+                    <label class="text-sm text-primary mb-1 block">비밀번호</label>
+                    <input type="password" class="w-full outline-none text-gray-700 bg-transparent" />
+                </div>
+            </div>
+
+            <div class="w-full mt-10 space-y-3">
+                <button id="btn-login" class="w-full bg-primary text-white py-3.5 rounded-xl font-medium text-lg active:bg-blue-800 transition-colors shadow-md">
+                    로그인
+                </button>
+                <button class="w-full bg-blue-50 text-primary border border-primary py-3.5 rounded-xl font-medium text-lg active:bg-blue-100 transition-colors">
+                    회원가입
+                </button>
+            </div>
+
+            <div class="flex space-x-4 text-sm text-primary mt-6">
+                <a href="#" class="hover:underline">아이디찾기</a>
+                <span class="text-gray-300">|</span>
+                <a href="#" class="hover:underline">비밀번호찾기</a>
+                <span class="text-gray-300">|</span>
+                <a href="#" class="hover:underline">둘러보기</a>
+            </div>
+
+            <div class="w-full mt-auto mb-10">
+                <div class="flex items-center justify-center mb-6">
+                    <div class="border-t border-gray-300 flex-grow"></div>
+                    <span class="px-3 text-xs text-primary font-medium">간편 로그인</span>
+                    <div class="border-t border-gray-300 flex-grow"></div>
+                </div>
+                <div class="flex justify-center space-x-6">
+                    <div class="w-10 h-10 rounded-full bg-yellow-400 flex items-center justify-center text-amber-900 cursor-pointer hover:opacity-80"><i class="fa-solid fa-comment"></i></div>
+                    <div class="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white cursor-pointer hover:opacity-80"><i class="fa-solid fa-n"></i></div>
+                    <div class="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-red-500 cursor-pointer hover:opacity-80"><i class="fa-brands fa-google"></i></div>
+                    <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white cursor-pointer hover:opacity-80"><i class="fa-brands fa-facebook-f"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Home Screen (테마별) -->
+        <div id="screen-home" class="absolute inset-0 z-20 bg-white flex flex-col transition-opacity duration-500 opacity-0 hidden">
+            <!-- Scrollable Content -->
+            <div class="flex-1 overflow-y-auto pb-20 hide-scrollbar">
+                <!-- Header Banner -->
+                <div class="relative h-64 bg-gray-800">
+                    <img src="https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?auto=format&fit=crop&q=80&w=800" alt="캠핑 배경" class="w-full h-full object-cover opacity-70">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                    <div class="absolute bottom-6 left-6 text-white">
+                        <h2 class="text-2xl font-bold leading-snug">다양한 즐길 거리를 찾아<br>차박캠핑을 준비해보세요</h2>
+                    </div>
+                </div>
+
+                <!-- 카테고리 -->
+                <div class="px-4 py-6">
+                    <h3 class="text-primary font-bold text-lg mb-4">테마별 카테고리</h3>
+                    <div class="grid grid-cols-4 gap-y-6 text-center">
+                        <div class="flex flex-col items-center cursor-pointer hover:opacity-70">
+                            <div class="text-3xl mb-2">🌸</div>
+                            <span class="text-xs text-gray-600 font-medium">꽃놀이</span>
+                        </div>
+                        <div class="flex flex-col items-center cursor-pointer hover:opacity-70">
+                            <div class="text-3xl mb-2">🔥</div>
+                            <span class="text-xs text-gray-600 font-medium">불멍</span>
+                        </div>
+                        <div class="flex flex-col items-center cursor-pointer hover:opacity-70">
+                            <div class="text-3xl mb-2">🏙️</div>
+                            <span class="text-xs text-gray-600 font-medium">도심</span>
+                        </div>
+                        <div class="flex flex-col items-center cursor-pointer hover:opacity-70">
+                            <div class="text-3xl mb-2">⛺</div>
+                            <span class="text-xs text-gray-600 font-medium">별감상</span>
+                        </div>
+                        <div class="flex flex-col items-center cursor-pointer hover:opacity-70">
+                            <div class="text-3xl mb-2">🐶</div>
+                            <span class="text-xs text-gray-600 font-medium">반려견</span>
+                        </div>
+                        <div class="flex flex-col items-center cursor-pointer hover:opacity-70">
+                            <div class="text-3xl mb-2">⛰️</div>
+                            <span class="text-xs text-gray-600 font-medium">오지</span>
+                        </div>
+                        <div class="flex flex-col items-center cursor-pointer hover:opacity-70">
+                            <div class="text-3xl mb-2">🥩</div>
+                            <span class="text-xs text-gray-600 font-medium">바베큐</span>
+                        </div>
+                        <div class="flex flex-col items-center cursor-pointer hover:opacity-70">
+                            <div class="text-3xl mb-2">🧳</div>
+                            <span class="text-xs text-gray-600 font-medium">장비</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 퀵 버튼 -->
+                <div class="flex px-4 space-x-3 mb-8">
+                    <button class="flex-1 bg-blue-100 text-primary py-3 rounded-lg flex items-center justify-center font-medium active:bg-blue-200 transition-colors">
+                        <i class="fa-solid fa-ticket mr-2"></i> 쿠폰
+                    </button>
+                    <button class="flex-1 bg-blue-100 text-primary py-3 rounded-lg flex items-center justify-center font-medium active:bg-blue-200 transition-colors">
+                        <i class="fa-solid fa-gift mr-2"></i> 이벤트
+                    </button>
+                    <button class="flex-1 bg-blue-100 text-primary py-3 rounded-lg flex items-center justify-center font-medium active:bg-blue-200 transition-colors">
+                        <i class="fa-solid fa-box-open mr-2"></i> 혜택
+                    </button>
+                </div>
+
+                <!-- 랭킹 -->
+                <div class="px-4 mb-6">
+                    <h3 class="text-primary font-bold text-lg mb-4 text-center">장소 랭킹 Top 10</h3>
+                    <!-- 이미지들이 가운데 정렬되도록 justify-center 클래스 추가 -->
+                    <div class="flex justify-center space-x-3 overflow-x-auto pb-4 hide-scrollbar">
+                        <div class="w-40 h-28 flex-shrink-0 bg-blue-900 rounded-xl overflow-hidden relative shadow-sm cursor-pointer">
+                            <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba" class="w-full h-full object-cover object-center opacity-80" alt="별">
+                            <div class="absolute bottom-2 left-2 text-white text-xs font-bold">1위 은하수 캠핑장</div>
+                        </div>
+                        <div class="w-40 h-28 flex-shrink-0 bg-green-900 rounded-xl overflow-hidden relative shadow-sm cursor-pointer">
+                            <img src="https://images.unsplash.com/photo-1448375240586-882707db8855" class="w-full h-full object-cover object-center opacity-80" alt="숲">
+                            <div class="absolute bottom-2 left-2 text-white text-xs font-bold">2위 포레스트 파크</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 하단 네비게이션 탭 -->
+            <div class="absolute bottom-0 w-full bg-white h-16 bottom-nav-shadow flex items-center justify-between px-6 z-50">
+                <div class="flex flex-col items-center text-primary cursor-pointer">
+                    <i class="fa-solid fa-house text-lg mb-1"></i>
+                    <span class="text-[10px] font-bold">홈</span>
+                </div>
+                
+                <!-- 검색 아이콘에 a 태그를 적용하여 index.html로 이동하도록 수정 -->
+                <a href="./index2.html" class="flex flex-col items-center text-gray-400 hover:text-primary cursor-pointer transition-colors no-underline">
+                    <i class="fa-solid fa-magnifying-glass text-lg mb-1"></i>
+                    <span class="text-[10px]">검색</span>
+                </a>
+                
+                <div class="flex flex-col items-center text-gray-400 hover:text-primary cursor-pointer transition-colors">
+                    <i class="fa-solid fa-users text-lg mb-1"></i>
+                    <span class="text-[10px]">모임</span>
+                </div>
+                <div class="flex flex-col items-center text-gray-400 hover:text-primary cursor-pointer transition-colors">
+                    <i class="fa-brands fa-youtube text-lg mb-1"></i>
+                    <span class="text-[10px]">라이브</span>
+                </div>
+                <div class="flex flex-col items-center text-gray-400 hover:text-primary cursor-pointer transition-colors">
+                    <i class="fa-regular fa-user text-lg mb-1"></i>
+                    <span class="text-[10px]">My</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <!-- App Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const screenSplash = document.getElementById('screen-splash');
+            const screenOnboarding = document.getElementById('screen-onboarding');
+            const screenLogin = document.getElementById('screen-login');
+            const screenHome = document.getElementById('screen-home');
+            const loadingProgress = document.getElementById('loading-progress');
+
+            const btnStart = document.getElementById('btn-start');
+            const btnLogin = document.getElementById('btn-login');
+
+            let swiperInstance = null;
+            let isTransitioningToLogin = false;
+
+            // --- 유틸 함수: 화면 부드럽게 전환 ---
+            function showScreen(screen) {
+                screen.classList.remove('hidden');
+                // 강제로 리플로우(Reflow)를 발생시켜 transition이 먹히게 함
+                void screen.offsetWidth;
+                screen.classList.remove('opacity-0');
+                screen.classList.add('opacity-100');
+            }
+
+            function hideScreen(screen, callback) {
+                screen.classList.remove('opacity-100');
+                screen.classList.add('opacity-0');
+                // CSS Transition 시간(500ms)만큼 대기 후 완전 숨김
+                setTimeout(() => {
+                    screen.classList.add('hidden');
+                    if(callback) callback();
+                }, 500); 
+            }
+
+
+            // --- 1. Splash Screen 로직 ---
+            // 로딩 바 애니메이션 시작
+            setTimeout(() => {
+                loadingProgress.style.width = '100%';
+            }, 50);
+
+            // 3초 대기 후 온보딩 화면으로 부드럽게 이동
+            setTimeout(() => {
+                hideScreen(screenSplash, () => {
+                    showScreen(screenOnboarding);
+                    initSwiper(); // 화면이 나타난 직후 스와이퍼 초기화
+                });
+            }, 3000);
+
+
+            // --- 2. Swiper & 자동 전환 로직 ---
+            function initSwiper() {
+                swiperInstance = new Swiper(".mySwiper", {
+                    autoplay: {
+                        delay: 1000, // 1초 대기
+                        disableOnInteraction: false,
+                        stopOnLastSlide: true // 마지막 슬라이드(work3)에서 자동재생 멈춤
+                    },
+                    pagination: {
+                        el: ".swiper-pagination",
+                        clickable: true,
+                    },
+                    loop: false, // 무한 반복 끔
+                    on: {
+                        reachEnd: function () {
+                            // 마지막 슬라이드 도달 후, 슬라이드가 1.5초 정도 머물다 로그인 화면으로 전환
+                            setTimeout(() => {
+                                goToLogin();
+                            }, 1500); 
+                        }
+                    }
+                });
+            }
+
+            // 로그인 화면으로 이동하는 공통 함수
+            function goToLogin() {
+                // 중복 실행 방지
+                if (isTransitioningToLogin) return;
+                isTransitioningToLogin = true;
+
+                if (swiperInstance) swiperInstance.destroy(); // 스와이퍼 리소스 정리
+                
+                hideScreen(screenOnboarding, () => {
+                    showScreen(screenLogin);
+                });
+            }
+
+
+            // --- 3. 이벤트 리스너 ---
+            // Onboarding -> Login (사용자가 "시작하기" 직접 클릭 시)
+            btnStart.addEventListener('click', () => {
+                goToLogin();
+            });
+
+            // Login -> Home (테마별)
+            btnLogin.addEventListener('click', () => {
+                hideScreen(screenLogin, () => {
+                    showScreen(screenHome);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -67,38 +67,10 @@
         .chip.dark { background-color: #444; color: #fff; }
         .chip.light { background-color: #e8ebf5; color: #5a70b3; }
         
-        /* 💡 수정된 배너 영역 (Position & Full Width) */
-        .banner-wrapper {
-            position: relative; /* 텍스트의 기준점 */
-            width: 100%; /* 가로 화면 꽉 차게 */
-            margin-top: auto; 
-            margin-bottom: auto;
-            /* 여백 차단용 설정 */
-            padding: 0;
-            overflow: hidden; 
-        }
-        .banner-image {
-            width: 100%; /* 부모(화면) 가로 크기에 100% 맞춤 */
-            height: 260px; /* 원하는 이미지 높이 */
-            object-fit: cover; /* 비율이 깨지지 않게 크롭 */
-            display: block; /* 이미지 하단 미세 여백 제거 */
-            filter: brightness(0.7); /* 글씨가 잘 보이도록 이미지를 살짝 어둡게 (옵션) */
-        }
-        .banner-text {
-            position: absolute; /* 부모(.banner-wrapper) 기준으로 띄움 */
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%); /* 정확한 정중앙 배치 */
-            width: 100%;
-            color: #fff; 
-            font-size: 28px; 
-            font-weight: 800;
-            text-align: center; 
-            text-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            letter-spacing: -0.5px;
-            z-index: 2; /* 이미지 위로 올라오도록 설정 */
-            pointer-events: none; /* 텍스트를 클릭해도 문제없도록 처리 */
-        }
+        /* 배너 영역 */
+        .banner-wrapper { position: relative; width: 100%; margin-top: auto; margin-bottom: auto; padding: 0; overflow: hidden; }
+        .banner-image { width: 100%; height: 260px; object-fit: cover; display: block; filter: brightness(0.7); }
+        .banner-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%; color: #fff; font-size: 28px; font-weight: 800; text-align: center; text-shadow: 0 4px 15px rgba(0,0,0,0.5); letter-spacing: -0.5px; z-index: 2; pointer-events: none; }
 
         /* [리스트 화면 및 좋아요 버튼] */
         #listTitle { padding: 20px 20px 5px; font-size: 18px; font-weight: 800; color: #222; display: none; }
@@ -108,13 +80,10 @@
         .list-title { font-size: 16px; font-weight: 700; color: #222; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .list-addr { font-size: 13px; color: #777; line-height: 1.4; word-break: keep-all; }
         
-        .like-btn { 
-            position: absolute; right: 15px; top: 50%; transform: translateY(-50%);
-            font-size: 24px; color: #ddd; padding: 10px; cursor: pointer; transition: color 0.2s;
-        }
+        .like-btn { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); font-size: 24px; color: #ddd; padding: 10px; cursor: pointer; transition: color 0.2s; }
         .like-btn.liked { color: #ff5252; } 
 
-        /* [지도 & 바텀시트 & 상세화면] */
+        /* [지도 & 바텀시트] */
         #map-container { flex: 1; position: relative; width: 100%; height: 100%; }
         .map-back-btn { position: absolute; top: 20px; left: 20px; z-index: 100; background: #fff; width: 44px; height: 44px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.15); cursor: pointer; font-size: 20px; color: #333; }
         .bottom-sheet { position: absolute; bottom: -120%; left: 0; width: 100%; background: #fff; border-radius: 24px 24px 0 0; padding: 24px; box-shadow: 0 -4px 20px rgba(0,0,0,0.1); transition: bottom 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); z-index: 200; display: flex; gap: 16px; cursor: pointer; }
@@ -125,14 +94,31 @@
         .sheet-addr { font-size: 13px; color: #777; margin-bottom: 8px;}
         .sheet-link { font-size: 14px; color: #5a70b3; font-weight:700; }
         
+        /* [상세 페이지] */
         .detail-header { position: relative; height: 300px; width: 100%; flex-shrink: 0;}
         .detail-img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .detail-content { padding: 24px; }
         .detail-title { font-size: 24px; font-weight: 700; color: #111; margin-bottom: 10px; }
         .detail-addr { font-size: 14px; color: #666; margin-bottom: 24px; display: flex; align-items: center; gap: 6px;}
-        .btn-reserve { width: 100%; padding: 16px; background: #5a70b3; color: #fff; border-radius: 12px; font-size: 16px; font-weight: 700; text-align: center; margin-bottom: 30px; cursor: pointer; box-shadow: 0 4px 10px rgba(90, 112, 179, 0.3); }
+        .btn-reserve { width: 100%; padding: 16px; background: #5a70b3; color: #fff; border-radius: 12px; font-size: 16px; font-weight: 700; text-align: center; margin-bottom: 30px; cursor: pointer; box-shadow: 0 4px 10px rgba(90, 112, 179, 0.3); transition: transform 0.1s; }
+        .btn-reserve:active { transform: scale(0.98); }
         .fac-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top:12px; }
         .fac-grid img { width: 100%; height: 130px; object-fit: cover; border-radius: 12px; }
+
+        /* [💡 새로 추가된 예약 페이지 스타일] */
+        .reserve-top-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid #eee; }
+        .reserve-content { padding: 24px; }
+        .form-group { margin-bottom: 24px; }
+        .form-group label { display: block; font-size: 14px; font-weight: 700; color: #555; margin-bottom: 10px; }
+        .reserve-input { width: 100%; padding: 14px 16px; border: 1px solid #e0e0e0; border-radius: 10px; font-size: 15px; outline: none; background: #fafafa; color: #333; appearance: none; }
+        .reserve-input:focus { border-color: #5a70b3; background: #fff; }
+        .bottom-fixed-btn {
+            position: absolute; bottom: 0; left: 0; width: 100%; padding: 20px; 
+            background: #222; color: #fff; font-size: 18px; font-weight: 700; text-align: center; cursor: pointer;
+            padding-bottom: calc(20px + env(safe-area-inset-bottom));
+            z-index: 100;
+        }
+
         .hide-ui { opacity: 0; visibility: hidden; pointer-events: none; }
         .hide-nav { transform: translateY(100%); }
     </style>
@@ -140,7 +126,6 @@
 <body>
 
 <div id="app">
-    
     <div id="common-header">
         <div class="header-search">
             <div class="search-box">
@@ -166,12 +151,10 @@
                     <div class="chip light" onclick="searchCamping('계곡');"># 계곡캠핑</div>
                 </div>
             </div>
-            
             <div class="banner-wrapper">
                 <img src="./images/image 3.png" alt="프로모션 배너" class="banner-image">
                 <div class="banner-text">얼리버드 30%할인 행사</div>
             </div>
-
         </div>
     </div>
 
@@ -199,7 +182,8 @@
             <div class="detail-content">
                 <div class="detail-title" id="detailTitle">캠핑장 이름</div>
                 <div class="detail-addr"><i class="fas fa-map-marker-alt" style="color:#5a70b3;"></i> <span id="detailAddr">주소</span></div>
-                <div class="btn-reserve">객실 예약하기</div>
+                
+                <div class="btn-reserve" onclick="openReserveScreen()">예약하기</div>
                 
                 <div style="font-size: 18px; font-weight: 700; color: #222; margin-bottom: 5px;">시설 갤러리</div>
                 <div class="fac-grid">
@@ -208,6 +192,50 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div id="screen-reserve" class="screen">
+        <div class="reserve-top-bar">
+            <div style="font-size: 20px; cursor: pointer; padding: 5px;" onclick="goBack()"><i class="fas fa-arrow-left"></i></div>
+            <div style="font-size: 17px; font-weight: 700;">예약하기</div>
+            <div style="width: 24px;"></div> </div>
+
+        <div class="scroll-area" style="padding-bottom: 80px;">
+            <div class="reserve-content">
+                <h2 id="reserveCampName" style="margin-bottom: 24px; color: #111; font-size: 22px;">캠핑장 이름</h2>
+                
+                <div class="form-group">
+                    <label><i class="far fa-calendar-alt"></i> 캠핑 일정</label>
+                    <div style="display:flex; gap: 10px; align-items: center;">
+                        <input type="date" class="reserve-input" id="checkin">
+                        <span style="font-weight: bold; color: #777;">~</span>
+                        <input type="date" class="reserve-input" id="checkout">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-campground"></i> 사이트 유형 선택</label>
+                    <select class="reserve-input">
+                        <option value="">유형을 선택해주세요</option>
+                        <option>파쇄석 사이트 (오토캠핑/차박가능)</option>
+                        <option>데크 사이트 (텐트 전용)</option>
+                        <option>노지 구역 (차박 전용)</option>
+                        <option>감성 글램핑</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-users"></i> 이용 인원 및 차량</label>
+                    <div style="display:flex; gap: 10px; margin-bottom:10px;">
+                        <input type="number" class="reserve-input" placeholder="성인 (명)" min="1" value="2">
+                        <input type="number" class="reserve-input" placeholder="아동 (명)" min="0" value="0">
+                    </div>
+                    <input type="number" class="reserve-input" placeholder="차량 (대)" min="1" value="1">
+                    <p style="font-size: 12px; color: #888; margin-top: 8px;">* 기본 차량 1대 외 추가 차량은 현장 결제가 발생할 수 있습니다.</p>
+                </div>
+            </div>
+        </div>
+        <div class="bottom-fixed-btn" onclick="alert('예약이 성공적으로 완료되었습니다!\n즐거운 캠핑 되세요🏕️'); goHome();">예약 확정하기</div>
     </div>
 
     <div id="bottom-nav">
@@ -221,6 +249,7 @@
     const GO_CAMPING_API_KEY = "7fb32307d1084916efd402f8c7df555b7c616c5148ff08a6ca84f0d350bd4572"; 
     let mapInstance = null;
     let currentHistory = ['screen-home'];
+    let selectedCampForReserve = null; // 예약할 캠핑장 정보를 담을 변수
 
     const dummyData = [
         { facltNm: "가평 별빛 오토캠핑장", addr1: "경기도 가평군 북면", mapY: 37.8812, mapX: 127.5492, firstImageUrl: "https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?auto=format&fit=crop&w=300&q=80" },
@@ -404,12 +433,32 @@
     }
 
     function openDetailScreen(item) {
+        selectedCampForReserve = item; // 현재 선택된 캠핑장 저장
         showScreen('screen-detail');
         document.getElementById('mapBottomSheet').classList.remove('show'); 
+        
         const imgUrl = item.firstImageUrl || "https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?auto=format&fit=crop&w=800&q=80";
         document.getElementById('detailMainImg').src = imgUrl;
         document.getElementById('detailTitle').textContent = item.facltNm;
         document.getElementById('detailAddr').textContent = item.addr1;
+    }
+
+    // 💡 예약 화면 열기 함수
+    function openReserveScreen() {
+        if(!selectedCampForReserve) return;
+        
+        // 캠핑장 이름 세팅
+        document.getElementById('reserveCampName').textContent = selectedCampForReserve.facltNm;
+        
+        // 오늘 날짜 및 내일 날짜 기본 세팅 (편의성)
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        
+        document.getElementById('checkin').value = today.toISOString().split('T')[0];
+        document.getElementById('checkout').value = tomorrow.toISOString().split('T')[0];
+
+        showScreen('screen-reserve');
     }
 
     function showScreen(screenId) {
@@ -417,7 +466,9 @@
 
         const header = document.getElementById('common-header');
         const nav = document.getElementById('bottom-nav');
-        if(screenId === 'screen-map' || screenId === 'screen-detail') {
+        
+        // 지도, 상세, 예약 화면에서는 검색바와 하단 네비게이션을 숨김
+        if(screenId === 'screen-map' || screenId === 'screen-detail' || screenId === 'screen-reserve') {
             header.classList.add('hide-ui'); nav.classList.add('hide-nav');
         } else {
             header.classList.remove('hide-ui'); nav.classList.remove('hide-nav');
@@ -435,7 +486,7 @@
             
             const header = document.getElementById('common-header');
             const nav = document.getElementById('bottom-nav');
-            if(prevScreen === 'screen-map' || prevScreen === 'screen-detail') {
+            if(prevScreen === 'screen-map' || prevScreen === 'screen-detail' || prevScreen === 'screen-reserve') {
                 header.classList.add('hide-ui'); nav.classList.add('hide-nav');
             } else {
                 header.classList.remove('hide-ui'); nav.classList.remove('hide-nav');

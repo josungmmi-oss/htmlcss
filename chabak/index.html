@@ -1,1366 +1,523 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>전국 캠핑장 검색 서비스</title>
-  <style>
-    :root {
-      --bg: #f5f6fa;
-      --surface: #ffffff;
-      --surface-2: #eef2ff;
-      --line: #e8eaf3;
-      --text: #2a2e3f;
-      --muted: #878da3;
-      --primary: #6478c9;
-      --primary-soft: #dfe7ff;
-      --chip: #5f5f63;
-      --shadow: 0 16px 40px rgba(53, 63, 102, 0.12);
-      --radius-xl: 28px;
-      --radius-lg: 20px;
-      --radius-md: 16px;
-      --safe-top: env(safe-area-inset-top, 0px);
-      --safe-bottom: env(safe-area-inset-bottom, 0px);
-    }
-
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body {
-      margin: 0;
-      background: #dfe4f2;
-      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
-      color: var(--text);
-    }
-
-    .phone-shell {
-      width: 100%;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: stretch;
-      padding: 0;
-    }
-
-    .app {
-      position: relative;
-      width: 100%;
-      max-width: 430px;
-      min-height: 100vh;
-      background: var(--bg);
-      overflow: hidden;
-      box-shadow: 0 10px 40px rgba(40, 45, 68, 0.12);
-    }
-
-    .screen {
-      display: none;
-      min-height: 100vh;
-      padding-top: calc(12px + var(--safe-top));
-      padding-bottom: calc(88px + var(--safe-bottom));
-      background: var(--bg);
-    }
-
-    .screen.active { display: block; }
-    .screen.map-screen { padding: 0 0 calc(32px + var(--safe-bottom)); }
-    .screen.detail-screen { padding: 0 0 calc(88px + var(--safe-bottom)); }
-
-    .status-bar {
-      height: 28px;
-      padding: 0 22px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      color: var(--primary);
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      font-size: 14px;
-    }
-
-    .status-icons {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .status-icon {
-      width: 16px;
-      height: 10px;
-      border: 1.8px solid currentColor;
-      border-radius: 2px;
-      position: relative;
-      opacity: 0.8;
-    }
-
-    .status-icon::after {
-      content: "";
-      position: absolute;
-      top: 2px;
-      right: -3px;
-      width: 2px;
-      height: 4px;
-      border-radius: 0 2px 2px 0;
-      background: currentColor;
-    }
-
-    .signal, .wifi {
-      width: 16px;
-      height: 12px;
-      position: relative;
-      display: inline-block;
-    }
-
-    .signal::before {
-      content: "";
-      position: absolute;
-      inset: auto 0 0 0;
-      height: 10px;
-      background:
-        linear-gradient(to top, currentColor 100%, transparent 0) 0 100%/2px 4px no-repeat,
-        linear-gradient(to top, currentColor 100%, transparent 0) 4px 100%/2px 6px no-repeat,
-        linear-gradient(to top, currentColor 100%, transparent 0) 8px 100%/2px 8px no-repeat,
-        linear-gradient(to top, currentColor 100%, transparent 0) 12px 100%/2px 10px no-repeat;
-      opacity: 0.9;
-    }
-
-    .wifi::before {
-      content: "";
-      position: absolute;
-      left: 1px;
-      top: 0;
-      width: 12px;
-      height: 12px;
-      border: 2px solid currentColor;
-      border-color: currentColor transparent transparent transparent;
-      border-radius: 50%;
-      transform: rotate(45deg);
-      opacity: 0.75;
-    }
-
-    .page {
-      padding: 0 24px;
-    }
-
-    .search-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .search-box {
-      flex: 1;
-      height: 42px;
-      background: #c6cde7;
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      padding: 0 14px;
-      gap: 10px;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.35);
-    }
-
-    .search-box input {
-      flex: 1;
-      border: 0;
-      outline: none;
-      background: transparent;
-      color: #ffffff;
-      font-size: 16px;
-      font-weight: 600;
-    }
-
-    .search-box input::placeholder { color: rgba(255,255,255,0.85); }
-
-    .icon-btn {
-      border: 0;
-      background: none;
-      padding: 0;
-      margin: 0;
-      cursor: pointer;
-      color: var(--primary);
-    }
-
-    .icon-map {
-      width: 22px;
-      height: 22px;
-      border: 2px solid currentColor;
-      border-radius: 3px;
-      position: relative;
-    }
-
-    .icon-map::before,
-    .icon-map::after {
-      content: "";
-      position: absolute;
-      top: -2px;
-      bottom: -2px;
-      width: 2px;
-      background: currentColor;
-      opacity: 0.7;
-    }
-    .icon-map::before { left: 6px; }
-    .icon-map::after { right: 6px; }
-
-    .icon-search {
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(255,255,255,0.85);
-      border-radius: 50%;
-      position: relative;
-      flex: 0 0 auto;
-    }
-    .icon-search::after {
-      content: "";
-      position: absolute;
-      width: 8px;
-      height: 2px;
-      background: rgba(255,255,255,0.85);
-      right: -6px;
-      bottom: -1px;
-      transform: rotate(45deg);
-      border-radius: 4px;
-    }
-
-    .section-title {
-      margin: 34px 0 14px;
-      color: var(--primary);
-      font-size: 16px;
-      font-weight: 700;
-    }
-
-    .chips { display: flex; gap: 14px; flex-wrap: wrap; }
-    .chip {
-      border: 0;
-      padding: 12px 18px;
-      border-radius: 999px;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      color: #fff;
-      background: var(--chip);
-    }
-    .chip.light { background: #9eadde; }
-
-    .hero {
-      margin: 34px -24px 0;
-      position: relative;
-      height: 360px;
-      background:
-        linear-gradient(rgba(176, 201, 255, 0.35), rgba(176, 201, 255, 0.2)),
-        url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
-      overflow: hidden;
-    }
-
-    .hero-copy {
-      position: absolute;
-      top: 72px;
-      width: 100%;
-      text-align: center;
-      color: #5571c3;
-      font-weight: 800;
-      font-size: 24px;
-      line-height: 1.35;
-      text-shadow: 0 2px 10px rgba(255,255,255,0.25);
-    }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      inset: auto 0 0 0;
-      height: 90px;
-      background: linear-gradient(to top, rgba(0,0,0,0.10), transparent);
-    }
-
-    .list-wrap {
-      padding: 0 24px;
-    }
-
-    .list-head { margin-top: 12px; }
-    .result-summary {
-      margin: 12px 0 16px;
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    .camp-list {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .camp-card {
-      display: grid;
-      grid-template-columns: 130px 1fr;
-      gap: 14px;
-      align-items: start;
-      cursor: pointer;
-    }
-
-    .thumb {
-      width: 130px;
-      height: 130px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #d3dbf4, #b9c9ef);
-      object-fit: cover;
-      box-shadow: var(--shadow);
-    }
-
-    .camp-name {
-      font-size: 17px;
-      line-height: 1.35;
-      font-weight: 800;
-      margin: 2px 0 6px;
-      letter-spacing: -0.02em;
-    }
-
-    .camp-addr {
-      font-size: 14px;
-      color: #5f6375;
-      line-height: 1.45;
-      min-height: 40px;
-    }
-
-    .camp-meta {
-      margin-top: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      color: #9b9eab;
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    .bookmark {
-      width: 14px;
-      height: 18px;
-      border: 2px solid #b4b7c3;
-      border-bottom-left-radius: 2px;
-      border-bottom-right-radius: 2px;
-      clip-path: polygon(0 0,100% 0,100% 100%,50% 76%,0 100%);
-      opacity: 0.8;
-      margin-bottom: 8px;
-    }
-
-    .meta-left { display: flex; flex-direction: column; gap: 8px; }
-    .meta-row { display: flex; gap: 10px; align-items: center; }
-    .distance { white-space: nowrap; font-size: 14px; }
-
-    .map-screen .map-header,
-    .detail-header {
-      position: absolute;
-      z-index: 3;
-      top: calc(12px + var(--safe-top));
-      left: 20px;
-      right: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      pointer-events: none;
-    }
-
-    .back-btn,
-    .ghost-btn {
-      width: 36px;
-      height: 36px;
-      border: 0;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.92);
-      box-shadow: 0 8px 20px rgba(52,60,98,0.16);
-      display: grid;
-      place-items: center;
-      color: #4f67b6;
-      cursor: pointer;
-      pointer-events: auto;
-    }
-
-    .arrow-left {
-      width: 12px;
-      height: 12px;
-      border-left: 2px solid currentColor;
-      border-bottom: 2px solid currentColor;
-      transform: rotate(45deg);
-      margin-left: 4px;
-    }
-
-    #map {
-      width: 100%;
-      height: calc(100vh - var(--safe-bottom));
-      min-height: 720px;
-      background: #dce6f7;
-    }
-
-    .sheet {
-      position: absolute;
-      left: 16px;
-      right: 16px;
-      bottom: calc(18px + var(--safe-bottom));
-      z-index: 3;
-      background: rgba(255,255,255,0.97);
-      border-radius: 22px 22px 0 0;
-      padding: 18px 18px 20px;
-      box-shadow: 0 18px 40px rgba(30, 40, 76, 0.18);
-      display: none;
-    }
-
-    .sheet.active { display: block; }
-    .sheet-inner {
-      display: grid;
-      grid-template-columns: 110px 1fr;
-      gap: 14px;
-      align-items: start;
-    }
-    .sheet-thumb {
-      width: 110px;
-      height: 96px;
-      border-radius: 12px;
-      object-fit: cover;
-      background: linear-gradient(135deg, #d3dbf4, #b9c9ef);
-    }
-    .sheet-title {
-      margin: 2px 0 8px;
-      font-size: 16px;
-      font-weight: 800;
-      line-height: 1.35;
-    }
-    .sheet-addr {
-      font-size: 12px;
-      line-height: 1.45;
-      color: #666b80;
-      margin-bottom: 14px;
-    }
-    .sheet-link {
-      color: #9ca3b9;
-      font-size: 14px;
-      font-weight: 700;
-      text-decoration: none;
-    }
-
-    .detail-hero {
-      position: relative;
-      height: 470px;
-      overflow: hidden;
-      background: #c7d4ef;
-    }
-
-    .detail-hero img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .detail-panel {
-      position: relative;
-      margin-top: -1px;
-      background: var(--bg);
-      border-radius: 0;
-      padding: 18px 24px 0;
-    }
-
-    .detail-name {
-      font-size: 18px;
-      line-height: 1.35;
-      margin: 0 0 4px;
-      color: #5671c5;
-      font-weight: 800;
-    }
-
-    .detail-addr {
-      margin: 0 0 18px;
-      color: #667089;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .detail-link-row {
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      margin-bottom: 24px;
-    }
-
-    .link-action {
-      border: 0;
-      background: none;
-      padding: 0;
-      margin: 0;
-      color: #5570c3;
-      font-size: 18px;
-      font-weight: 800;
-      text-align: left;
-      cursor: pointer;
-    }
-
-    .gallery-title {
-      margin: 8px 0 16px;
-      font-size: 16px;
-      font-weight: 800;
-      color: #4c5063;
-    }
-
-    .gallery {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      padding-bottom: 20px;
-    }
-
-    .gallery img,
-    .gallery .photo-fallback {
-      width: 100%;
-      height: 120px;
-      border-radius: 12px;
-      object-fit: cover;
-      background: linear-gradient(135deg, #d7def5, #becbee);
-    }
-
-    .info-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .info-box {
-      background: var(--surface);
-      border-radius: 16px;
-      padding: 14px;
-      box-shadow: 0 8px 18px rgba(85, 100, 140, 0.08);
-    }
-
-    .info-label {
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 8px;
-    }
-
-    .info-value {
-      font-size: 14px;
-      font-weight: 700;
-      line-height: 1.45;
-      color: #444b60;
-      word-break: keep-all;
-    }
-
-    .floating-handle {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: calc(8px + var(--safe-bottom));
-      width: 132px;
-      height: 5px;
-      border-radius: 99px;
-      background: #5570c3;
-      opacity: 0.9;
-      z-index: 4;
-    }
-
-    .tabbar {
-      position: fixed;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: 0;
-      width: 100%;
-      max-width: 430px;
-      background: rgba(255,255,255,0.96);
-      backdrop-filter: blur(12px);
-      border-top: 1px solid rgba(90, 99, 140, 0.08);
-      z-index: 10;
-      padding: 10px 16px calc(14px + var(--safe-bottom));
-      display: flex;
-      justify-content: space-around;
-    }
-
-    .tab-item {
-      color: #b8b8be;
-      font-size: 12px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      min-width: 52px;
-      cursor: pointer;
-    }
-
-    .tab-item.active { color: #5b73c8; }
-    .tab-icon {
-      width: 22px;
-      height: 22px;
-      position: relative;
-      opacity: 0.9;
-    }
-    .tab-home::before { content: "⌂"; font-size: 22px; position: absolute; inset: 0; text-align: center; line-height: 22px; }
-    .tab-search::before {
-      content: "";
-      position: absolute;
-      left: 2px;
-      top: 2px;
-      width: 12px;
-      height: 12px;
-      border: 2px solid currentColor;
-      border-radius: 50%;
-    }
-    .tab-search::after {
-      content: "";
-      position: absolute;
-      width: 8px;
-      height: 2px;
-      background: currentColor;
-      right: 0;
-      bottom: 2px;
-      transform: rotate(45deg);
-      border-radius: 3px;
-    }
-    .tab-grid::before { content: "⌘"; font-size: 20px; position: absolute; inset: 0; text-align: center; line-height: 22px; }
-    .tab-play::before { content: "▻"; font-size: 20px; position: absolute; inset: 0; text-align: center; line-height: 20px; }
-    .tab-user::before { content: "◯"; font-size: 19px; position: absolute; inset: 0; text-align: center; line-height: 20px; }
-
-    .empty-state,
-    .loading,
-    .error-box {
-      background: var(--surface);
-      border-radius: 18px;
-      padding: 18px;
-      color: #5f657a;
-      font-size: 14px;
-      line-height: 1.6;
-      box-shadow: 0 10px 22px rgba(79, 91, 129, 0.08);
-    }
-
-    .helper-row {
-      display: flex;
-      gap: 10px;
-      margin-top: 12px;
-      flex-wrap: wrap;
-    }
-
-    .helper-btn {
-      border: 0;
-      background: var(--primary-soft);
-      color: var(--primary);
-      font-weight: 700;
-      border-radius: 999px;
-      padding: 10px 14px;
-      cursor: pointer;
-    }
-
-    .notice {
-      margin-top: 16px;
-      font-size: 12px;
-      color: #8d94ab;
-      line-height: 1.55;
-    }
-
-    .hidden { display: none !important; }
-
-    @media (min-width: 431px) {
-      .phone-shell { padding: 24px 0; }
-      .app { min-height: 820px; border-radius: 34px; }
-      .tabbar { bottom: 24px; border-radius: 0 0 34px 34px; }
-      .screen, .screen.map-screen, .screen.detail-screen { min-height: 820px; }
-      #map { min-height: 820px; height: 820px; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>캠핑장 검색 서비스</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=e863a55497769d28bf4f9b55634187ff"></script>
+    
+    <style>
+        /* [공통 초기화] */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Pretendard', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: #f0f0f0; display: flex; justify-content: center; height: 100vh; height: 100dvh; overflow: hidden; }
+        
+        #app {
+            width: 100%; max-width: 440px; height: 100%;
+            background-color: #fff; position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1); overflow: hidden;
+        }
+
+        /* [화면 전환 애니메이션] */
+        .screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: #fff; display: flex; flex-direction: column;
+            transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1); z-index: 10;
+        }
+        .screen.base-screen { transform: translateX(0); z-index: 5; }
+        .screen.active { transform: translateX(0); z-index: 15; box-shadow: -5px 0 15px rgba(0,0,0,0.05); }
+
+        /* [스크롤 및 레이아웃] */
+        .scroll-area { flex: 1; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; }
+        .scroll-area::-webkit-scrollbar { display: none; }
+        .has-header { padding-top: 70px; }
+        .has-nav { padding-bottom: 80px; }
+
+        /* [헤더 및 검색바] - Form 태그로 변경됨 */
+        #common-header {
+            position: absolute; top: 0; left: 0; width: 100%; z-index: 20;
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(5px);
+            transition: opacity 0.3s ease, visibility 0.3s;
+        }
+        .header-search { padding: 15px 20px; display: flex; align-items: center; gap: 12px; }
+        .search-box {
+            flex: 1; background-color: #f0f2f8; border-radius: 12px;
+            display: flex; align-items: center; padding: 12px 15px; margin: 0; border: none;
+        }
+        .search-box input { 
+            border: none; background: none; outline: none; width: 100%; margin-left: 10px; 
+            font-size: 15px; -webkit-appearance: none; 
+        }
+        .head-icon { font-size: 24px; color: #5a70b3; cursor: pointer; padding: 4px; }
+        .head-icon.heart { color: #ff5252; } 
+
+        /* 하단 네비게이션 */
+        #bottom-nav {
+            position: absolute; bottom: 0; left: 0; width: 100%; z-index: 20;
+            display: flex; justify-content: space-around; padding: 12px 0;
+            background: #fff; border-top: 1px solid #eee; padding-bottom: calc(12px + env(safe-area-inset-bottom));
+        }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #ccc; font-size: 11px; gap: 5px; cursor: pointer; }
+        .nav-item.active { color: #5a70b3; }
+        .nav-item i { font-size: 22px; }
+
+        /* [홈 화면] */
+        .keyword-container { padding: 20px; flex-shrink: 0; }
+        .section-title { font-size: 16px; color: #333; margin-bottom: 12px; font-weight: 700; }
+        .chip-group { display: flex; gap: 8px; flex-wrap: wrap; }
+        .chip { padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 500; cursor: pointer; }
+        .chip.dark { background-color: #444; color: #fff; }
+        .chip.light { background-color: #e8ebf5; color: #5a70b3; }
+        
+        /* 배너 영역 */
+        .banner-wrapper { position: relative; width: 100%; margin-top: auto; margin-bottom: auto; padding: 0; overflow: hidden; }
+        .banner-image { width: 100%; height: 357px; object-fit: cover; display: block; filter: brightness(0.7); }
+        .banner-text { position: absolute; top: 20%; left: 30%; transform: translate(-50%, -50%); width: 100%; color: #fff; font-size: 24px; font-weight: 500; text-align: center; text-shadow: 0 4px 15px rgba(0,0,0,0.5); letter-spacing: -0.5px; z-index: 2; pointer-events: none; }
+
+        /* [리스트 화면] */
+        #listTitle { padding: 20px 20px 5px; font-size: 18px; font-weight: 800; color: #222; display: none; }
+        .list-item { display: flex; padding: 15px 20px; border-bottom: 1px solid #f5f5f5; gap: 15px; cursor: pointer; position: relative;}
+        .list-img { width: 90px; height: 90px; border-radius: 12px; object-fit: cover; flex-shrink: 0; background-color: #eee;}
+        .list-info { flex: 1; display: flex; flex-direction: column; justify-content: center; overflow: hidden; padding-right: 30px;}
+        .list-title { font-size: 16px; font-weight: 700; color: #222; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .list-addr { font-size: 13px; color: #777; line-height: 1.4; word-break: keep-all; }
+        
+        .like-btn { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); font-size: 24px; color: #ddd; padding: 10px; cursor: pointer; transition: color 0.2s; }
+        .like-btn.liked { color: #ff5252; } 
+
+        /* [지도 & 바텀시트] */
+        #map-container { flex: 1; position: relative; width: 100%; height: 100%; }
+        .map-back-btn { position: absolute; top: 20px; left: 20px; z-index: 100; background: #fff; width: 44px; height: 44px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.15); cursor: pointer; font-size: 20px; color: #333; }
+        .bottom-sheet { position: absolute; bottom: -120%; left: 0; width: 100%; background: #fff; border-radius: 24px 24px 0 0; padding: 24px; box-shadow: 0 -4px 20px rgba(0,0,0,0.1); transition: bottom 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); z-index: 200; display: flex; gap: 16px; cursor: pointer; }
+        .bottom-sheet.show { bottom: 0; }
+        .sheet-img { width: 80px; height: 80px; border-radius: 16px; object-fit: cover; flex-shrink:0;}
+        .sheet-info { display: flex; flex-direction: column; justify-content: center; overflow:hidden;}
+        .sheet-title { font-size: 17px; font-weight: 700; color: #222; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px;}
+        .sheet-addr { font-size: 13px; color: #777; margin-bottom: 8px;}
+        .sheet-link { font-size: 14px; color: #5a70b3; font-weight:700; }
+        
+        /* [상세 페이지] */
+        .detail-header { position: relative; height: 300px; width: 100%; flex-shrink: 0;}
+        .detail-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .detail-content { padding: 24px; }
+        .detail-title { font-size: 24px; font-weight: 700; color: #111; margin-bottom: 10px; }
+        .detail-addr { font-size: 14px; color: #666; margin-bottom: 24px; display: flex; align-items: center; gap: 6px;}
+        .btn-reserve { width: 100%; padding: 16px; background: #5a70b3; color: #fff; border-radius: 12px; font-size: 16px; font-weight: 700; text-align: center; margin-bottom: 30px; cursor: pointer; box-shadow: 0 4px 10px rgba(90, 112, 179, 0.3); transition: transform 0.1s; }
+        .btn-reserve:active { transform: scale(0.98); }
+        .fac-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top:12px; }
+        .fac-grid img { width: 100%; height: 130px; object-fit: cover; border-radius: 12px; }
+
+        /* [예약 페이지] */
+        .reserve-top-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid #eee; }
+        .reserve-content { padding: 24px; }
+        .form-group { margin-bottom: 24px; }
+        .form-group label { display: block; font-size: 14px; font-weight: 700; color: #555; margin-bottom: 10px; }
+        .reserve-input { width: 100%; padding: 14px 16px; border: 1px solid #e0e0e0; border-radius: 10px; font-size: 15px; outline: none; background: #fafafa; color: #333; appearance: none; }
+        .reserve-input:focus { border-color: #5a70b3; background: #fff; }
+        .bottom-fixed-btn {
+            position: absolute; bottom: 0; left: 0; width: 100%; padding: 20px; 
+            background: #222; color: #fff; font-size: 18px; font-weight: 700; text-align: center; cursor: pointer;
+            padding-bottom: calc(20px + env(safe-area-inset-bottom));
+            z-index: 100;
+        }
+
+        .hide-ui { opacity: 0; visibility: hidden; pointer-events: none; }
+        .hide-nav { transform: translateY(100%); }
+    </style>
 </head>
 <body>
-  <div class="phone-shell">
-    <div class="app">
-      <section class="screen active" id="search-screen">
-        <div class="status-bar">
-          <div>9:41</div>
-          <div class="status-icons">
-            <span class="signal"></span>
-            <span class="wifi"></span>
-            <span class="status-icon"></span>
-          </div>
+
+<div id="app">
+    <div id="common-header">
+        <div class="header-search">
+            <form class="search-box" onsubmit="handleSearchSubmit(event)">
+                <i class="fas fa-search" style="color: #a0aabf;" onclick="handleSearchSubmit(event)"></i>
+                <input type="search" id="searchInput" placeholder="캠핑장 이름을 검색해보세요">
+            </form>
+            <i class="fas fa-heart head-icon heart" onclick="showFavorites()"></i>
+            <i class="fas fa-map head-icon" onclick="openMapScreen()"></i>
         </div>
-
-        <div class="page">
-          <div class="search-row">
-            <div class="search-box">
-              <span class="icon-search"></span>
-              <input id="search-input" type="text" placeholder="지역 또는 키워드를 검색해주세요" />
-            </div>
-            <button class="icon-btn" id="quick-map-open" aria-label="지도 열기">
-              <span class="icon-map"></span>
-            </button>
-          </div>
-
-          <h2 class="section-title">최근 검색어</h2>
-          <div class="chips" id="recent-chips"></div>
-
-          <h2 class="section-title">인기 키워드</h2>
-          <div class="chips">
-            <button class="chip light" data-keyword="오토캠핑">오토캠핑</button>
-            <button class="chip light" data-keyword="차박">차박</button>
-            <button class="chip light" data-keyword="강화도">강화도</button>
-            <button class="chip light" data-keyword="카라반">카라반</button>
-          </div>
-
-          <div class="hero">
-            <div class="hero-copy">전국 캠핑장 검색<br />원하는 장소를 찾아보세요</div>
-          </div>
-        </div>
-      </section>
-
-      <section class="screen" id="list-screen">
-        <div class="status-bar">
-          <div>9:41</div>
-          <div class="status-icons">
-            <span class="signal"></span>
-            <span class="wifi"></span>
-            <span class="status-icon"></span>
-          </div>
-        </div>
-
-        <div class="list-wrap">
-          <div class="search-row list-head">
-            <div class="search-box">
-              <span class="icon-search"></span>
-              <input id="list-search-input" type="text" placeholder="지역 또는 키워드를 검색해주세요" />
-            </div>
-            <button class="icon-btn" id="open-map-from-list" aria-label="지도 보기">
-              <span class="icon-map"></span>
-            </button>
-          </div>
-
-          <div class="result-summary" id="result-summary">검색 결과를 불러오는 중...</div>
-          <div id="list-feedback" class="loading">검색 결과를 불러오는 중입니다.</div>
-          <div class="camp-list" id="camp-list"></div>
-        </div>
-      </section>
-
-      <section class="screen map-screen" id="map-screen">
-        <div class="status-bar" style="position:absolute; z-index:3; top: calc(0px + var(--safe-top)); left:0; right:0; color:#5d78c8;">
-          <div style="padding-left:22px;">9:41</div>
-          <div class="status-icons" style="padding-right:22px;">
-            <span class="signal"></span>
-            <span class="wifi"></span>
-            <span class="status-icon"></span>
-          </div>
-        </div>
-        <div class="map-header">
-          <button class="back-btn" id="back-from-map" aria-label="뒤로가기"><span class="arrow-left"></span></button>
-          <button class="ghost-btn" id="focus-selected" aria-label="선택 위치로 이동">◎</button>
-        </div>
-        <div id="map"></div>
-        <div class="sheet" id="bottom-sheet">
-          <div class="sheet-inner">
-            <img id="sheet-image" class="sheet-thumb" alt="캠핑장 이미지" />
-            <div>
-              <div class="sheet-title" id="sheet-title"></div>
-              <div class="sheet-addr" id="sheet-addr"></div>
-              <a href="#" class="sheet-link" id="sheet-detail-link">상세 정보 보기</a>
-            </div>
-          </div>
-        </div>
-        <div class="floating-handle"></div>
-      </section>
-
-      <section class="screen detail-screen" id="detail-screen">
-        <div class="detail-header">
-          <button class="back-btn" id="back-from-detail" aria-label="뒤로가기"><span class="arrow-left"></span></button>
-        </div>
-        <div class="status-bar" style="position:absolute; z-index:3; top: calc(0px + var(--safe-top)); left:0; right:0; color:#5d78c8;">
-          <div style="padding-left:22px;">9:41</div>
-          <div class="status-icons" style="padding-right:22px;">
-            <span class="signal"></span>
-            <span class="wifi"></span>
-            <span class="status-icon"></span>
-          </div>
-        </div>
-        <div class="detail-hero">
-          <img id="detail-hero-image" alt="캠핑장 대표 이미지" />
-        </div>
-        <div class="detail-panel">
-          <h1 class="detail-name" id="detail-name"></h1>
-          <p class="detail-addr" id="detail-addr"></p>
-
-          <div class="detail-link-row">
-            <button class="link-action" id="go-booking-btn">예약/홈페이지 보기 ▶</button>
-            <button class="link-action" id="toggle-facility-btn">편의시설 보기 ▼</button>
-          </div>
-
-          <div class="info-grid hidden" id="facility-panel"></div>
-
-          <h3 class="gallery-title">캠핑장 사진</h3>
-          <div class="gallery" id="detail-gallery"></div>
-
-          <p class="notice" id="detail-notice"></p>
-        </div>
-      </section>
-
-      <nav class="tabbar">
-        <div class="tab-item" data-screen="search-screen"><span class="tab-icon tab-home"></span><span>홈</span></div>
-        <div class="tab-item active" data-screen="search-screen"><span class="tab-icon tab-search"></span><span>검색</span></div>
-        <div class="tab-item"><span class="tab-icon tab-grid"></span><span>모임</span></div>
-        <div class="tab-item"><span class="tab-icon tab-play"></span><span>라이브</span></div>
-        <div class="tab-item"><span class="tab-icon tab-user"></span><span>My</span></div>
-      </nav>
     </div>
-  </div>
 
-  <script>
-    /*
-      ==========================
-      여기에 API KEY를 넣어주세요.
-      ==========================
-    */
-    const GOCAMPING_SERVICE_KEY = "7fb32307d1084916efd402f8c7df555b7c616c5148ff08a6ca84f0d350bd4572";
-    const KAKAO_JAVASCRIPT_KEY = "e863a55497769d28bf4f9b55634187ff";
+    <div id="screen-home" class="screen base-screen">
+        <div class="scroll-area has-header has-nav">
+            <div class="keyword-container">
+                <div class="section-title">최근 검색어</div>
+                <div class="chip-group" id="recentSearches"></div>
+            </div>
+            <div class="keyword-container">
+                <div class="section-title">인기 테마</div>
+                <div class="chip-group">
+                    <div class="chip light" onclick="triggerSearch('차박');"># 차박명소</div>
+                    <div class="chip light" onclick="triggerSearch('글램핑');"># 감성글램핑</div>
+                    <div class="chip light" onclick="triggerSearch('계곡');"># 계곡캠핑</div>
+                </div>
+            </div>
+            <div class="banner-wrapper">
+                <img src="./images/image 3.png" alt="프로모션 배너" class="banner-image">
+                <div class="banner-text">얼리버드 예약 <br> 30%할인 행사</div>
+            </div>
+        </div>
+    </div>
 
-    const API_BASE = "https://apis.data.go.kr/B551011/GoCamping";
-    const APP_NAME = "CampingSearchApp";
-    const RECENT_KEY = "gocamping_recent_keywords";
-    const FALLBACK_IMAGE = "data:image/svg+xml;utf8," + encodeURIComponent(`
-      <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
-        <defs>
-          <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#dce4fa"/>
-            <stop offset="100%" stop-color="#bccaf0"/>
-          </linearGradient>
-        </defs>
-        <rect width="800" height="600" fill="url(#g)"/>
-        <g fill="#6b7ec8" opacity="0.9">
-          <path d="M220 420h360v24H220z"/>
-          <path d="M270 420l110-170 110 170H270z"/>
-          <path d="M500 420l60-90 60 90h-120z" opacity="0.75"/>
-          <circle cx="600" cy="160" r="46" opacity="0.45"/>
-        </g>
-      </svg>
-    `);
+    <div id="screen-list" class="screen">
+        <div class="scroll-area has-header has-nav">
+            <div id="listTitle">검색 결과</div>
+            <div id="resultList"></div>
+        </div>
+    </div>
 
-    const state = {
-      currentScreen: "search-screen",
-      results: [],
-      selected: null,
-      markers: [],
-      map: null,
-      mapLoaded: false,
-      mapLoadPromise: null,
-      lastKeyword: "",
-      historyStack: ["search-screen"],
-    };
+    <div id="screen-map" class="screen">
+        <div id="map-container">
+            <div class="map-back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i></div>
+            <div id="kakaoMap" style="width:100%; height:100%;"></div>
+            <div class="bottom-sheet" id="mapBottomSheet"></div>
+        </div>
+    </div>
 
-    const el = {
-      searchScreen: document.getElementById("search-screen"),
-      listScreen: document.getElementById("list-screen"),
-      mapScreen: document.getElementById("map-screen"),
-      detailScreen: document.getElementById("detail-screen"),
-      searchInput: document.getElementById("search-input"),
-      listSearchInput: document.getElementById("list-search-input"),
-      recentChips: document.getElementById("recent-chips"),
-      campList: document.getElementById("camp-list"),
-      listFeedback: document.getElementById("list-feedback"),
-      resultSummary: document.getElementById("result-summary"),
-      bottomSheet: document.getElementById("bottom-sheet"),
-      sheetImage: document.getElementById("sheet-image"),
-      sheetTitle: document.getElementById("sheet-title"),
-      sheetAddr: document.getElementById("sheet-addr"),
-      sheetDetailLink: document.getElementById("sheet-detail-link"),
-      detailHeroImage: document.getElementById("detail-hero-image"),
-      detailName: document.getElementById("detail-name"),
-      detailAddr: document.getElementById("detail-addr"),
-      detailGallery: document.getElementById("detail-gallery"),
-      detailNotice: document.getElementById("detail-notice"),
-      facilityPanel: document.getElementById("facility-panel"),
-      goBookingBtn: document.getElementById("go-booking-btn"),
-      toggleFacilityBtn: document.getElementById("toggle-facility-btn"),
-    };
+    <div id="screen-detail" class="screen">
+        <div class="scroll-area" style="padding-bottom: 40px;">
+            <div class="detail-header">
+                <div class="map-back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i></div>
+                <img src="" class="detail-img" id="detailMainImg" alt="캠핑장">
+            </div>
+            <div class="detail-content">
+                <div class="detail-title" id="detailTitle">캠핑장 이름</div>
+                <div class="detail-addr"><i class="fas fa-map-marker-alt" style="color:#5a70b3;"></i> <span id="detailAddr">주소</span></div>
+                
+                <div class="btn-reserve" onclick="openReserveScreen()">예약하기</div>
+                
+                <div style="font-size: 18px; font-weight: 700; color: #222; margin-bottom: 5px;">시설 갤러리</div>
+                <div class="fac-grid">
+                    <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=300&q=80">
+                    <img src="https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&w=300&q=80">
+                    <img src="./images/Frame 51.png" alt="">
+                    <img src="./images/Frame 52.png" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
 
-    function normalizeImage(src) {
-      if (!src || typeof src !== "string") return FALLBACK_IMAGE;
-      return src.trim() || FALLBACK_IMAGE;
+    <div id="screen-reserve" class="screen">
+        <div class="reserve-top-bar">
+            <div style="font-size: 20px; cursor: pointer; padding: 5px;" onclick="goBack()"><i class="fas fa-arrow-left"></i></div>
+            <div style="font-size: 17px; font-weight: 700;">예약하기</div>
+            <div style="width: 24px;"></div>
+        </div>
+
+        <div class="scroll-area" style="padding-bottom: 80px;">
+            <div class="reserve-content">
+                <h2 id="reserveCampName" style="margin-bottom: 24px; color: #111; font-size: 22px;">캠핑장 이름</h2>
+                
+                <div class="form-group">
+                    <label><i class="far fa-calendar-alt"></i> 캠핑 일정</label>
+                    <div style="display:flex; gap: 10px; align-items: center;">
+                        <input type="date" class="reserve-input" id="checkin">
+                        <span style="font-weight: bold; color: #777;">~</span>
+                        <input type="date" class="reserve-input" id="checkout">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-campground"></i> 사이트 유형 선택</label>
+                    <select class="reserve-input">
+                        <option value="">유형을 선택해주세요</option>
+                        <option>파쇄석 사이트 (오토캠핑/차박가능)</option>
+                        <option>데크 사이트 (텐트 전용)</option>
+                        <option>노지 구역 (차박 전용)</option>
+                        <option>감성 글램핑</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-users"></i> 이용 인원 및 차량</label>
+                    <div style="display:flex; gap: 10px; margin-bottom:10px;">
+                        <input type="number" class="reserve-input" placeholder="성인 (명)" min="1" value="2">
+                        <input type="number" class="reserve-input" placeholder="아동 (명)" min="0" value="0">
+                    </div>
+                    <input type="number" class="reserve-input" placeholder="차량 (대)" min="1" value="1">
+                    <p style="font-size: 12px; color: #888; margin-top: 8px;">* 기본 차량 1대 외 추가 차량은 현장 결제가 발생할 수 있습니다.</p>
+                </div>
+            </div>
+        </div>
+        <div class="bottom-fixed-btn" onclick="alert('예약이 성공적으로 완료되었습니다!\n즐거운 캠핑 되세요🏕️'); goHome();">예약 확정하기</div>
+    </div>
+
+    <div id="bottom-nav">
+        <div class="nav-item active" onclick="goHome()"><i class="fas fa-home"></i><span>홈</span></div>
+        <div class="nav-item" onclick="showFavorites()"><i class="far fa-heart"></i><span>찜</span></div>
+        <div class="nav-item"><i class="far fa-user"></i><span>MY</span></div>
+    </div>
+</div>
+
+<script>
+    const GO_CAMPING_API_KEY = "7fb32307d1084916efd402f8c7df555b7c616c5148ff08a6ca84f0d350bd4572"; 
+    let mapInstance = null;
+    let currentHistory = ['screen-home'];
+    let selectedCampForReserve = null;
+
+    const dummyData = [
+        { facltNm: "가평 별빛 오토캠핑장", addr1: "경기도 가평군 북면", mapY: 37.8812, mapX: 127.5492, firstImageUrl: "https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?auto=format&fit=crop&w=300&q=80" },
+        { facltNm: "평창 흥정계곡 캠핑장", addr1: "강원도 평창군 봉평면", mapY: 37.6167, mapX: 128.3223, firstImageUrl: "https://images.unsplash.com/photo-1537565266751-34fd38d100fb?auto=format&fit=crop&w=300&q=80" },
+        { facltNm: "제주 애월 바당 캠핑장", addr1: "제주특별자치도 제주시 애월읍", mapY: 33.4623, mapX: 126.3197, firstImageUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=300&q=80" }
+    ];
+
+    window.onload = () => loadRecentSearches();
+
+    function loadRecentSearches() {
+        const history = JSON.parse(localStorage.getItem('camping_history') || '[]');
+        const container = document.getElementById('recentSearches');
+        container.innerHTML = '';
+        history.forEach(keyword => {
+            const chip = document.createElement('div');
+            chip.className = 'chip dark';
+            chip.textContent = keyword;
+            chip.onclick = () => triggerSearch(keyword);
+            container.appendChild(chip);
+        });
     }
 
-    function safeText(text, fallback = "정보 없음") {
-      if (text === null || text === undefined || text === "") return fallback;
-      return String(text);
+    // 💡 1. 폼(Form) 전송 이벤트 핸들러: 모바일 키보드 호환성 완벽 처리
+    function handleSearchSubmit(e) {
+        if(e) e.preventDefault(); // 기본 새로고침 방지
+        const keyword = document.getElementById('searchInput').value.trim();
+        if(keyword) {
+            document.getElementById('searchInput').blur(); // 💡 키보드 강제로 내리기
+            saveKeyword(keyword);
+            searchCamping(keyword);
+        }
     }
 
-    function formatDistance(item) {
-      if (!item || !navigator.geolocation || item.distanceKm == null) return "거리 정보 없음";
-      return `${item.distanceKm.toFixed(1)}Km`;
+    // 💡 2. 칩셋 클릭 시 폼 전송 우회 처리
+    function triggerSearch(keyword) {
+        document.getElementById('searchInput').value = keyword;
+        saveKeyword(keyword);
+        searchCamping(keyword);
     }
 
-    function readRecentKeywords() {
-      try {
-        return JSON.parse(localStorage.getItem(RECENT_KEY) || "[]");
-      } catch (e) {
-        return [];
-      }
-    }
-
-    function saveRecentKeyword(keyword) {
-      const trimmed = keyword.trim();
-      if (!trimmed) return;
-      const next = [trimmed, ...readRecentKeywords().filter(item => item !== trimmed)].slice(0, 8);
-      localStorage.setItem(RECENT_KEY, JSON.stringify(next));
-      renderRecentKeywords();
-    }
-
-    function renderRecentKeywords() {
-      const keywords = readRecentKeywords();
-      if (!keywords.length) {
-        el.recentChips.innerHTML = `<div class="empty-state" style="padding:14px 16px; border-radius:14px; width:100%;">최근 검색어가 아직 없습니다.</div>`;
-        return;
-      }
-
-      el.recentChips.innerHTML = keywords.map(keyword => (
-        `<button class="chip" data-keyword="${escapeHtml(keyword)}">${escapeHtml(keyword)}</button>`
-      )).join("");
-    }
-
-    function escapeHtml(str) {
-      return String(str)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', '&quot;')
-        .replaceAll("'", '&#39;');
-    }
-
-    function setActiveTab(screenId) {
-      document.querySelectorAll('.tab-item').forEach((tab, index) => {
-        if (index >= 2) return;
-        tab.classList.toggle('active', tab.dataset.screen === screenId || (screenId !== 'search-screen' && tab.dataset.screen === undefined));
-      });
-      const tabs = document.querySelectorAll('.tab-item');
-      if (tabs[1]) tabs[1].classList.add('active');
-      if (screenId === 'search-screen') {
-        tabs[0].classList.remove('active');
-      }
-    }
-
-    function showScreen(screenId, push = true) {
-      document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
-      const target = document.getElementById(screenId);
-      if (target) target.classList.add('active');
-      state.currentScreen = screenId;
-      setActiveTab(screenId);
-
-      if (push) {
-        const last = state.historyStack[state.historyStack.length - 1];
-        if (last !== screenId) state.historyStack.push(screenId);
-      }
-
-      if (screenId === 'map-screen' && state.map && window.kakao?.maps) {
-        setTimeout(() => {
-          window.kakao.maps.event.trigger(state.map, 'resize');
-          if (state.selected) focusItemOnMap(state.selected);
-        }, 100);
-      }
-    }
-
-    function goBack(fallback = 'search-screen') {
-      if (state.historyStack.length > 1) {
-        state.historyStack.pop();
-        showScreen(state.historyStack[state.historyStack.length - 1], false);
-      } else {
-        showScreen(fallback, false);
-      }
+    function saveKeyword(keyword) {
+        let history = JSON.parse(localStorage.getItem('camping_history') || '[]');
+        history = history.filter(item => item !== keyword);
+        history.unshift(keyword);
+        if(history.length > 5) history.pop();
+        localStorage.setItem('camping_history', JSON.stringify(history));
+        loadRecentSearches();
     }
 
     async function searchCamping(keyword) {
-      const trimmed = keyword.trim();
-      if (!trimmed) {
-        alert('검색어를 입력해주세요.');
-        return;
-      }
-
-      if (GOCAMPING_SERVICE_KEY === 'YOUR_GOCAMPING_SERVICE_KEY') {
-        showScreen('list-screen');
-        el.listFeedback.className = 'error-box';
-        el.listFeedback.innerHTML = '고캠핑 서비스키가 비어 있습니다.<br>파일 상단의 <strong>GOCAMPING_SERVICE_KEY</strong> 값을 먼저 넣어주세요.';
-        el.campList.innerHTML = '';
-        el.resultSummary.textContent = 'API 키 확인 필요';
-        return;
-      }
-
-      saveRecentKeyword(trimmed);
-      state.lastKeyword = trimmed;
-      el.searchInput.value = trimmed;
-      el.listSearchInput.value = trimmed;
-      showScreen('list-screen');
-      renderLoading();
-
-      try {
-        const items = await fetchCampingData(trimmed);
-        state.results = await enrichDistances(items);
-        renderList(trimmed, state.results);
-      } catch (error) {
-        console.error(error);
-        el.listFeedback.className = 'error-box';
-        el.listFeedback.innerHTML = '검색 결과를 불러오지 못했습니다.<br>서비스키, 호출 URL, 또는 브라우저 네트워크 상태를 확인해주세요.';
-        el.campList.innerHTML = '';
-        el.resultSummary.textContent = '검색 실패';
-      }
-    }
-
-    function renderLoading() {
-      el.resultSummary.textContent = '검색 중...';
-      el.campList.innerHTML = '';
-      el.listFeedback.className = 'loading';
-      el.listFeedback.textContent = '검색 결과를 불러오는 중입니다.';
-    }
-
-    async function fetchCampingData(keyword) {
-      const url = new URL(`${API_BASE}/searchList`);
-      url.searchParams.set('serviceKey', GOCAMPING_SERVICE_KEY);
-      url.searchParams.set('MobileOS', 'ETC');
-      url.searchParams.set('MobileApp', APP_NAME);
-      url.searchParams.set('_type', 'json');
-      url.searchParams.set('numOfRows', '60');
-      url.searchParams.set('pageNo', '1');
-      url.searchParams.set('keyword', keyword);
-
-      const response = await fetch(url.toString());
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const data = await response.json();
-      const items = data?.response?.body?.items?.item || [];
-      return Array.isArray(items) ? items : [items].filter(Boolean);
-    }
-
-    async function enrichDistances(items) {
-      const userPosition = await getUserPosition().catch(() => null);
-      return items.map(item => {
-        const normalized = normalizeCampingItem(item);
-        if (userPosition && normalized.mapY && normalized.mapX) {
-          normalized.distanceKm = calculateDistanceKm(
-            userPosition.latitude,
-            userPosition.longitude,
-            Number(normalized.mapY),
-            Number(normalized.mapX)
-          );
-        } else {
-          normalized.distanceKm = null;
-        }
-        return normalized;
-      }).sort((a, b) => {
-        if (a.distanceKm == null && b.distanceKm == null) return 0;
-        if (a.distanceKm == null) return 1;
-        if (b.distanceKm == null) return -1;
-        return a.distanceKm - b.distanceKm;
-      });
-    }
-
-    function normalizeCampingItem(item) {
-      return {
-        contentId: safeText(item.contentId, crypto.randomUUID()),
-        facltNm: safeText(item.facltNm),
-        addr1: safeText(item.addr1),
-        addr2: safeText(item.addr2, ''),
-        doNm: safeText(item.doNm, ''),
-        sigunguNm: safeText(item.sigunguNm, ''),
-        induty: safeText(item.induty, '일반야영장'),
-        lctCl: safeText(item.lctCl, '입지 정보 없음'),
-        lineIntro: safeText(item.lineIntro, ''),
-        intro: safeText(item.intro, '소개 정보 없음'),
-        sbrsCl: safeText(item.sbrsCl, '편의시설 정보 없음'),
-        homepage: safeText(item.homepage, ''),
-        resveUrl: safeText(item.resveUrl, ''),
-        resveCl: safeText(item.resveCl, ''),
-        mapX: item.mapX ? Number(item.mapX) : null,
-        mapY: item.mapY ? Number(item.mapY) : null,
-        firstImageUrl: normalizeImage(item.firstImageUrl),
-        createdtime: safeText(item.createdtime, ''),
-        toiletCo: safeText(item.toiletCo, '-'),
-        swrmCo: safeText(item.swrmCo, '-'),
-        wtrplCo: safeText(item.wtrplCo, '-'),
-        brazierCl: safeText(item.brazierCl, '-'),
-        animalCmgCl: safeText(item.animalCmgCl, '-'),
-        caravAcmpnyAt: safeText(item.caravAcmpnyAt, '-'),
-        trlerAcmpnyAt: safeText(item.trlerAcmpnyAt, '-'),
-        posblFcltyCl: safeText(item.posblFcltyCl, '-'),
-        siteBottomCl1: safeText(item.siteBottomCl1, '0'),
-        siteBottomCl2: safeText(item.siteBottomCl2, '0'),
-        siteBottomCl3: safeText(item.siteBottomCl3, '0'),
-        siteBottomCl4: safeText(item.siteBottomCl4, '0'),
-        siteBottomCl5: safeText(item.siteBottomCl5, '0'),
-      };
-    }
-
-    function renderList(keyword, items) {
-      el.resultSummary.textContent = `"${keyword}" 검색 결과 ${items.length}건`;
-
-      if (!items.length) {
-        el.listFeedback.className = 'empty-state';
-        el.listFeedback.innerHTML = `검색 결과가 없습니다.<br>다른 지역명이나 키워드로 다시 검색해주세요.`;
-        el.campList.innerHTML = '';
-        return;
-      }
-
-      el.listFeedback.className = 'hidden';
-      el.listFeedback.textContent = '';
-      el.campList.innerHTML = items.map(item => `
-        <article class="camp-card" data-id="${escapeHtml(item.contentId)}">
-          <img class="thumb" src="${escapeHtml(item.firstImageUrl)}" alt="${escapeHtml(item.facltNm)}" loading="lazy" onerror="this.src='${FALLBACK_IMAGE}'" />
-          <div>
-            <h3 class="camp-name">${escapeHtml(item.facltNm)}</h3>
-            <div class="camp-addr">${escapeHtml(item.addr1)}${item.addr2 ? `<br>${escapeHtml(item.addr2)}` : ''}</div>
-            <div class="camp-meta">
-              <div class="meta-left">
-                <div class="bookmark"></div>
-                <div>${escapeHtml(item.induty)}</div>
-              </div>
-              <div class="distance">${escapeHtml(formatDistance(item))}</div>
-            </div>
-          </div>
-        </article>
-      `).join('');
-    }
-
-    function getItemById(id) {
-      return state.results.find(item => item.contentId === id) || null;
-    }
-
-    function ensureKakaoMap() {
-      if (window.kakao?.maps) return Promise.resolve();
-      if (KAKAO_JAVASCRIPT_KEY === 'YOUR_KAKAO_JAVASCRIPT_KEY') {
-        return Promise.reject(new Error('Kakao JavaScript key missing'));
-      }
-      if (state.mapLoadPromise) return state.mapLoadPromise;
-
-      state.mapLoadPromise = new Promise((resolve, reject) => {
-        const script = document.createElement('script');
-        script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_JAVASCRIPT_KEY}&autoload=false`;
-        script.onload = () => window.kakao.maps.load(resolve);
-        script.onerror = reject;
-        document.head.appendChild(script);
-      });
-
-      return state.mapLoadPromise;
-    }
-
-    async function openMapWithResults(selectedId = null) {
-      if (!state.results.length) {
-        alert('먼저 검색 결과를 불러와주세요.');
-        return;
-      }
-
-      try {
-        await ensureKakaoMap();
-      } catch (error) {
-        console.error(error);
-        alert('카카오맵 키를 확인해주세요. KAKAO_JAVASCRIPT_KEY 값이 필요합니다.');
-        return;
-      }
-
-      showScreen('map-screen');
-      initOrUpdateMap(selectedId);
-    }
-
-    function initOrUpdateMap(selectedId = null) {
-      const firstWithCoord = state.results.find(item => item.mapX && item.mapY);
-      const base = firstWithCoord || state.results[0];
-      const center = new kakao.maps.LatLng(base.mapY || 37.5665, base.mapX || 126.9780);
-
-      if (!state.map) {
-        state.map = new kakao.maps.Map(document.getElementById('map'), {
-          center,
-          level: 9,
+        // 💡 3. 예약페이지로 넘어가는 Z-index 버그 방지 (기존 열린 화면 강제 삭제)
+        ['screen-map', 'screen-detail', 'screen-reserve'].forEach(id => {
+            document.getElementById(id).classList.remove('active');
         });
-      } else {
-        state.map.setCenter(center);
-      }
+        
+        // 검색 화면(리스트)으로 히스토리 강제 지정
+        currentHistory = ['screen-home']; 
+        showScreen('screen-list');
 
-      clearMarkers();
-      const bounds = new kakao.maps.LatLngBounds();
+        const listContainer = document.getElementById('resultList');
+        document.getElementById('listTitle').style.display = 'none'; 
+        listContainer.innerHTML = '<div style="padding:50px 20px; text-align:center; color:#777;">데이터를 불러오는 중입니다...</div>';
 
-      state.results.forEach(item => {
-        if (!item.mapX || !item.mapY) return;
-        const position = new kakao.maps.LatLng(item.mapY, item.mapX);
-        const marker = new kakao.maps.Marker({ position, map: state.map });
-        marker.__itemId = item.contentId;
-        state.markers.push(marker);
-        bounds.extend(position);
-        kakao.maps.event.addListener(marker, 'click', () => selectCamp(item.contentId, true));
-      });
-
-      if (!bounds.isEmpty()) {
-        state.map.setBounds(bounds, 60, 60, 60, 60);
-      }
-
-      const targetId = selectedId || state.selected?.contentId || state.results[0]?.contentId;
-      if (targetId) selectCamp(targetId, true);
-    }
-
-    function clearMarkers() {
-      state.markers.forEach(marker => marker.setMap(null));
-      state.markers = [];
-    }
-
-    function selectCamp(id, fromMap = false) {
-      const item = getItemById(id);
-      if (!item) return;
-      state.selected = item;
-      renderBottomSheet(item);
-      if (state.currentScreen === 'map-screen' && (fromMap || item.mapX && item.mapY)) {
-        focusItemOnMap(item);
-      }
-    }
-
-    function focusItemOnMap(item) {
-      if (!state.map || !item?.mapX || !item?.mapY || !window.kakao?.maps) return;
-      const center = new kakao.maps.LatLng(item.mapY, item.mapX);
-      state.map.panTo(center);
-      state.map.setLevel(5);
-    }
-
-    function renderBottomSheet(item) {
-      el.bottomSheet.classList.add('active');
-      el.sheetImage.src = item.firstImageUrl;
-      el.sheetImage.onerror = () => { el.sheetImage.src = FALLBACK_IMAGE; };
-      el.sheetTitle.textContent = item.facltNm;
-      el.sheetAddr.textContent = item.addr1;
-      el.sheetDetailLink.onclick = (e) => {
-        e.preventDefault();
-        openDetail(item.contentId);
-      };
-    }
-
-    function buildGalleryImages(item) {
-      const gallery = [item.firstImageUrl];
-      return gallery.filter(Boolean);
-    }
-
-    function renderFacilities(item) {
-      const info = [
-        ['업종', item.induty],
-        ['입지', item.lctCl],
-        ['편의시설', item.sbrsCl],
-        ['주변시설', item.posblFcltyCl],
-        ['화장실', item.toiletCo],
-        ['샤워실', item.swrmCo],
-        ['개수대', item.wtrplCo],
-        ['화로대', item.brazierCl],
-        ['반려동물', item.animalCmgCl],
-        ['카라반 동반', item.caravAcmpnyAt],
-        ['트레일러 동반', item.trlerAcmpnyAt],
-        ['예약 방식', item.resveCl || '정보 없음'],
-      ];
-
-      el.facilityPanel.innerHTML = info.map(([label, value]) => `
-        <div class="info-box">
-          <div class="info-label">${escapeHtml(label)}</div>
-          <div class="info-value">${escapeHtml(value || '정보 없음')}</div>
-        </div>
-      `).join('');
-    }
-
-    function openDetail(id) {
-      const item = getItemById(id);
-      if (!item) return;
-      state.selected = item;
-
-      el.detailHeroImage.src = item.firstImageUrl;
-      el.detailHeroImage.onerror = () => { el.detailHeroImage.src = FALLBACK_IMAGE; };
-      el.detailName.textContent = item.facltNm;
-      el.detailAddr.textContent = `${item.addr1}${item.addr2 ? ' ' + item.addr2 : ''}`;
-      renderFacilities(item);
-
-      const photos = buildGalleryImages(item);
-      el.detailGallery.innerHTML = photos.length
-        ? photos.map(src => `<img src="${escapeHtml(src)}" alt="${escapeHtml(item.facltNm)} 사진" onerror="this.src='${FALLBACK_IMAGE}'" />`).join('') +
-          `<div class="photo-fallback"></div><div class="photo-fallback"></div><div class="photo-fallback"></div>`
-        : `<div class="photo-fallback"></div><div class="photo-fallback"></div><div class="photo-fallback"></div><div class="photo-fallback"></div>`;
-
-      el.detailNotice.textContent = item.lineIntro && item.lineIntro !== '정보 없음'
-        ? item.lineIntro
-        : item.intro;
-
-      el.goBookingBtn.onclick = () => {
-        const url = item.resveUrl || item.homepage;
-        if (!url || url === '정보 없음') {
-          alert('연결 가능한 예약/홈페이지 정보가 없습니다.');
-          return;
-        }
-        window.open(url, '_blank', 'noopener');
-      };
-
-      el.toggleFacilityBtn.onclick = () => {
-        el.facilityPanel.classList.toggle('hidden');
-        el.toggleFacilityBtn.textContent = el.facilityPanel.classList.contains('hidden')
-          ? '편의시설 보기 ▼'
-          : '편의시설 닫기 ▲';
-      };
-
-      el.facilityPanel.classList.add('hidden');
-      el.toggleFacilityBtn.textContent = '편의시설 보기 ▼';
-      showScreen('detail-screen');
-    }
-
-    function getUserPosition() {
-      return new Promise((resolve, reject) => {
-        if (!navigator.geolocation) return reject(new Error('geolocation unsupported'));
-        navigator.geolocation.getCurrentPosition(
-          pos => resolve({ latitude: pos.coords.latitude, longitude: pos.coords.longitude }),
-          reject,
-          { enableHighAccuracy: true, timeout: 6000, maximumAge: 600000 }
-        );
-      });
-    }
-
-    function calculateDistanceKm(lat1, lon1, lat2, lon2) {
-      const toRad = deg => deg * Math.PI / 180;
-      const R = 6371;
-      const dLat = toRad(lat2 - lat1);
-      const dLon = toRad(lon2 - lon1);
-      const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
-      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-      return R * c;
-    }
-
-    function bindEvents() {
-      el.searchInput.addEventListener('keydown', e => {
-        if (e.key === 'Enter') searchCamping(e.target.value);
-      });
-
-      el.listSearchInput.addEventListener('keydown', e => {
-        if (e.key === 'Enter') searchCamping(e.target.value);
-      });
-
-      document.body.addEventListener('click', e => {
-        const keywordButton = e.target.closest('[data-keyword]');
-        if (keywordButton) {
-          searchCamping(keywordButton.dataset.keyword);
-          return;
+        if (GO_CAMPING_API_KEY === "YOUR_GO_CAMPING_API_KEY") {
+            setTimeout(() => renderList(dummyData, false), 400);
+            return;
         }
 
-        const card = e.target.closest('.camp-card');
-        if (card) {
-          selectCamp(card.dataset.id);
-          openMapWithResults(card.dataset.id);
+        try {
+            const url = `https://apis.data.go.kr/B551011/GoCamping/searchList?numOfRows=20&pageNo=1&MobileOS=ETC&MobileApp=AppTest&serviceKey=${GO_CAMPING_API_KEY}&_type=json&keyword=${encodeURIComponent(keyword)}`;
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (data.response && data.response.body && data.response.body.items && data.response.body.items !== "") {
+                let items = data.response.body.items.item;
+                if (!Array.isArray(items)) items = [items]; 
+                renderList(items, false);
+            } else {
+                listContainer.innerHTML = '<div style="padding:50px 20px; text-align:center; color:#777;">검색 결과가 없습니다.</div>';
+            }
+        } catch (error) {
+            renderList(dummyData, false);
         }
-      });
-
-      document.getElementById('quick-map-open').addEventListener('click', () => {
-        if (state.results.length) openMapWithResults(state.selected?.contentId || state.results[0]?.contentId);
-        else alert('먼저 검색 후 지도 보기를 이용해주세요.');
-      });
-
-      document.getElementById('open-map-from-list').addEventListener('click', () => {
-        openMapWithResults(state.selected?.contentId || state.results[0]?.contentId);
-      });
-
-      document.getElementById('back-from-map').addEventListener('click', () => goBack('list-screen'));
-      document.getElementById('back-from-detail').addEventListener('click', () => goBack('map-screen'));
-      document.getElementById('focus-selected').addEventListener('click', () => {
-        if (state.selected) focusItemOnMap(state.selected);
-      });
-
-      document.querySelectorAll('.tab-item[data-screen]').forEach(tab => {
-        tab.addEventListener('click', () => showScreen(tab.dataset.screen));
-      });
     }
 
-    function init() {
-      renderRecentKeywords();
-      bindEvents();
-      showScreen('search-screen', false);
+    function showFavorites() {
+        let likes = JSON.parse(localStorage.getItem('liked_camps') || '[]');
+        renderList(likes, true);
+        showScreen('screen-list');
     }
 
-    init();
-  </script>
+    function renderList(items, isFavoriteView = false) {
+        const listContainer = document.getElementById('resultList');
+        const listTitle = document.getElementById('listTitle');
+        listContainer.innerHTML = '';
+        
+        if(isFavoriteView) {
+            listTitle.style.display = 'block';
+            listTitle.textContent = `❤️ 내가 찜한 캠핑장 (${items.length})`;
+        } else {
+            listTitle.style.display = 'none';
+        }
+
+        if(items.length === 0) {
+            listContainer.innerHTML = '<div style="padding:50px 20px; text-align:center; color:#777;">목록이 비어있습니다.</div>';
+            return;
+        }
+
+        let likes = JSON.parse(localStorage.getItem('liked_camps') || '[]');
+
+        items.forEach(item => {
+            const isLiked = likes.some(c => c.facltNm === item.facltNm);
+            const heartClass = isLiked ? 'fas fa-heart like-btn liked' : 'far fa-heart like-btn';
+            
+            const div = document.createElement('div');
+            div.className = 'list-item';
+            const imgUrl = item.firstImageUrl || "https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?auto=format&fit=crop&w=150&q=80";
+            
+            div.innerHTML = `
+                <img src="${imgUrl}" class="list-img" alt="썸네일">
+                <div class="list-info">
+                    <div class="list-title">${item.facltNm}</div>
+                    <div class="list-addr">${item.addr1 || item.doNm + ' ' + item.sigunguNm}</div>
+                </div>
+                <i class="${heartClass}"></i>
+            `;
+            
+            const likeBtn = div.querySelector('.like-btn');
+            likeBtn.onclick = (e) => {
+                e.stopPropagation(); 
+                toggleLikeLogic(e.target, item);
+            };
+
+            div.onclick = () => openMapScreen(item);
+            listContainer.appendChild(div);
+        });
+    }
+
+    function toggleLikeLogic(targetEl, item) {
+        let likes = JSON.parse(localStorage.getItem('liked_camps') || '[]');
+        const index = likes.findIndex(c => c.facltNm === item.facltNm);
+
+        if(index > -1) {
+            likes.splice(index, 1);
+            targetEl.className = 'far fa-heart like-btn';
+        } else {
+            likes.push(item);
+            targetEl.className = 'fas fa-heart like-btn liked';
+        }
+        
+        localStorage.setItem('liked_camps', JSON.stringify(likes));
+        
+        const listTitle = document.getElementById('listTitle');
+        if (listTitle.style.display === 'block') {
+            showFavorites(); 
+        }
+    }
+
+    function openMapScreen(item = null) {
+        showScreen('screen-map');
+        if (typeof kakao === 'undefined' || !kakao.maps) return;
+
+        const lat = item && item.mapY ? parseFloat(item.mapY) : 36.5; 
+        const lng = item && item.mapX ? parseFloat(item.mapX) : 127.8;
+        const targetPosition = new kakao.maps.LatLng(lat, lng);
+
+        setTimeout(() => {
+            const container = document.getElementById('kakaoMap');
+            if(!mapInstance) {
+                mapInstance = new kakao.maps.Map(container, { center: targetPosition, level: item ? 5 : 12 });
+            } else {
+                mapInstance.relayout();
+                mapInstance.setCenter(targetPosition);
+                mapInstance.setLevel(item ? 5 : 12);
+            }
+            if(item) {
+                const marker = new kakao.maps.Marker({ position: targetPosition, map: mapInstance });
+                kakao.maps.event.addListener(marker, 'click', () => openBottomSheet(item));
+                openBottomSheet(item); 
+            }
+        }, 350); 
+    }
+
+    function openBottomSheet(item) {
+        const sheet = document.getElementById('mapBottomSheet');
+        const imgUrl = item.firstImageUrl || "https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?auto=format&fit=crop&w=150&q=80";
+        sheet.innerHTML = `
+            <img src="${imgUrl}" class="sheet-img">
+            <div class="sheet-info">
+                <div class="sheet-title">${item.facltNm}</div>
+                <div class="sheet-addr">${item.addr1}</div>
+                <div class="sheet-link">상세페이지로 이동 ➔</div>
+            </div>
+        `;
+        sheet.classList.add('show');
+        sheet.onclick = () => openDetailScreen(item);
+    }
+
+    function openDetailScreen(item) {
+        selectedCampForReserve = item; 
+        showScreen('screen-detail');
+        document.getElementById('mapBottomSheet').classList.remove('show'); 
+        
+        const imgUrl = item.firstImageUrl || "https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?auto=format&fit=crop&w=800&q=80";
+        document.getElementById('detailMainImg').src = imgUrl;
+        document.getElementById('detailTitle').textContent = item.facltNm;
+        document.getElementById('detailAddr').textContent = item.addr1;
+    }
+
+    function openReserveScreen() {
+        if(!selectedCampForReserve) return;
+        
+        document.getElementById('reserveCampName').textContent = selectedCampForReserve.facltNm;
+        
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        
+        document.getElementById('checkin').value = today.toISOString().split('T')[0];
+        document.getElementById('checkout').value = tomorrow.toISOString().split('T')[0];
+
+        showScreen('screen-reserve');
+    }
+
+    function showScreen(screenId) {
+        if(screenId !== 'screen-home') document.getElementById(screenId).classList.add('active');
+
+        const header = document.getElementById('common-header');
+        const nav = document.getElementById('bottom-nav');
+        
+        if(screenId === 'screen-map' || screenId === 'screen-detail' || screenId === 'screen-reserve') {
+            header.classList.add('hide-ui'); nav.classList.add('hide-nav');
+        } else {
+            header.classList.remove('hide-ui'); nav.classList.remove('hide-nav');
+        }
+        if(currentHistory[currentHistory.length - 1] !== screenId) currentHistory.push(screenId);
+    }
+
+    function goBack() {
+        if(currentHistory.length > 1) {
+            const currentScreen = currentHistory.pop();
+            document.getElementById(currentScreen).classList.remove('active');
+            const prevScreen = currentHistory[currentHistory.length - 1];
+            
+            if(prevScreen === 'screen-map') document.getElementById('mapBottomSheet').classList.remove('show');
+            
+            const header = document.getElementById('common-header');
+            const nav = document.getElementById('bottom-nav');
+            if(prevScreen === 'screen-map' || prevScreen === 'screen-detail' || prevScreen === 'screen-reserve') {
+                header.classList.add('hide-ui'); nav.classList.add('hide-nav');
+            } else {
+                header.classList.remove('hide-ui'); nav.classList.remove('hide-nav');
+            }
+        }
+    }
+
+    function goHome() {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        currentHistory = ['screen-home'];
+        document.getElementById('common-header').classList.remove('hide-ui');
+        document.getElementById('bottom-nav').classList.remove('hide-nav');
+    }
+</script>
 </body>
 </html>

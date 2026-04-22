@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문서객체 선택방법(querySelector)</title>
+</head>
+
+<body>
+    <div class="box">
+        <h1>큰제목태그1</h1>
+        <h1>큰제목태그2</h1>
+        <h1>큰제목태그3</h1>
+    </div>
+    <h1>큰제목태그4</h1>
+    <h1>큰제목태그5</h1>
+
+    <script>
+        //querySelector(): css부모와 자식간의 선택자를 줄때
+        // 1.문서객체를 선택 맨 위에 태그 하나만 선택된다
+
+        let tit = document.querySelector(".box h1");
+        console.log(tit);
+        tit.style.border="Spx solid red";
+
+        //querySelectorAll() : 부모와 자식간의 관계를 선택할때 자식 모두다 선택된다.
+        let tit2 = document.querySelectorAll(".box h1")
+        console.log(tit2)
+        tit2[0].style.background="red"
+        tit2[1].style.background="blue"
+        tit2[2].style.background="green"
+    </script>
+</body>
+</html>

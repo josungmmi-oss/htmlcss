@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문서객체 선택</title>
+</head>
+<body>
+    <h1 id="txt1">제목태그1</h1>
+    <h1 id="txt2">제목태그2</h1>
+    <h1 id="txt3">제목태그3</h1>
+    <script>
+        // 
+
+        let tit1 = document.getElementById("txt1");
+        console.log(tit1);
+        //자바스크립트 프로그램으로 css적용
+        //객체.style->자바스크립트를 프로그램으로 css적용시 명령
+        tit1.style.color = "red";
+        tit1.style.background = "yellow";
+        // fond-size의 -(dasi)사용불가
+        tit1.style.fontSize="100px"
+        
+        //두번째 제목: 문서객체를 선택하여 자바를 가져와서 변수에 저장
+        let tit2 = document.getElementById("txt2");
+        console.log(tit2);
+        tit2.style.color="blue"
+
+        //세번째 제목: 글자색을 초록색, 배경색 빨강, 글자크기 48px 으로 스타일지정
+        let tit3 = document.getElementById("txt3");
+        console.log(tit3);
+        tit3.style.color = "green";
+        tit3.style.background = "red";
+        tit3.style.fontSize = "48px";
+        tit3.style.fontWeight ="900";
+</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>클릭이벤트(click,function)</title>
+</head>
+<body>
+    <h1 id="txt">제일 큰 제목 태그</h1>
+    <h2 id="txt2">두번째 큰 제목</h2>
+    <p>첫번째 문단</p>
+
+    <script>
+    // h1을 클릭하면 글자색 빨간색, 배경색 노란색
+    let tit = document.getElementById("txt");
+    console.log(tit);
+
+    tit.addEventListener("click", function() {
+        tit.style.color = "red";
+        tit.style.background = "yellow";
+    });
+
+    // h2를 클릭하면 글자색 파란색
+    let tit2 = document.getElementById("txt2");
+    tit2.addEventListener("click", function() {
+        tit2.style.color = "blue";
+    });
+
+    // p를 클릭하면 글자색 초록색
+    let ppp = document.querySelector("p");
+
+    ppp.addEventListener("click", function() {
+        this.style.color = "green";
+    });
+
+    // 마우스 호버 시 글자색 빨간색, 글자 크기 24px
+    ppp.addEventListener("mouseenter", function() {
+        this.style.fontSize = "24px";
+        this.style.color = "red";
+    });
+
+    // 마우스가 벗어나면 원래대로
+    ppp.addEventListener("mouseleave", function() {
+        this.style.fontSize = "16px";
+        this.style.color = "#000";
+    });
+</script>
+</body>
+</html>

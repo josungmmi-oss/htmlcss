@@ -1,0 +1,55 @@
+@charset "utf-8";
+body{
+font-family: "notosans";
+}
+
+.box1, .box2, .box3 {
+    width: 640px;
+    height: 200px;
+    border: 5px solid #ccc;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 20px;
+}
+
+.box1 div, .box2 div, .box3 div {
+    width: 200px;
+    height: 200px;
+}
+.box2{
+    position: relative;
+}
+
+.box1 div:first-child {
+    background: red;
+}
+.box1 div:last-child {
+    background: green;
+}
+
+.box2 div:first-child {
+    background: orange;
+}
+.box2 div:nth-child(2) {
+    background: #cf0;
+}
+.box2 div:last-child {
+    background: #0cf;
+}
+
+/* .box3 div:first-child {
+    background: aqua;
+} */
+.box3 div:last-child {
+    background: blueviolet;
+}
+/*공중에 배치*/
+.box2 .ani{
+    position: absolute;
+    left: 440px;
+    top: 0;
+}
+/*bg class에 배경을 gold로 채우는 명령*/
+.bg{
+    background: gold;
+}

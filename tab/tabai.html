@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BRAND tab기능</title>
+
+  <style>
+    @charset "utf-8";
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, "Noto Sans KR", sans-serif;
+      color: #333;
+      background-color: #fff;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    li {
+      list-style: none;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    section {
+      width: 100%;
+    }
+
+    section .inner {
+      width: 1140px;
+      margin: 0 auto;
+      padding: 60px 0 38px;
+      text-align: center;
+    }
+
+    section .inner h2 {
+      font-size: 50px;
+      color: #333;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    section .inner p {
+      font-size: 20px;
+      font-weight: 500;
+      margin-top: 24px;
+    }
+
+    section .inner .tab {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 42px;
+      margin-bottom: 66px;
+    }
+
+    section .inner .tab li a {
+      display: block;
+      width: 140px;
+      height: 46px;
+      border-radius: 23px;
+      line-height: 44px;
+      font-size: 18px;
+      color: #555;
+      font-weight: 500;
+      border: 1px solid #555;
+      transition: 0.2s;
+    }
+
+    section .inner .tab li:hover a {
+      background: #ff6400;
+      color: #fff;
+      border-color: #ff6400;
+    }
+
+    section .inner .tab li.on a {
+      background: #ff6400;
+      color: #fff;
+      border: 1px solid #ff6400;
+    }
+
+    section .inner .list-wrap {
+      display: none;
+    }
+
+    section .inner .list-wrap.on {
+      display: block;
+    }
+
+    section .inner .list-wrap .list {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 50px;
+      min-height: 250px;
+    }
+
+    section .inner .list-wrap .list li {
+      width: 180px;
+      text-align: center;
+    }
+
+    section .inner .list-wrap .list img {
+      width: 200px;
+      height: 165px;
+      object-fit: contain;
+      margin: 0 auto 32px;
+    }
+
+    section .inner .list-wrap .list h3 {
+      font-size: 16px;
+      font-weight: 500;
+      color: #555;
+    }
+
+    /* .more-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      width: 162px;
+      height: 48px;
+      margin-top: 26px;
+      border: 1px solid #ff6400;
+      color: #ff6400;
+      font-size: 25px;
+      font-weight: 400;
+    }
+
+    .more-btn span {
+      position: relative;
+      display: block;
+      width: 42px;
+      height: 1px;
+      background-color: #ff6400;
+    }
+
+    .more-btn span::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: -4px;
+      width: 8px;
+      height: 8px;
+      border-top: 1px solid #ff6400;
+      border-right: 1px solid #ff6400;
+      transform: rotate(45deg);
+    } */
+  </style>
+</head>
+
+<body>
+
+  <section>
+    <div class="inner">
+
+      <h2>BRAND</h2>
+      <p>건강하고 창의적인 미래를 만들기 위한 삼양식품의 다양한 브랜드를 소개합니다.</p>
+
+      <!-- tab 메뉴 3개 -->
+      <ul class="tab">
+        <li class="on">
+          <a href="#">삼양1963</a>
+        </li>
+        <li>
+          <a href="#">삼양라면</a>
+        </li>
+        <li>
+          <a href="#">불닭볶음면</a>
+        </li>
+      </ul>
+
+      <!-- tab 1 -->
+      <div class="list-wrap on">
+        <ul class="list">
+          <li>
+            <a href="#">
+              <img src="./images/1.png" alt="삼양1963">
+              <h3>삼양1963</h3>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- tab 2 -->
+      <div class="list-wrap">
+        <ul class="list">
+          <li>
+            <a href="#">
+              <img src="./images/2.png" alt="삼양라면">
+              <h3>삼양라면</h3>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <img src="./images/3.png" alt="큰컵 삼양라면">
+              <h3>큰컵 삼양라면</h3>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <img src="./images/4.png" alt="삼양라면 매운맛">
+              <h3>삼양라면 매운맛</h3>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <img src="./images/5.png" alt="큰컵 삼양라면 매운맛">
+              <h3>큰컵 삼양라면 매운맛</h3>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- tab 3 -->
+      <div class="list-wrap">
+        <ul class="list">
+          <li>
+            <a href="#">
+              <img src="./images/6.png" alt="불닭볶음면">
+              <h3>불닭볶음면</h3>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <img src="./images/7.png" alt="까르보불닭볶음면">
+              <h3>까르보불닭볶음면</h3>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <img src="./images/8.png" alt="로제불닭볶음면">
+              <h3>로제불닭볶음면</h3>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <img src="./images/9.png" alt="불닭볶음탕면">
+              <h3>불닭볶음탕면</h3>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- <a href="#" class="more-btn">
+        more
+        <span></span>
+      </a> -->
+
+    </div>
+  </section>
+
+  <script>
+    let tabMenu = document.querySelectorAll(".tab li");
+    let listWrap = document.querySelectorAll(".list-wrap");
+
+    for (let i = 0; i < tabMenu.length; i++) {
+      tabMenu[i].addEventListener("click", function (e) {
+        e.preventDefault();
+
+        for (let j = 0; j < tabMenu.length; j++) {
+          tabMenu[j].classList.remove("on");
+          listWrap[j].classList.remove("on");
+        }
+
+        tabMenu[i].classList.add("on");
+        listWrap[i].classList.add("on");
+      });
+    }
+  </script>
+
+</body>
+</html>

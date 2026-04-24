@@ -901,3 +901,109 @@ list-style: none;
 .meal-slide.is-clone {
   pointer-events: none;
 }
+
+/* ================================
+  추가 기능 CSS
+  - MD 탭 hover
+  - 상품 hover
+  - 스크롤 등장 효과
+  - 맨위로 버튼
+================================ */
+
+.md-tab-item {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.md-tab-item:hover,
+.md-tab-item.active {
+  border-color: #0d5611;
+  color: #ffffff;
+  font-weight: 700;
+  background-color: #0d5611;
+}
+
+.card-item {
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.card-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+
+.card-image img {
+  transition: transform 0.4s ease;
+}
+
+.card-item:hover .card-image > img:not(.badge-circle):not(.btn-cart) {
+  transform: scale(1.06);
+}
+
+.card-item:hover .card-name {
+  color: #0d5611;
+}
+
+.card-image img.btn-cart {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.card-item:hover .card-image img.btn-cart {
+  transform: scale(1.12);
+  opacity: 0.9;
+}
+
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(60px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.scroll-reveal.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.top-btn {
+  position: fixed;
+  right: 28px;
+  bottom: 28px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background-color: #0d5611;
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: 700;
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(16px);
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+}
+
+.top-btn.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.top-btn:hover {
+  background-color: #083d0c;
+}
+
+@media (max-width: 767px) {
+  .top-btn {
+    right: 16px;
+    bottom: 18px;
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
+  }
+
+  .card-item:hover {
+    transform: translateY(-4px);
+  }
+}
+

@@ -782,15 +782,15 @@
           <!-- 중복 패딩 제거 및 마진 42px 데이터 반영 -->
         </div>
         <ul class="md-tab-list">
-          <li class="md-tab-item active">비빔밥</li>
-          <li class="md-tab-item">국 / 찌개 / 탕</li>
-          <li class="md-tab-item">어린이 반찬</li>
-          <li class="md-tab-item">볶음</li>
-          <li class="md-tab-item">무침</li>
-          <li class="md-tab-item">메인요리</li>
-          <li class="md-tab-item">조림</li>
+          <li class="md-tab-item active" data-tab="bibimbap">비빔밥</li>
+          <li class="md-tab-item" data-tab="soup">국 / 찌개 / 탕</li>
+          <li class="md-tab-item" data-tab="kids">어린이 반찬</li>
+          <li class="md-tab-item" data-tab="none">볶음</li>
+          <li class="md-tab-item" data-tab="none">무침</li>
+          <li class="md-tab-item" data-tab="none">메인요리</li>
+          <li class="md-tab-item" data-tab="none">조림</li>
         </ul>
-        <div class="card-list">
+        <div class="card-list md-card-list">
           <div class="card-item">
             <div class="card-image">
               <img
@@ -970,6 +970,9 @@
         </div>
       </div>
     </main>
+
+    <button type="button" class="top-btn" aria-label="맨 위로 이동">↑</button>
+
     <div class="footer-wrapper">
       <footer class="block-magenta">
         <div class="footer-left">
@@ -1002,358 +1005,573 @@
       </footer>
     </div>
   <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    var headerWrapper = document.querySelector(".header-wrapper");
-    var menuButton = document.querySelector(".mobile-menu-toggle");
-    var searchButton = document.querySelector(".search-btn");
-    var searchInput = document.querySelector(".search-input");
+    document.addEventListener("DOMContentLoaded", function () {
+      var headerWrapper = document.querySelector(".header-wrapper");
+      var menuButton = document.querySelector(".mobile-menu-toggle");
+      var searchButton = document.querySelector(".search-btn");
+      var searchInput = document.querySelector(".search-input");
 
-    function isMobileViewport() {
-      return window.matchMedia("(max-width: 767px)").matches;
-    }
-
-    function closeMobileMenu() {
-      if (!headerWrapper || !menuButton) return;
-      headerWrapper.classList.remove("is-open");
-      menuButton.setAttribute("aria-label", "메뉴 열기");
-    }
-
-    function closeMobileSearch() {
-      if (!headerWrapper || !searchButton) return;
-      headerWrapper.classList.remove("is-search-open");
-      searchButton.setAttribute("aria-label", "검색 열기");
-    }
-
-    if (headerWrapper && menuButton) {
-      menuButton.addEventListener("click", function () {
-        if (isMobileViewport()) {
-          closeMobileSearch();
-        }
-        headerWrapper.classList.toggle("is-open");
-        var opened = headerWrapper.classList.contains("is-open");
-        menuButton.setAttribute("aria-label", opened ? "메뉴 닫기" : "메뉴 열기");
-      });
-    }
-
-    if (headerWrapper && searchButton) {
-      searchButton.addEventListener("click", function (event) {
-        if (!isMobileViewport()) {
-          return;
-        }
-
-        event.preventDefault();
-        closeMobileMenu();
-        headerWrapper.classList.toggle("is-search-open");
-        var opened = headerWrapper.classList.contains("is-search-open");
-        searchButton.setAttribute("aria-label", opened ? "검색 닫기" : "검색 열기");
-
-        if (opened && searchInput) {
-          window.setTimeout(function () {
-            searchInput.focus();
-          }, 50);
-        }
-      });
-    }
-
-    window.addEventListener("resize", function () {
-      if (!isMobileViewport()) {
-        closeMobileMenu();
-        closeMobileSearch();
-      }
-      if (mealSwiper) {
-        var mealMaxIndex = getMealMaxIndex();
-        if (mealIndex > mealMaxIndex) {
-          mealIndex = mealMaxIndex;
-        }
-        renderMealSlider();
-      }
-    });
-
-    
-    var mealSwiper = document.querySelector("#mealSwiper");
-    if (mealSwiper) {
-      var mealViewport = mealSwiper.querySelector(".meal-swiper-viewport");
-      var mealTrack = mealSwiper.querySelector(".meal-swiper-track");
-      var mealPrevButton = mealSwiper.querySelector(".meal-swiper-prev");
-      var mealNextButton = mealSwiper.querySelector(".meal-swiper-next");
-      var mealGap = 16;
-      var mealTimer = null;
-      var mealIndex = 0;
-      var mealCloneCount = 0;
-      var mealAnimating = false;
-
-      function getMealVisibleCount() {
-        if (window.innerWidth <= 767) return 2;
-        if (window.innerWidth <= 1024) return 2;
-        return 4;
+      function isMobileViewport() {
+        return window.matchMedia("(max-width: 767px)").matches;
       }
 
-      function getMealOriginalSlides() {
-        return Array.prototype.slice.call(
-          mealTrack.querySelectorAll(".meal-slide:not(.is-clone)")
-        );
+      function closeMobileMenu() {
+        if (!headerWrapper || !menuButton) return;
+        headerWrapper.classList.remove("is-open");
+        menuButton.setAttribute("aria-label", "메뉴 열기");
       }
 
-      function buildMealLoop() {
-        if (!mealTrack) return;
-
-        Array.prototype.slice.call(mealTrack.querySelectorAll(".meal-slide.is-clone")).forEach(function (node) {
-          node.remove();
-        });
-
-        var originals = getMealOriginalSlides();
-        if (!originals.length) return;
-
-        mealCloneCount = Math.min(getMealVisibleCount(), originals.length);
-
-        var headClones = originals.slice(0, mealCloneCount).map(function (slide) {
-          var clone = slide.cloneNode(true);
-          clone.classList.add("is-clone");
-          clone.setAttribute("aria-hidden", "true");
-          return clone;
-        });
-
-        var tailClones = originals.slice(-mealCloneCount).map(function (slide) {
-          var clone = slide.cloneNode(true);
-          clone.classList.add("is-clone");
-          clone.setAttribute("aria-hidden", "true");
-          return clone;
-        });
-
-        tailClones.forEach(function (clone) {
-          mealTrack.insertBefore(clone, mealTrack.firstChild);
-        });
-
-        headClones.forEach(function (clone) {
-          mealTrack.appendChild(clone);
-        });
-
-        mealIndex = mealCloneCount;
-        setMealPosition(false);
+      function closeMobileSearch() {
+        if (!headerWrapper || !searchButton) return;
+        headerWrapper.classList.remove("is-search-open");
+        searchButton.setAttribute("aria-label", "검색 열기");
       }
 
-      function getMealStepWidth() {
-        var firstSlide = mealTrack.querySelector(".meal-slide");
-        if (!firstSlide) return 0;
-        return firstSlide.getBoundingClientRect().width + mealGap;
-      }
-
-      function setMealPosition(withAnimation) {
-        if (!mealTrack) return;
-        mealTrack.style.transition = withAnimation ? "transform 0.45s ease" : "none";
-        mealTrack.style.transform = "translateX(-" + (getMealStepWidth() * mealIndex) + "px)";
-      }
-
-      function normalizeMealIndex() {
-        var originals = getMealOriginalSlides();
-        var originalCount = originals.length;
-        if (!originalCount) return;
-
-        if (mealIndex >= originalCount + mealCloneCount) {
-          mealIndex = mealCloneCount;
-          setMealPosition(false);
-        } else if (mealIndex < mealCloneCount) {
-          mealIndex = originalCount + mealCloneCount - 1;
-          setMealPosition(false);
-        }
-      }
-
-      function goMealNext() {
-        if (mealAnimating) return;
-        mealAnimating = true;
-        mealIndex += 1;
-        setMealPosition(true);
-      }
-
-      function goMealPrev() {
-        if (mealAnimating) return;
-        mealAnimating = true;
-        mealIndex -= 1;
-        setMealPosition(true);
-      }
-
-      function stopMealAuto() {
-        if (mealTimer) {
-          window.clearInterval(mealTimer);
-          mealTimer = null;
-        }
-      }
-
-      function startMealAuto() {
-        stopMealAuto();
-        mealTimer = window.setInterval(goMealNext, 2000);
-      }
-
-      if (mealPrevButton) {
-        mealPrevButton.addEventListener("click", function () {
-          goMealPrev();
-          startMealAuto();
+      if (headerWrapper && menuButton) {
+        menuButton.addEventListener("click", function () {
+          if (isMobileViewport()) closeMobileSearch();
+          headerWrapper.classList.toggle("is-open");
+          var opened = headerWrapper.classList.contains("is-open");
+          menuButton.setAttribute("aria-label", opened ? "메뉴 닫기" : "메뉴 열기");
         });
       }
 
-      if (mealNextButton) {
-        mealNextButton.addEventListener("click", function () {
-          goMealNext();
-          startMealAuto();
+      if (headerWrapper && searchButton) {
+        searchButton.addEventListener("click", function (event) {
+          if (!isMobileViewport()) return;
+          event.preventDefault();
+          closeMobileMenu();
+          headerWrapper.classList.toggle("is-search-open");
+          var opened = headerWrapper.classList.contains("is-search-open");
+          searchButton.setAttribute("aria-label", opened ? "검색 닫기" : "검색 열기");
+          if (opened && searchInput) {
+            window.setTimeout(function () {
+              searchInput.focus();
+            }, 50);
+          }
         });
       }
-
-      mealTrack.addEventListener("transitionend", function () {
-        mealAnimating = false;
-        normalizeMealIndex();
-      });
-
-      mealSwiper.addEventListener("mouseenter", stopMealAuto);
-      mealSwiper.addEventListener("mouseleave", startMealAuto);
-      mealSwiper.addEventListener("focusin", stopMealAuto);
-      mealSwiper.addEventListener("focusout", startMealAuto);
 
       window.addEventListener("resize", function () {
+        if (!isMobileViewport()) {
+          closeMobileMenu();
+          closeMobileSearch();
+        }
+      });
+
+      var mealSwiper = document.querySelector("#mealSwiper");
+      if (mealSwiper) {
+        var mealTrack = mealSwiper.querySelector(".meal-swiper-track");
+        var mealPrevButton = mealSwiper.querySelector(".meal-swiper-prev");
+        var mealNextButton = mealSwiper.querySelector(".meal-swiper-next");
+        var mealGap = 16;
+        var mealTimer = null;
+        var mealIndex = 0;
+        var mealCloneCount = 0;
+        var mealAnimating = false;
+
+        function getMealVisibleCount() {
+          if (window.innerWidth <= 767) return 2;
+          if (window.innerWidth <= 1024) return 2;
+          return 4;
+        }
+
+        function getMealOriginalSlides() {
+          if (!mealTrack) return [];
+          return Array.prototype.slice.call(mealTrack.querySelectorAll(".meal-slide:not(.is-clone)"));
+        }
+
+        function getMealStepWidth() {
+          var firstSlide = mealTrack.querySelector(".meal-slide");
+          if (!firstSlide) return 0;
+          return firstSlide.getBoundingClientRect().width + mealGap;
+        }
+
+        function setMealPosition(withAnimation) {
+          if (!mealTrack) return;
+          mealTrack.style.transition = withAnimation ? "transform 0.45s ease" : "none";
+          mealTrack.style.transform = "translateX(-" + getMealStepWidth() * mealIndex + "px)";
+        }
+
+        function buildMealLoop() {
+          if (!mealTrack) return;
+          Array.prototype.slice.call(mealTrack.querySelectorAll(".meal-slide.is-clone")).forEach(function (node) {
+            node.remove();
+          });
+
+          var originals = getMealOriginalSlides();
+          if (!originals.length) return;
+
+          mealCloneCount = Math.min(getMealVisibleCount(), originals.length);
+
+          originals.slice(-mealCloneCount).forEach(function (slide) {
+            var clone = slide.cloneNode(true);
+            clone.classList.add("is-clone");
+            clone.setAttribute("aria-hidden", "true");
+            mealTrack.insertBefore(clone, mealTrack.firstChild);
+          });
+
+          originals.slice(0, mealCloneCount).forEach(function (slide) {
+            var clone = slide.cloneNode(true);
+            clone.classList.add("is-clone");
+            clone.setAttribute("aria-hidden", "true");
+            mealTrack.appendChild(clone);
+          });
+
+          mealIndex = mealCloneCount;
+          setMealPosition(false);
+        }
+
+        function normalizeMealIndex() {
+          var originalCount = getMealOriginalSlides().length;
+          if (!originalCount) return;
+
+          if (mealIndex >= originalCount + mealCloneCount) {
+            mealIndex = mealCloneCount;
+            setMealPosition(false);
+          } else if (mealIndex < mealCloneCount) {
+            mealIndex = originalCount + mealCloneCount - 1;
+            setMealPosition(false);
+          }
+        }
+
+        function goMealNext() {
+          if (mealAnimating) return;
+          mealAnimating = true;
+          mealIndex += 1;
+          setMealPosition(true);
+        }
+
+        function goMealPrev() {
+          if (mealAnimating) return;
+          mealAnimating = true;
+          mealIndex -= 1;
+          setMealPosition(true);
+        }
+
+        function stopMealAuto() {
+          if (mealTimer) {
+            window.clearInterval(mealTimer);
+            mealTimer = null;
+          }
+        }
+
+        function startMealAuto() {
+          stopMealAuto();
+          mealTimer = window.setInterval(goMealNext, 2000);
+        }
+
+        if (mealPrevButton) {
+          mealPrevButton.addEventListener("click", function () {
+            goMealPrev();
+            startMealAuto();
+          });
+        }
+
+        if (mealNextButton) {
+          mealNextButton.addEventListener("click", function () {
+            goMealNext();
+            startMealAuto();
+          });
+        }
+
+        if (mealTrack) {
+          mealTrack.addEventListener("transitionend", function () {
+            mealAnimating = false;
+            normalizeMealIndex();
+          });
+        }
+
+        mealSwiper.addEventListener("mouseenter", stopMealAuto);
+        mealSwiper.addEventListener("mouseleave", startMealAuto);
+        mealSwiper.addEventListener("focusin", stopMealAuto);
+        mealSwiper.addEventListener("focusout", startMealAuto);
+
+        window.addEventListener("resize", function () {
+          buildMealLoop();
+        });
+
         buildMealLoop();
-      });
-
-      buildMealLoop();
-      startMealAuto();
-    }
-
-    var slider = document.querySelector("[data-slider]");
-    if (!slider) return;
-
-    var track = slider.querySelector(".banner-track");
-    var prevButton = slider.querySelector(".banner-btn.prev");
-    var nextButton = slider.querySelector(".banner-btn.next");
-    var currentText = slider.querySelector(".current-slide");
-    var totalText = slider.querySelector(".total-slides");
-    var autoTimer = null;
-    var autoDelay = 3000;
-    var bannerIndex = 0;
-    var bannerAnimating = false;
-
-    function getBannerOriginalSlides() {
-      return Array.prototype.slice.call(
-        track.querySelectorAll(".banner-slide:not(.is-clone)")
-      );
-    }
-
-    function updateBannerPagination() {
-      var originalSlides = getBannerOriginalSlides();
-      var slideCount = originalSlides.length;
-      if (!slideCount) return;
-
-      var current = bannerIndex;
-      if (current <= 0) current = slideCount;
-      if (current > slideCount) current = 1;
-
-      if (currentText) {
-        currentText.textContent = String(current);
+        startMealAuto();
       }
-      if (totalText) {
-        totalText.textContent = String(slideCount);
-      }
-    }
 
-    function setBannerPosition(withAnimation) {
-      track.style.transition = withAnimation ? "transform 0.5s ease" : "none";
-      track.style.transform = "translateX(-" + (bannerIndex * 100) + "%)";
-      updateBannerPagination();
-    }
+      var slider = document.querySelector("[data-slider]");
+      if (slider) {
+        var track = slider.querySelector(".banner-track");
+        var prevButton = slider.querySelector(".banner-btn.prev");
+        var nextButton = slider.querySelector(".banner-btn.next");
+        var currentText = slider.querySelector(".current-slide");
+        var totalText = slider.querySelector(".total-slides");
+        var autoTimer = null;
+        var autoDelay = 3000;
+        var bannerIndex = 0;
+        var bannerAnimating = false;
 
-    function buildBannerLoop() {
-      if (!track) return;
+        function getBannerOriginalSlides() {
+          if (!track) return [];
+          return Array.prototype.slice.call(track.querySelectorAll(".banner-slide:not(.is-clone)"));
+        }
 
-      Array.prototype.slice.call(track.querySelectorAll(".banner-slide.is-clone")).forEach(function (node) {
-        node.remove();
-      });
+        function updateBannerPagination() {
+          var slideCount = getBannerOriginalSlides().length;
+          if (!slideCount) return;
 
-      var originalSlides = getBannerOriginalSlides();
-      if (!originalSlides.length) return;
+          var current = bannerIndex;
+          if (current <= 0) current = slideCount;
+          if (current > slideCount) current = 1;
 
-      var firstClone = originalSlides[0].cloneNode(true);
-      var lastClone = originalSlides[originalSlides.length - 1].cloneNode(true);
-      firstClone.classList.add("is-clone");
-      firstClone.setAttribute("aria-hidden", "true");
-      lastClone.classList.add("is-clone");
-      lastClone.setAttribute("aria-hidden", "true");
+          if (currentText) currentText.textContent = String(current);
+          if (totalText) totalText.textContent = String(slideCount);
+        }
 
-      track.insertBefore(lastClone, track.firstChild);
-      track.appendChild(firstClone);
+        function setBannerPosition(withAnimation) {
+          if (!track) return;
+          track.style.transition = withAnimation ? "transform 0.5s ease" : "none";
+          track.style.transform = "translateX(-" + bannerIndex * 100 + "%)";
+          updateBannerPagination();
+        }
 
-      bannerIndex = 1;
-      setBannerPosition(false);
-    }
+        function buildBannerLoop() {
+          if (!track) return;
 
-    function normalizeBannerIndex() {
-      var slideCount = getBannerOriginalSlides().length;
-      if (!slideCount) return;
+          Array.prototype.slice.call(track.querySelectorAll(".banner-slide.is-clone")).forEach(function (node) {
+            node.remove();
+          });
 
-      if (bannerIndex === 0) {
-        bannerIndex = slideCount;
-        setBannerPosition(false);
-      } else if (bannerIndex === slideCount + 1) {
-        bannerIndex = 1;
-        setBannerPosition(false);
-      }
-      updateBannerPagination();
-    }
+          var originalSlides = getBannerOriginalSlides();
+          if (!originalSlides.length) return;
 
-    function goBannerNext() {
-      if (bannerAnimating) return;
-      bannerAnimating = true;
-      bannerIndex += 1;
-      setBannerPosition(true);
-    }
+          var firstClone = originalSlides[0].cloneNode(true);
+          var lastClone = originalSlides[originalSlides.length - 1].cloneNode(true);
 
-    function goBannerPrev() {
-      if (bannerAnimating) return;
-      bannerAnimating = true;
-      bannerIndex -= 1;
-      setBannerPosition(true);
-    }
+          firstClone.classList.add("is-clone");
+          firstClone.setAttribute("aria-hidden", "true");
+          lastClone.classList.add("is-clone");
+          lastClone.setAttribute("aria-hidden", "true");
 
-    function stopAutoSlide() {
-      if (autoTimer) {
-        window.clearInterval(autoTimer);
-        autoTimer = null;
-      }
-    }
+          track.insertBefore(lastClone, track.firstChild);
+          track.appendChild(firstClone);
 
-    function startAutoSlide() {
-      stopAutoSlide();
-      autoTimer = window.setInterval(function () {
-        goBannerNext();
-      }, autoDelay);
-    }
+          bannerIndex = 1;
+          setBannerPosition(false);
+        }
 
-    if (prevButton) {
-      prevButton.addEventListener("click", function () {
-        goBannerPrev();
+        function normalizeBannerIndex() {
+          var slideCount = getBannerOriginalSlides().length;
+          if (!slideCount) return;
+
+          if (bannerIndex === 0) {
+            bannerIndex = slideCount;
+            setBannerPosition(false);
+          } else if (bannerIndex === slideCount + 1) {
+            bannerIndex = 1;
+            setBannerPosition(false);
+          }
+
+          updateBannerPagination();
+        }
+
+        function goBannerNext() {
+          if (bannerAnimating) return;
+          bannerAnimating = true;
+          bannerIndex += 1;
+          setBannerPosition(true);
+        }
+
+        function goBannerPrev() {
+          if (bannerAnimating) return;
+          bannerAnimating = true;
+          bannerIndex -= 1;
+          setBannerPosition(true);
+        }
+
+        function stopAutoSlide() {
+          if (autoTimer) {
+            window.clearInterval(autoTimer);
+            autoTimer = null;
+          }
+        }
+
+        function startAutoSlide() {
+          stopAutoSlide();
+          autoTimer = window.setInterval(goBannerNext, autoDelay);
+        }
+
+        if (prevButton) {
+          prevButton.addEventListener("click", function () {
+            goBannerPrev();
+            startAutoSlide();
+          });
+        }
+
+        if (nextButton) {
+          nextButton.addEventListener("click", function () {
+            goBannerNext();
+            startAutoSlide();
+          });
+        }
+
+        if (track) {
+          track.addEventListener("transitionend", function () {
+            bannerAnimating = false;
+            normalizeBannerIndex();
+          });
+        }
+
+        slider.addEventListener("mouseenter", stopAutoSlide);
+        slider.addEventListener("mouseleave", startAutoSlide);
+        slider.addEventListener("focusin", stopAutoSlide);
+        slider.addEventListener("focusout", startAutoSlide);
+
+        window.addEventListener("resize", function () {
+          setBannerPosition(false);
+        });
+
+        buildBannerLoop();
         startAutoSlide();
+      }
+
+      var mdTabs = document.querySelectorAll(".md-tab-item");
+      var mdCardList = document.querySelector(".md-card-list");
+
+      var mdData = {
+        bibimbap: [
+          {
+            img: "./md_banchan/md5.png",
+            badge: "./icons/sale3.png",
+            name: "아이들 한우 비빔밥",
+            desc: "아이들도 맛있게 먹는 비빔밥 출시!",
+            discount: "13%",
+            price: "9,400원",
+            original: "10,800원",
+            tag: "맵지않음"
+          },
+          {
+            img: "./md_banchan/md6.png",
+            badge: "",
+            name: "나물 비빔밥",
+            desc: "가심비 가득, 정성 가득 비빔밥",
+            discount: "",
+            price: "10,800원",
+            original: "",
+            tag: "인기"
+          },
+          {
+            img: "./new_banchan/new4.png",
+            badge: "",
+            name: "한우 삼색 소보로 덮밥",
+            desc: "알록달록 색감까지 맛있는 한 끼",
+            discount: "7%",
+            price: "4,800원",
+            original: "5,200원",
+            tag: "신제품"
+          },
+          {
+            img: "./new_banchan/new3.png",
+            badge: "",
+            name: "한우 하이라이스 덮밥",
+            desc: "부드럽게 끓여낸 한우 하이라이스 소스",
+            discount: "",
+            price: "4,300원",
+            original: "",
+            tag: "신제품"
+          }
+        ],
+        soup: [
+          {
+            img: "./home/imgi_213_ZIP_P_8078_T.jpg",
+            badge: "./icons/percent.png",
+            name: "[원더스푼] 한우 소고기 미역국",
+            desc: "영양 가득 든든한 한우 미역국",
+            discount: "11%",
+            price: "4,700원",
+            original: "5,300원",
+            tag: "신제품"
+          },
+          {
+            img: "./04_md_banchan/imgi_239_ZIP_P_8073_A.jpg",
+            badge: "",
+            name: "[원더스푼] 된장국",
+            desc: "매일 먹어도 좋은 담백한 된장국",
+            discount: "",
+            price: "3,300원",
+            original: "",
+            tag: "맵지않음"
+          },
+          {
+            img: "./04_md_banchan/imgi_240_ZIP_P_8075_A.jpg",
+            badge: "",
+            name: "[원더스푼] 맑은 순두부찌개",
+            desc: "맵지 않은 순두부찌개, 아이도 OK",
+            discount: "",
+            price: "4,300원",
+            original: "",
+            tag: "맵지않음"
+          },
+          {
+            img: "./new_banchan/new7.jpg",
+            badge: "",
+            name: "맑은 한우 배춧국, 냉동",
+            desc: "담백하고 개운한 한우 배춧국",
+            discount: "",
+            price: "9,800원",
+            original: "",
+            tag: "신제품"
+          }
+        ],
+        kids: [
+          {
+            img: "./new_banchan/new1.png",
+            badge: "./icons/percent.png",
+            name: "[원더스푼] 두부덮밥",
+            desc: "아이들도 입맛 없는 날 뚝딱 한 그릇",
+            discount: "10%",
+            price: "3,500원",
+            original: "3,900원",
+            tag: "신제품"
+          },
+          {
+            img: "./new_banchan/new2.png",
+            badge: "./icons/sale2.png",
+            name: "[원더스푼] 한돈 순두부 덮밥",
+            desc: "몽글몽글 부드러운 한돈 순두부 소스",
+            discount: "9%",
+            price: "3,800원",
+            original: "4,200원",
+            tag: "신제품"
+          },
+          {
+            img: "./04_md_banchan/imgi_241_ZIP_P_8067_A.jpg",
+            badge: "",
+            name: "[원더스푼] 맛살 계란 덮밥",
+            desc: "고소한 맛살과 폭신한 계란의 조합",
+            discount: "",
+            price: "4,300원",
+            original: "",
+            tag: "맵지않음"
+          },
+          {
+            img: "./home/imgi_215_ZIP_P_8068_T.jpg",
+            badge: "",
+            name: "한우야채카레",
+            desc: "부드러운 야채들로 풍성하게",
+            discount: "12%",
+            price: "3,800원",
+            original: "4,300원",
+            tag: "신제품"
+          }
+        ]
+      };
+
+      function getTagClass(tagName) {
+        if (tagName === "인기") return "tag-best";
+        if (tagName === "신제품") return "tag-new";
+        return "tag-mild";
+      }
+
+      function makeMdCard(item) {
+        return `
+          <div class="card-item scroll-reveal">
+            <div class="card-image">
+              ${item.badge ? `<img class="badge-circle" src="${item.badge}" alt="뱃지" />` : ""}
+              <img src="${item.img}" alt="${item.name}" />
+              <img class="btn-cart" src="./icons/lock.png" alt="장바구니 담기" />
+            </div>
+            <div class="card-info">
+              <div class="card-tags">
+                ${item.tag ? `<span class="tag-item ${getTagClass(item.tag)}">${item.tag}</span>` : ""}
+              </div>
+              <strong class="card-name">${item.name}</strong>
+              <span class="card-desc">${item.desc}</span>
+              <div class="card-price-wrap">
+                <div class="card-price-row">
+                  ${item.discount ? `<span class="card-discount">${item.discount}</span>` : ""}
+                  <span class="card-price">${item.price}</span>
+                </div>
+                ${item.original ? `<span class="card-original-price">${item.original}</span>` : ""}
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderMdCards(tabName) {
+        if (!mdCardList || !mdData[tabName]) return;
+        mdCardList.innerHTML = mdData[tabName].map(makeMdCard).join("");
+        window.setTimeout(observeScrollItems, 50);
+      }
+
+      mdTabs.forEach(function (tab) {
+        tab.addEventListener("click", function () {
+          mdTabs.forEach(function (item) {
+            item.classList.remove("active");
+          });
+
+          tab.classList.add("active");
+
+          var tabName = tab.getAttribute("data-tab");
+          if (tabName === "none") return;
+
+          renderMdCards(tabName);
+        });
       });
-    }
 
-    if (nextButton) {
-      nextButton.addEventListener("click", function () {
-        goBannerNext();
-        startAutoSlide();
+      var scrollObserver = null;
+
+      function observeScrollItems() {
+        var revealItems = document.querySelectorAll(
+          ".inner-box, .card-item, .sub-banner-link, .recommend-card, .review-item"
+        );
+
+        revealItems.forEach(function (item) {
+          item.classList.add("scroll-reveal");
+        });
+
+        if (scrollObserver) {
+          scrollObserver.disconnect();
+        }
+
+        scrollObserver = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("show");
+              }
+            });
+          },
+          {
+            threshold: 0.12
+          }
+        );
+
+        revealItems.forEach(function (item) {
+          scrollObserver.observe(item);
+        });
+      }
+
+      observeScrollItems();
+
+      var topBtn = document.querySelector(".top-btn");
+
+      window.addEventListener("scroll", function () {
+        if (!topBtn) return;
+
+        if (window.scrollY > 400) {
+          topBtn.classList.add("show");
+        } else {
+          topBtn.classList.remove("show");
+        }
       });
-    }
 
-    track.addEventListener("transitionend", function () {
-      bannerAnimating = false;
-      normalizeBannerIndex();
+      if (topBtn) {
+        topBtn.addEventListener("click", function () {
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+          });
+        });
+      }
     });
-
-    slider.addEventListener("mouseenter", stopAutoSlide);
-    slider.addEventListener("mouseleave", startAutoSlide);
-    slider.addEventListener("focusin", stopAutoSlide);
-    slider.addEventListener("focusout", startAutoSlide);
-    window.addEventListener("resize", function () {
-      setBannerPosition(false);
-    });
-
-    buildBannerLoop();
-    startAutoSlide();
-  });
-</script>
+  </script>
 </body>
 </html>

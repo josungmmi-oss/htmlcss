@@ -121,6 +121,92 @@ const pages = document.querySelectorAll(".page");
 
 
 
+
+    const storeLocation = {
+      name: "이삭토스트 김포 장기점",
+      address: "경기 김포시 김포한강4로 125 월드타워빌딩 10층 102호",
+      lat: 37.6447084,
+      lng: 126.6670806
+    };
+
+    let storeMapInstance = null;
+    let storeMapInitialized = false;
+
+    function initStoreMap() {
+      const mapContainer = document.getElementById("storeMap");
+      const mapNotice = document.getElementById("storeMapNotice");
+
+      if (!mapContainer) return;
+
+      if (!window.kakao || !window.kakao.maps) {
+        if (mapNotice) mapNotice.classList.add("active");
+        return;
+      }
+
+      window.kakao.maps.load(() => {
+        const center = new window.kakao.maps.LatLng(storeLocation.lat, storeLocation.lng);
+
+        const mapOption = {
+          center: center,
+          level: 3
+        };
+
+        storeMapInstance = new window.kakao.maps.Map(mapContainer, mapOption);
+
+        const marker = new window.kakao.maps.Marker({
+          position: center,
+          map: storeMapInstance
+        });
+
+        const infoWindow = new window.kakao.maps.InfoWindow({
+          content: '<div style="padding:8px 12px;font-size:13px;white-space:nowrap;">' + storeLocation.name + '</div>'
+        });
+
+        infoWindow.open(storeMapInstance, marker);
+
+        if (mapNotice) mapNotice.classList.remove("active");
+
+        setTimeout(() => {
+          storeMapInstance.relayout();
+          storeMapInstance.setCenter(center);
+        }, 120);
+
+        storeMapInitialized = true;
+      });
+    }
+
+    function refreshStoreMap() {
+      if (!window.kakao || !window.kakao.maps) {
+        const mapNotice = document.getElementById("storeMapNotice");
+        if (mapNotice) mapNotice.classList.add("active");
+        return;
+      }
+
+      if (!storeMapInitialized) {
+        initStoreMap();
+        return;
+      }
+
+      if (storeMapInstance) {
+        const center = new window.kakao.maps.LatLng(storeLocation.lat, storeLocation.lng);
+        setTimeout(() => {
+          storeMapInstance.relayout();
+          storeMapInstance.setCenter(center);
+        }, 120);
+      }
+    }
+
+    function openKakaoMapSearch() {
+      const query = encodeURIComponent(storeLocation.name + " " + storeLocation.address);
+      window.open("https://map.kakao.com/link/search/" + query, "_blank");
+    }
+
+    function openKakaoMapRoute() {
+      const name = encodeURIComponent(storeLocation.name);
+      window.open("https://map.kakao.com/link/to/" + name + "," + storeLocation.lat + "," + storeLocation.lng, "_blank");
+    }
+
+
     function saveAppState() {
       const data = {
         selectedMenuIds: state.selectedMenuIds,
@@ -236,6 +322,7 @@ const pages = document.querySelectorAll(".page");
       renderCartPage();
       updateCartCounts();
       bindStaticDetailImages();
+    bindCardActions();
     }
 
     function showOrderHistoryPage() {
@@ -515,6 +602,36 @@ const pages = document.querySelectorAll(".page");
     }
 
 
+
+    function bindCardActions() {
+      const actionTargets = document.querySelectorAll("[data-action]");
+
+      actionTargets.forEach((target) => {
+        if (target.dataset.actionBound === "true") return;
+
+        target.dataset.actionBound = "true";
+
+        const runAction = () => {
+          if (target.dataset.action === "event-sheet") {
+            openEventSheet();
+          }
+
+          if (target.dataset.action === "store-page") {
+            showPage("storePage");
+          }
+        };
+
+        target.addEventListener("click", runAction);
+
+        target.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            runAction();
+          }
+        });
+      });
+    }
+
     function bindStaticDetailImages() {
       const detailImages = document.querySelectorAll("[data-detail-id]");
 
@@ -569,6 +686,10 @@ const pages = document.querySelectorAll(".page");
         renderOrderHistory();
       }
 
+      if (id === "storePage") {
+        refreshStoreMap();
+      }
+
       updateCartCounts();
     }
 
@@ -587,13 +708,19 @@ const pages = document.querySelectorAll(".page");
     }
 
     function openEventSheet() {
-      document.getElementById("eventDimmed").classList.add("active");
-      document.getElementById("eventSheet").classList.add("active");
+      const eventDimmed = document.getElementById("eventDimmed");
+      const eventSheet = document.getElementById("eventSheet");
+
+      if (eventDimmed) eventDimmed.classList.add("active");
+      if (eventSheet) eventSheet.classList.add("active");
     }
 
     function closeEventSheet() {
-      document.getElementById("eventDimmed").classList.remove("active");
-      document.getElementById("eventSheet").classList.remove("active");
+      const eventDimmed = document.getElementById("eventDimmed");
+      const eventSheet = document.getElementById("eventSheet");
+
+      if (eventDimmed) eventDimmed.classList.remove("active");
+      if (eventSheet) eventSheet.classList.remove("active");
     }
 
     function formatPrice(num) {

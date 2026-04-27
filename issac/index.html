@@ -86,7 +86,7 @@
 
             <button class="icon-btn" type="button" aria-label="알림">
               <!-- 헤더 알림 아이콘 삽입 위치 -->
-              <span class="icon-slot"><img src="./images/bell2.png" alt=""></span>
+              <span class="icon-slot"><img src="./images/bell2.png" alt="알림아이콘"></span>
               
             </button>
           </div>
@@ -97,14 +97,14 @@
             <button class="icon-btn" type="button" aria-label="장바구니" onclick="showCartPage()">
               <!-- 헤더 장바구니 아이콘 삽입 위치 -->
               <span class="cart-icon-wrap">
-                <span class="icon-slot"><img src="./images/cart-icon.png" alt=""></span>
+                <span class="icon-slot"><img src="./images/cart-icon.png" alt="장바구니"></span>
                 <span class="cart-badge" id="homeCartCount">0</span>
               </span>
             </button>
 
             <button class="icon-btn" type="button" aria-label="메뉴 열기" onclick="openDrawer()">
               <!-- 헤더 햄버거 아이콘 삽입 위치 -->
-              <span class="icon-slot"><img src="./images/hammenuicons.png" alt=""></span>
+              <span class="icon-slot"><img src="./images/hammenuicons.png" alt="메뉴아이콘"></span>
             </button>
           </div>
         </header>
@@ -125,7 +125,7 @@
             <button class="quick-item" type="button" onclick="openQuickSheet('stamp')">
               <span class="quick-icon">
                 <!-- 스탬프 아이콘 삽입 위치 -->
-                <span class="icon-slot"><img src="./images/stamp iconl.png" alt=""></span>
+                <span class="icon-slot"><img src="./images/stamp iconl.png" alt="스탬프아이콘"></span>
               </span>
               <span>스탬프 <strong>3</strong></span>
             </button>
@@ -133,7 +133,7 @@
             <button class="quick-item" type="button" onclick="openQuickSheet('coupon')">
               <span class="quick-icon">
                 <!-- 쿠폰 아이콘 삽입 위치 -->
-                <span class="icon-slot"><img src="./images/coupon-iconl.png" alt=""></span>
+                <span class="icon-slot"><img src="./images/coupon-iconl.png" alt="쿠폰아이콘"></span>
               </span>
               <span>쿠폰 <strong>0</strong></span>
             </button>
@@ -141,7 +141,7 @@
             <button class="quick-item" type="button" onclick="openQuickSheet('pay')">
               <span class="quick-icon">
                 <!-- pay 아이콘 삽입 위치 -->
-                <span class="icon-slot"><img src="./images/payicon.png" alt=""></span>
+                <span class="icon-slot"><img src="./images/payicon.png" alt="pay아이콘"></span>
               </span>
               <span>Pay</span>
             </button>
@@ -149,7 +149,7 @@
 
           <section class="section">
             <h3>EVENT</h3>
-            <div class="event-card" role="button" tabindex="0" data-action="event-sheet">
+            <div class="event-card" role="button" tabindex="0" data-action="event-sheet" onclick="openEventSheet()">
               <p>신메뉴 스토리 인증 이벤트<br>새우 토스트의 잊을 수 없는 맛</p>
               <div class="event-thumb">
                 <!-- 홈 이벤트 썸네일 이미지 삽입 위치 -->
@@ -235,16 +235,16 @@
 
           <section class="section">
             <h3>가까운 매장</h3>
-            <div class="store-card" role="button" tabindex="0" data-action="store-page">
+            <div class="store-card" role="button" tabindex="0" data-action="store-page" onclick="showPage('storePage')">
               <h4>김포 장기점</h4>
               <div class="store-row">
-                <div class="store-logo"><img src="./images/1-logo.png" alt=""></div>
+                <div class="store-logo"><img src="./images/1-logo.png" alt="로고1"></div>
 
                 <div class="store-meta">
                   <div class="store-distance">
                     <span class="icon-mini">
                       <!-- 매장 위치 아이콘 삽입 위치 -->
-                      <span class="icon-slot"><img src="./images/map icon.png" alt=""></span>
+                      <span class="icon-slot"><img src="./images/map icon.png" alt="위치아이콘"></span>
                     </span>
                     <span>777m</span>
                   </div>
@@ -273,15 +273,15 @@
             <div class="footer-sns">
               <span class="sns-icon">
                 <!-- 인스타 아이콘 삽입 위치 -->
-                <span class="icon-slot"><img src="./images/insta.png" alt=""></span>
+                <span class="icon-slot"><img src="./images/insta.png" alt="인스타"></span>
               </span>
               <span class="sns-icon">
                 <!-- 블로그 아이콘 삽입 위치 -->
-                <span class="icon-slot"><img src="./images/blog.png" alt=""></span>
+                <span class="icon-slot"><img src="./images/blog.png" alt="블로그"></span>
               </span>
               <span class="sns-icon">
                 <!-- 유튜브 아이콘 삽입 위치 -->
-                <span class="icon-slot"><img src="./images/youtube.png" alt=""></span>
+                <span class="icon-slot"><img src="./images/youtube.png" alt="유튜브"></span>
               </span>
             </div>
           </footer>
@@ -291,7 +291,7 @@
           <button class="nav-item active" type="button" onclick="showPage('home')">
             <span class="nav-icon">
               <!-- 홈 활성 아이콘 삽입 위치 -->
-              <span class="icon-slot"><img src="./images/redhomeicons.png" alt=""></span>
+              <span class="icon-slot"><img src="./images/redhomeicons.png" alt="홈아이콘"></span>
             </span>
             <span>홈</span>
           </button>
@@ -299,7 +299,7 @@
           <button class="nav-item" type="button" onclick="openEventSheet()">
             <span class="nav-icon">
               <!-- 이벤트 아이콘 삽입 위치 -->
-              <span class="icon-slot"><img src="./images/eventicon.png" alt=""></span>
+              <span class="icon-slot"><img src="./images/eventicon.png" alt="이벤트아이콘"></span>
             </span>
             <span>이벤트</span>
           </button>
@@ -317,7 +317,7 @@
           <button class="nav-item" type="button" onclick="showOrderHistoryPage()">
             <span class="nav-icon">
               <!-- 주문내역 아이콘 삽입 위치 -->
-              <span class="icon-slot"><img src="./images/ordericon.png" alt=""></span>
+              <span class="icon-slot"><img src="./images/ordericon.png" alt="주문내역아이콘"></span>
             </span>
             <span>주문내역</span>
           </button>
@@ -325,7 +325,7 @@
           <button class="nav-item" type="button">
             <span class="nav-icon">
               <!-- 더보기 아이콘 삽입 위치 -->
-              <span class="icon-slot"><img src="./images/moreicon.png" alt=""></span>
+              <span class="icon-slot"><img src="./images/moreicon.png" alt="더보기아이콘"></span>
             </span>
             <span>더보기</span>
           </button>
@@ -338,7 +338,7 @@
       <div class="sub-header">
         <button class="sub-back" type="button" onclick="showPage('home')">
           <!-- 서브 뒤로가기 아이콘 삽입 위치 -->
-          <span class="icon-slot"><img src="./images/backicons.png" alt=""></span>
+          <span class="icon-slot"><img src="./images/backicons.png" alt="뒤로가기"></span>
         </button>
 
         <div class="sub-tabs">
@@ -363,14 +363,14 @@
         <button class="nav-item" type="button" onclick="showPage('home')">
           <span class="nav-icon">
             <!-- 홈 기본 아이콘 삽입 위치 -->
-            <span class="icon-slot"><img src="./images/home icons.png" alt=""></span>
+            <span class="icon-slot"><img src="./images/home icons.png" alt="홈아이콘"></span>
           </span>
           <span>홈</span>
         </button>
 
         <button class="nav-item" type="button" onclick="openEventSheet()">
           <span class="nav-icon">
-            <span class="icon-slot"><img src="./images/eventicon.png" alt=""></span>
+            <span class="icon-slot"><img src="./images/eventicon.png" alt="이벤트"></span>
           </span>
           <span>이벤트</span>
         </button>
@@ -386,14 +386,14 @@
 
         <button class="nav-item" type="button" onclick="showOrderHistoryPage()">
           <span class="nav-icon">
-            <span class="icon-slot"><img src="./images/ordericon.png" alt=""></span>
+            <span class="icon-slot"><img src="./images/ordericon.png" alt="주문버튼"></span>
           </span>
           <span>주문내역</span>
         </button>
 
         <button class="nav-item" type="button">
           <span class="nav-icon">
-            <span class="icon-slot"><img src="./images/moreicon.png" alt=""></span>
+            <span class="icon-slot"><img src="./images/moreicon.png" alt="더보기"></span>
           </span>
           <span>더보기</span>
         </button>
@@ -404,7 +404,7 @@
     <section id="storePage" class="page page-store">
       <div class="sub-header">
         <button class="sub-back" type="button" onclick="showPage('home')">
-          <span class="icon-slot"><img src="./images/backicons.png" alt=""></span>
+          <span class="icon-slot"><img src="./images/backicons.png" alt="뒤로가기"></span>
         </button>
 
         <div class="sub-tabs">
@@ -419,9 +419,21 @@
         <div class="store-address">
           <span class="icon-mini">
             <!-- 매장 상세 위치 아이콘 삽입 위치 -->
-            <span class="icon-slot"><img src="./images/map icon.png" alt=""></span>
+            <span class="icon-slot"><img src="./images/map icon.png" alt="위치아이콘"></span>
           </span>
           <span>경기 김포시 김포한강4로 125월드타워빌딩 1층 102호<br>(장기동)</span>
+        </div>
+
+        <div class="store-map-box">
+          <div id="storeMap" class="store-map" aria-label="김포 장기점 지도"></div>
+          <div id="storeMapNotice" class="store-map-notice">
+            카카오맵 JavaScript 키를 입력하면 지도가 표시됩니다.
+          </div>
+        </div>
+
+        <div class="store-map-actions">
+          <button type="button" class="map-action-btn" onclick="openKakaoMapRoute()">카카오맵 길찾기</button>
+          <button type="button" class="map-action-btn ghost" onclick="openKakaoMapSearch()">지도에서 보기</button>
         </div>
       </div>
     </section>
@@ -429,7 +441,7 @@
     <!-- ORDER PAGE -->
     <section id="orderPage" class="page page-order">
       <button class="order-back" type="button" onclick="showPage('menuPage')">
-        <span class="icon-slot"><img src="./images/backicons.png" alt=""></span>
+        <span class="icon-slot"><img src="./images/backicons.png" alt="뒤로가기"></span>
       </button>
 
       <div class="order-store">김포 장기점</div>
@@ -437,7 +449,7 @@
       <div class="order-address">
         <span class="icon-mini">
           <!-- 주문페이지 위치 아이콘 삽입 위치 -->
-          <span class="icon-slot"><img src="./images/map icon.png" alt=""></span>
+          <span class="icon-slot"><img src="./images/map icon.png" alt="위치아이콘"></span>
         </span>
         <span>경기 김포시 김포한강4로 125월드타워빌딩 1층 102호<br>(장기동)</span>
       </div>
@@ -448,7 +460,7 @@
         <div class="order-type-item" onclick="setOrderType('hall')">
           <span class="type-icon">
             <!-- 매장식사 아이콘 삽입 위치 -->
-            <span class="icon-slot"><img src="./images/hall icon.png" alt=""></span>
+            <span class="icon-slot"><img src="./images/hall icon.png" alt="매장식사아이콘"></span>
           </span>
           <span>매장식사</span>
           <span class="check-box"></span>
@@ -457,7 +469,7 @@
         <div class="order-type-item" onclick="setOrderType('takeout')">
           <span class="type-icon">
             <!-- 방문포장 아이콘 삽입 위치 -->
-            <span class="icon-slot"><img src="./images/takeout-icon.png" alt=""></span>
+            <span class="icon-slot"><img src="./images/takeout-icon.png" alt="방문포장아이콘"></span>
           </span>
           <span>방문포장</span>
           <span class="check-box checked">✓</span>
@@ -516,7 +528,7 @@
     <section id="cartPage" class="page page-cart">
       <div class="cart-header">
         <button class="cart-back" type="button" onclick="showPage('home')">
-          <span class="icon-slot"><img src="./images/backicons.png" alt=""></span>
+          <span class="icon-slot"><img src="./images/backicons.png" alt="뒤로가기"></span>
         </button>
         <h2>장바구니</h2>
       </div>
@@ -540,7 +552,7 @@
     <section id="orderHistoryPage" class="page page-history">
       <div class="history-header">
         <button class="cart-back" type="button" onclick="showPage('home')">
-          <span class="icon-slot"><img src="./images/backicons.png" alt=""></span>
+          <span class="icon-slot"><img src="./images/backicons.png" alt="뒤로가기"></span>
         </button>
         <h2>주문내역</h2>
       </div>
@@ -552,7 +564,7 @@
     <section id="payPage" class="page page-pay">
       <div class="pay-header">
         <button class="cart-back" type="button" onclick="showPage('home')">
-          <span class="icon-slot"><img src="./images/backicons.png" alt=""></span>
+          <span class="icon-slot"><img src="./images/backicons.png" alt="뒤로가기"></span>
         </button>
         <h2>Pay 등록</h2>
       </div>
@@ -576,14 +588,14 @@
     <section id="imageDetailPage" class="page page-image-detail">
       <div class="image-detail-header">
         <button class="image-detail-back" type="button" onclick="closeImageDetailPage()">
-          <span class="icon-slot"><img src="./images/backicons.png" alt=""></span>
+          <span class="icon-slot"><img src="./images/backicons.png" alt="뒤로가기"></span>
         </button>
         <h2>메뉴 상세</h2>
       </div>
 
       <div class="image-detail-card">
         <div class="image-detail-visual">
-          <img id="imageDetailImg" src="" alt="">
+          <img id="imageDetailImg" src="" alt="주문상세">
         </div>
 
         <h3 class="image-detail-title" id="imageDetailTitle"></h3>
@@ -600,13 +612,13 @@
     <!-- OVERLAYS -->
     <div class="dimmed" id="drawerDimmed" onclick="closeDrawer()"></div>
     <div class="side-drawer" id="sideDrawer">
-      <div class="drawer-logo"><img src="./images/logo3.png" alt=""></div>
+      <div class="drawer-logo"><img src="./images/logo3.png" alt="로고3"></div>
 
       <ul class="drawer-group">
         <li>
           <button class="drawer-toggle" type="button" onclick="toggleDrawerSub('drawerBrand')">
             <span>브랜드</span>
-            <span class="arrow"><img src="./images/down-icon.png" alt=""></span>
+            <span class="arrow"><img src="./images/down-icon.png" alt="다운아이콘"></span>
           </button>
           <ul class="drawer-sub" id="drawerBrand">
             <li>이삭토스트</li>
@@ -618,14 +630,14 @@
         <li>
           <button class="drawer-toggle" type="button" onclick="showPage('menuPage'); closeDrawer();">
             <span>메뉴</span>
-            <span class="arrow"><img src="./images/menuicons.png" alt=""></span>
+            <span class="arrow"><img src="./images/menuicons.png" alt="">메뉴아이콘</span>
           </button>
         </li>
 
         <li>
           <button class="drawer-toggle" type="button" onclick="toggleDrawerSub('drawerCommunity')">
             <span>커뮤니티</span>
-            <span class="arrow"><img src="./images/down-icon.png" alt=""></span>
+            <span class="arrow"><img src="./images/down-icon.png" alt="다운아이콘"></span>
           </button>
           <ul class="drawer-sub" id="drawerCommunity">
             <li>공지사항</li>
@@ -639,7 +651,7 @@
         <li>
           <button class="drawer-toggle" type="button" onclick="toggleDrawerSub('drawerBoard')">
             <span>고객 게시판</span>
-            <span class="arrow"><img src="./images/down-icon.png" alt=""></span>
+            <span class="arrow"><img src="./images/down-icon.png" alt="다운아이콘"></span>
           </button>
           <ul class="drawer-sub" id="drawerBoard">
             <li>매장 칭찬하기</li>
@@ -652,7 +664,7 @@
         <li>
           <button class="drawer-toggle" type="button" onclick="toggleDrawerSub('drawerGuide')">
             <span>가맹안내</span>
-            <span class="arrow"><img src="./images/down-icon.png" alt=""></span>
+            <span class="arrow"><img src="./images/down-icon.png" alt="다운아이콘"></span>
           </button>
           <ul class="drawer-sub" id="drawerGuide">
             <li>가맹 상담 신청</li>
@@ -675,7 +687,7 @@
     <div class="menu-detail-sheet" id="menuDetailSheet">
       <button class="menu-detail-close" type="button" onclick="closeMenuDetail()">✕</button>
       <div class="menu-detail-img">
-        <img id="menuDetailImg" src="" alt="">
+        <img id="menuDetailImg" src="" alt="메뉴상세">
       </div>
       <h2 id="menuDetailTitle"></h2>
       <div class="menu-detail-price" id="menuDetailPrice"></div>
@@ -703,5 +715,6 @@
 
   </div>
   <script src="./script/script.js"></script>
+  <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=e863a55497769d28bf4f9b55634187ff&autoload=false"></script>
 </body>
 </html>

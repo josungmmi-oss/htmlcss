@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Isaac Toast App UI</title>
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+  <div class="app">
+
+    <!-- SPLASH -->
+    <section id="splash" class="page page-splash active">
+      <div class="splash-inner">
+        <div class="splash-bg-shape"></div>
+
+        <!-- 스플래시 로고 이미지 삽입 위치 -->
+        <!-- 예: <img src="./images/icon-logo.png" alt="로고" class="brand-mark"> -->
+        <div class="brand-mark"><img src="./images/1-logo.png" alt=""></div>
+
+        <div class="loading-wrap">
+          <div class="loading-bar">
+            <div class="loading-fill" id="loadingFill"></div>
+          </div>
+          <div class="loading-percent" id="loadingPercent">0%</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WORK 1 -->
+    <section id="work1" class="page work-full-page">
+      <!-- work1 시안 이미지 그대로 삽입 -->
+      <img src="./images/work1.png" alt="work1" class="work-full-img">
+    </section>
+
+    <!-- WORK 2 -->
+    <section id="work2" class="page work-full-page">
+      <!-- work2 시안 이미지 그대로 삽입 -->
+      <img src="./images/work2.png" alt="work2" class="work-full-img">
+    </section>
+
+    <!-- WORK 3 -->
+    <section id="work3" class="page work-full-page">
+      <!-- work3 시안 이미지 그대로 삽입 -->
+      <img src="./images/work3.png" alt="work3" class="work-full-img">
+    </section>
+
+    <!-- LOGIN -->
+
+    <section id="login" class="page page-login">
+      <div class="login-wrap">
+        <h2>로그인</h2>
+
+        <div class="form-group">
+          <label>휴대폰번호</label>
+          <input type="text" placeholder="휴대폰 번호를 입력해주세요">
+        </div>
+
+        <div class="form-group">
+          <label>비밀번호</label>
+          <input type="password" placeholder="비밀번호를 입력해주세요">
+        </div>
+
+        <button class="login-btn" onclick="showPage('home')">로그인</button>
+
+        <div class="login-tools">
+          <button class="login-keep" type="button" onclick="toggleKeepLogin()">
+            <span class="keep-circle" id="keepCircle"></span>
+            <span>로그인 상태 유지</span>
+          </button>
+          <div>회원가입 ㅣ 비밀번호 찾기</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOME -->
+    <section id="home" class="page page-home">
+      <div class="page-shell">
+        <header class="top-header">
+          <div class="header-side">
+            <button class="icon-btn" type="button">
+              <!-- 헤더 뒤로가기 아이콘 삽입 위치 -->
+              <!-- 예: <span class="icon-slot"><img src="./images/icon-back.png" alt="뒤로"></span> -->
+              <span class="icon-slot"><img src="./images/backicons.png" alt=""></span>
+            </button>
+
+            <button class="icon-btn" type="button">
+              <!-- 헤더 알림 아이콘 삽입 위치 -->
+              <span class="icon-slot"><img src="./images/bell2.png" alt=""></span>
+              
+            </button>
+          </div>
+
+          <div class="brand-text"><img src="./images/issaclogo.png" alt=""></div>
+
+          <div class="header-actions">
+            <button class="icon-btn" type="button" onclick="showCartPage()">
+              <!-- 헤더 장바구니 아이콘 삽입 위치 -->
+              <span class="cart-icon-wrap">
+                <span class="icon-slot"><img src="./images/cart-icon.png" alt=""></span>
+                <span class="cart-badge" id="homeCartCount">0</span>
+              </span>
+            </button>
+
+            <button class="icon-btn" type="button" onclick="openDrawer()">
+              <!-- 헤더 햄버거 아이콘 삽입 위치 -->
+              <span class="icon-slot"><img src="./images/hammenuicons.png" alt=""></span>
+            </button>
+          </div>
+        </header>
+
+        <div class="home-scroll">
+          <div class="banner-slider">
+            <div class="banner-track" id="bannerTrack">
+              <!-- 홈 배너 1~5 이미지 삽입 위치 -->
+              <div class="banner-slide"><img src="./images/b1.png" alt="배너 1"></div>
+              <div class="banner-slide"><img src="./images/b2.png" alt="배너 2"></div>
+              <div class="banner-slide"><img src="./images/b3.png" alt="배너 3"></div>
+              <div class="banner-slide"><img src="./images/b4.png" alt="배너 4"></div>
+              <div class="banner-slide"><img src="./images/b5.png" alt="배너 5"></div>
+            </div>
+          </div>
+
+          <div class="quick-links">
+            <button class="quick-item" type="button" onclick="openQuickSheet('stamp')">
+              <span class="quick-icon">
+                <!-- 스탬프 아이콘 삽입 위치 -->
+                <span class="icon-slot"><img src="./images/stamp iconl.png" alt=""></span>
+              </span>
+              <span>스탬프 <strong>3</strong></span>
+            </button>
+
+            <button class="quick-item" type="button" onclick="openQuickSheet('coupon')">
+              <span class="quick-icon">
+                <!-- 쿠폰 아이콘 삽입 위치 -->
+                <span class="icon-slot"><img src="./images/coupon-iconl.png" alt=""></span>
+              </span>
+              <span>쿠폰 <strong>0</strong></span>
+            </button>
+
+            <button class="quick-item" type="button" onclick="openQuickSheet('pay')">
+              <span class="quick-icon">
+                <!-- pay 아이콘 삽입 위치 -->
+                <span class="icon-slot"><img src="./images/payicon.png" alt=""></span>
+              </span>
+              <span>Pay</span>
+            </button>
+          </div>
+
+          <section class="section">
+            <h3>EVENT</h3>
+            <button class="event-card" type="button" onclick="openEventSheet()">
+              <p>신메뉴 스토리 인증 이벤트<br>새우 토스트의 잊을 수 없는 맛</p>
+              <div class="event-thumb">
+                <!-- 홈 이벤트 썸네일 이미지 삽입 위치 -->
+                <img src="./images/event.png" alt="이벤트 썸네일">
+              </div>
+            </button>
+          </section>
+
+          <section class="section">
+            <h3>추천 메뉴</h3>
+            <div class="menu-horizontal">
+              <div class="menu-card">
+                <div class="img-box">
+                  <img src="./images/frenchcream.png" alt="프렌치크림 브리오슈 세트" data-detail-id="set-french-cream" data-detail-from="home">
+                </div>
+                <p>프렌치크림<br>브리오슈 세트</p>
+              </div>
+
+              <div class="menu-card">
+                <div class="img-box">
+                  <img src="./images/realchil.png" alt="리얼 칠리 새우 세트" data-detail-id="set-real-chili" data-detail-from="home">
+                </div>
+                <p>리얼 칠리 새우 세트</p>
+              </div>
+
+              <div class="menu-card">
+                <div class="img-box">
+                  <img src="./images/sewoospecial.png" alt="새우 스페셜 세트" data-detail-id="set-shrimp-special" data-detail-from="home">
+                </div>
+                <p>새우 스페셜 세트</p>
+              </div>
+
+              <div class="menu-card">
+                <div class="img-box">
+                  <img src="./images/realchilsewoo.png" alt="리얼 칠리 새우" data-detail-id="toast-real-chili" data-detail-from="home">
+                </div>
+                <p>리얼 칠리<br>새우</p>
+              </div>
+
+              <div class="menu-card">
+                <div class="img-box">
+                  <img src="./images/pop.png" alt="칠리 포테이토 팝" data-detail-id="side-chili-potato" data-detail-from="home">
+                </div>
+                <p>칠리 포테이토<br>팝</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="section">
+            <h3>최근 주문</h3>
+            <div class="menu-horizontal">
+              <div class="recent-card">
+                <div class="thumb">
+                  <img src="./images/baconbest.png" alt="베이컨 베스트">
+                </div>
+                <div>
+                  <strong>베이컨 베스트</strong>
+                  <p>기본(빵) ㅣ 기본(계란) ㅣ 추가...</p>
+                </div>
+              </div>
+
+              <div class="recent-card">
+                <div class="thumb">
+                  <img src="./images/realchilsewoo.png" alt="리얼 칠리 새우" data-detail-id="toast-real-chili" data-detail-from="home">
+                </div>
+                <div>
+                  <strong>리얼 칠리 새우</strong>
+                  <p>기본구성</p>
+                </div>
+              </div>
+
+              <div class="recent-card">
+                <div class="thumb">
+                  <img src="./images/sewoospecial.png" alt="새우 스페셜" data-detail-id="set-shrimp-special" data-detail-from="home">
+                </div>
+                <div>
+                  <strong>새우 스페셜</strong>
+                  <p>기본(빵) ㅣ 기본(계란) ㅣ 소스...</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="section">
+            <h3>가까운 매장</h3>
+            <button class="store-card" type="button" onclick="showPage('storePage')">
+              <h4>김포 장기점</h4>
+              <div class="store-row">
+                <div class="store-logo"><img src="./images/1-logo.png" alt=""></div>
+
+                <div class="store-meta">
+                  <div class="store-distance">
+                    <span class="icon-mini">
+                      <!-- 매장 위치 아이콘 삽입 위치 -->
+                      <span class="icon-slot"><img src="./images/map icon.png" alt=""></span>
+                    </span>
+                    <span>777m</span>
+                  </div>
+
+                  <span class="store-tag">매장</span>
+                  <span class="store-tag">포장</span>
+                </div>
+              </div>
+            </button>
+          </section>
+
+          <footer class="footer-info">
+            <h4>이삭토스트</h4>
+            <p>(주)비버웍스 (서비스 시행사)</p>
+            <p>
+              비버웍스는 통신판매 중개자 이며, 통신판매의 당사자가 아닙니다.<br>
+              따라서 비버웍스는 상품, 거래정보 및 거래에 대하여 책임을 지지 않습니다.
+            </p>
+
+            <div class="footer-links">
+              <span>개인/위치정보처리방침</span>
+              <span>위치기반 서비스 이용약관(비버웍스)</span>
+              <span>이용약관</span>
+            </div>
+
+            <div class="footer-sns">
+              <span class="sns-icon">
+                <!-- 인스타 아이콘 삽입 위치 -->
+                <span class="icon-slot"><img src="./images/insta.png" alt=""></span>
+              </span>
+              <span class="sns-icon">
+                <!-- 블로그 아이콘 삽입 위치 -->
+                <span class="icon-slot"><img src="./images/blog.png" alt=""></span>
+              </span>
+              <span class="sns-icon">
+                <!-- 유튜브 아이콘 삽입 위치 -->
+                <span class="icon-slot"><img src="./images/youtube.png" alt=""></span>
+              </span>
+            </div>
+          </footer>
+        </div>
+
+        <nav class="bottom-nav">
+          <button class="nav-item active" type="button" onclick="showPage('home')">
+            <span class="nav-icon">
+              <!-- 홈 활성 아이콘 삽입 위치 -->
+              <span class="icon-slot"><img src="./images/redhomeicons.png" alt=""></span>
+            </span>
+            <span>홈</span>
+          </button>
+
+          <button class="nav-item" type="button" onclick="openEventSheet()">
+            <span class="nav-icon">
+              <!-- 이벤트 아이콘 삽입 위치 -->
+              <span class="icon-slot"><img src="./images/eventicon.png" alt=""></span>
+            </span>
+            <span>이벤트</span>
+          </button>
+
+          <div class="nav-center-wrap">
+            <button class="order-main-btn" type="button" onclick="closeImageDetailPage()">
+              <span class="check-circle">
+                <!-- 중앙 주문 체크 아이콘 삽입 위치 -->
+                <span class="icon-slot">✓</span>
+              </span>
+              <span class="order-label">주문</span>
+            </button>
+          </div>
+
+          <button class="nav-item" type="button" onclick="showOrderHistoryPage()">
+            <span class="nav-icon">
+              <!-- 주문내역 아이콘 삽입 위치 -->
+              <span class="icon-slot"><img src="./images/ordericon.png" alt=""></span>
+            </span>
+            <span>주문내역</span>
+          </button>
+
+          <button class="nav-item" type="button">
+            <span class="nav-icon">
+              <!-- 더보기 아이콘 삽입 위치 -->
+              <span class="icon-slot"><img src="./images/moreicon.png" alt=""></span>
+            </span>
+            <span>더보기</span>
+          </button>
+        </nav>
+      </div>
+    </section>
+
+    <!-- MENU PAGE -->
+    <section id="menuPage" class="page page-menu">
+      <div class="sub-header">
+        <button class="sub-back" type="button" onclick="showPage('home')">
+          <!-- 서브 뒤로가기 아이콘 삽입 위치 -->
+          <span class="icon-slot"><img src="./images/backicons.png" alt=""></span>
+        </button>
+
+        <div class="sub-tabs">
+          <button class="active" type="button">메뉴 정보</button>
+          <button type="button" onclick="showPage('storePage')">매장 정보</button>
+        </div>
+      </div>
+
+      <div class="menu-shell">
+        <div class="category-wrap">
+          <button class="category-btn active" type="button" onclick="changeCategory('all', this)">전체</button>
+          <button class="category-btn" type="button" onclick="changeCategory('recommend', this)">추천</button>
+          <button class="category-btn" type="button" onclick="changeCategory('set', this)">토스트세트</button>
+          <button class="category-btn" type="button" onclick="changeCategory('toast', this)">토스트</button>
+          <button class="category-btn" type="button" onclick="changeCategory('side', this)">사이드</button>
+        </div>
+
+        <div class="menu-scroll-area" id="menuList"></div>
+      </div>
+
+      <nav class="bottom-nav">
+        <button class="nav-item" type="button" onclick="showPage('home')">
+          <span class="nav-icon">
+            <!-- 홈 기본 아이콘 삽입 위치 -->
+            <span class="icon-slot"><img src="./images/home icons.png" alt=""></span>
+          </span>
+          <span>홈</span>
+        </button>
+
+        <button class="nav-item" type="button" onclick="openEventSheet()">
+          <span class="nav-icon">
+            <span class="icon-slot"><img src="./images/eventicon.png" alt=""></span>
+          </span>
+          <span>이벤트</span>
+        </button>
+
+        <div class="nav-center-wrap">
+          <button class="order-main-btn" type="button" onclick="goToSelectedOrder()">
+            <span class="check-circle">
+              <span class="icon-slot">✓</span>
+            </span>
+            <span class="order-label">주문 <span class="cart-count-badge" id="cartCount">0</span></span>
+          </button>
+        </div>
+
+        <button class="nav-item" type="button" onclick="showOrderHistoryPage()">
+          <span class="nav-icon">
+            <span class="icon-slot"><img src="./images/ordericon.png" alt=""></span>
+          </span>
+          <span>주문내역</span>
+        </button>
+
+        <button class="nav-item" type="button">
+          <span class="nav-icon">
+            <span class="icon-slot"><img src="./images/moreicon.png" alt=""></span>
+          </span>
+          <span>더보기</span>
+        </button>
+      </nav>
+    </section>
+
+    <!-- STORE PAGE -->
+    <section id="storePage" class="page page-store">
+      <div class="sub-header">
+        <button class="sub-back" type="button" onclick="showPage('home')">
+          <span class="icon-slot"><img src="./images/backicons.png" alt=""></span>
+        </button>
+
+        <div class="sub-tabs">
+          <button type="button" onclick="showPage('menuPage')">메뉴 정보</button>
+          <button class="active" type="button">매장 정보</button>
+        </div>
+      </div>
+
+      <div class="store-info-wrap">
+        <h2>김포 장기점</h2>
+
+        <div class="store-address">
+          <span class="icon-mini">
+            <!-- 매장 상세 위치 아이콘 삽입 위치 -->
+            <span class="icon-slot"><img src="./images/map icon.png" alt=""></span>
+          </span>
+          <span>경기 김포시 김포한강4로 125월드타워빌딩 1층 102호<br>(장기동)</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ORDER PAGE -->
+    <section id="orderPage" class="page page-order">
+      <button class="order-back" type="button" onclick="showPage('menuPage')">
+        <span class="icon-slot"><img src="./images/backicons.png" alt=""></span>
+      </button>
+
+      <div class="order-store">김포 장기점</div>
+
+      <div class="order-address">
+        <span class="icon-mini">
+          <!-- 주문페이지 위치 아이콘 삽입 위치 -->
+          <span class="icon-slot"><img src="./images/map icon.png" alt=""></span>
+        </span>
+        <span>경기 김포시 김포한강4로 125월드타워빌딩 125층 102호<br>(장기동)</span>
+      </div>
+
+      <div class="order-list" id="orderList"></div>
+
+      <div class="order-type-row">
+        <div class="order-type-item" onclick="setOrderType('hall')">
+          <span class="type-icon">
+            <!-- 매장식사 아이콘 삽입 위치 -->
+            <span class="icon-slot"><img src="./images/hall icon.png" alt=""></span>
+          </span>
+          <span>매장식사</span>
+          <span class="check-box"></span>
+        </div>
+
+        <div class="order-type-item" onclick="setOrderType('takeout')">
+          <span class="type-icon">
+            <!-- 방문포장 아이콘 삽입 위치 -->
+            <span class="icon-slot"><img src="./images/takeout-icon.png" alt=""></span>
+          </span>
+          <span>방문포장</span>
+          <span class="check-box checked">✓</span>
+        </div>
+      </div>
+
+      <div class="coupon-area">
+        <div class="coupon-row">
+          <span id="couponText">사용 가능한 쿠폰 1장</span>
+          <button class="coupon-btn" id="couponButton" type="button" onclick="toggleCoupon()">1,000원 쿠폰 적용</button>
+        </div>
+      </div>
+
+      <div class="order-summary">
+        <div class="summary-line">
+          <span>주문금액</span>
+          <span id="orderPriceLine">8,000원</span>
+        </div>
+
+        <div class="summary-line">
+          <span>쿠폰할인</span>
+          <span id="couponDiscountPrice">-0원</span>
+        </div>
+
+        <div class="summary-line total">
+          <span>총결제금액</span>
+          <span id="orderTotalPrice">8,000원</span>
+        </div>
+      </div>
+
+      <div class="order-actions">
+        <button class="ghost-btn" type="button" onclick="showPage('menuPage')">더 담으러 가기</button>
+        <button class="primary-btn" type="button" onclick="submitOrder()">주문하기</button>
+      </div>
+    </section>
+
+    <!-- ORDER COMPLETE PAGE -->
+    <section id="orderCompletePage" class="page page-complete">
+      <div class="complete-icon">✓</div>
+      <h2>주문이 완료되었습니다</h2>
+      <p>김포 장기점으로 주문이 접수되었습니다.<br>매장에서 준비가 완료되면 안내됩니다.</p>
+
+      <div class="complete-summary">
+        <h3>주문 내역</h3>
+        <div class="complete-list" id="completeList"></div>
+        <div class="complete-total">
+          <span>총결제금액</span>
+          <span id="completeTotalPrice">0원</span>
+        </div>
+      </div>
+
+      <button class="complete-home-btn" type="button" onclick="finishOrder()">홈으로 가기</button>
+    </section>
+
+    <!-- CART PAGE -->
+    <section id="cartPage" class="page page-cart">
+      <div class="cart-header">
+        <button class="cart-back" type="button" onclick="showPage('home')">
+          <span class="icon-slot"><img src="./images/backicons.png" alt=""></span>
+        </button>
+        <h2>장바구니</h2>
+      </div>
+
+      <div class="cart-list" id="cartList"></div>
+
+      <div class="cart-summary-box">
+        <div class="cart-summary-line">
+          <span>총 상품금액</span>
+          <span id="cartTotalPrice">0원</span>
+        </div>
+      </div>
+
+      <div class="cart-action-row">
+        <button class="cart-more-btn" type="button" onclick="showPage('menuPage')">더 담기</button>
+        <button class="cart-order-btn" type="button" onclick="goToSelectedOrder()">주문하기</button>
+      </div>
+    </section>
+
+    <!-- ORDER HISTORY PAGE -->
+    <section id="orderHistoryPage" class="page page-history">
+      <div class="history-header">
+        <button class="cart-back" type="button" onclick="showPage('home')">
+          <span class="icon-slot"><img src="./images/backicons.png" alt=""></span>
+        </button>
+        <h2>주문내역</h2>
+      </div>
+
+      <div class="history-list" id="historyList"></div>
+    </section>
+
+    <!-- PAY REGISTER PAGE -->
+    <section id="payPage" class="page page-pay">
+      <div class="pay-header">
+        <button class="cart-back" type="button" onclick="showPage('home')">
+          <span class="icon-slot"><img src="./images/backicons.png" alt=""></span>
+        </button>
+        <h2>Pay 등록</h2>
+      </div>
+
+      <div class="pay-card">
+        <label>카드번호</label>
+        <input id="payCardNumber" type="text" placeholder="0000-0000-0000-0000">
+
+        <label>유효기간</label>
+        <input id="payCardDate" type="text" placeholder="MM/YY">
+
+        <label>카드 별칭</label>
+        <input id="payCardName" type="text" placeholder="예: 내 카드">
+
+        <button class="pay-register-btn" type="button" onclick="registerPay()">등록하기</button>
+      </div>
+    </section>
+
+
+    <!-- IMAGE DETAIL PAGE -->
+    <section id="imageDetailPage" class="page page-image-detail">
+      <div class="image-detail-header">
+        <button class="image-detail-back" type="button" onclick="closeImageDetailPage()">
+          <span class="icon-slot"><img src="./images/backicons.png" alt=""></span>
+        </button>
+        <h2>메뉴 상세</h2>
+      </div>
+
+      <div class="image-detail-card">
+        <div class="image-detail-visual">
+          <img id="imageDetailImg" src="" alt="">
+        </div>
+
+        <h3 class="image-detail-title" id="imageDetailTitle"></h3>
+        <div class="image-detail-price" id="imageDetailPrice"></div>
+        <div class="image-detail-desc" id="imageDetailDesc"></div>
+
+        <div class="image-detail-actions">
+          <button class="image-detail-cart" type="button" onclick="addDetailItemToCart()">장바구니 담기</button>
+          <button class="image-detail-order" type="button" onclick="orderDetailItemNow()">바로 주문</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- OVERLAYS -->
+    <div class="dimmed" id="drawerDimmed" onclick="closeDrawer()"></div>
+    <div class="side-drawer" id="sideDrawer">
+      <div class="drawer-logo"><img src="./images/logo3.png" alt=""></div>
+
+      <ul class="drawer-group">
+        <li>
+          <button class="drawer-toggle" type="button" onclick="toggleDrawerSub('drawerBrand')">
+            <span>브랜드</span>
+            <span class="arrow"><img src="./images/down-icon.png" alt=""></span>
+          </button>
+          <ul class="drawer-sub" id="drawerBrand">
+            <li>이삭토스트</li>
+            <li>CEO 인사말</li>
+            <li>연혁</li>
+          </ul>
+        </li>
+
+        <li>
+          <button class="drawer-toggle" type="button" onclick="showPage('menuPage'); closeDrawer();">
+            <span>메뉴</span>
+            <span class="arrow"><img src="./images/menuicons.png" alt=""></span>
+          </button>
+        </li>
+
+        <li>
+          <button class="drawer-toggle" type="button" onclick="toggleDrawerSub('drawerCommunity')">
+            <span>커뮤니티</span>
+            <span class="arrow"><img src="./images/down-icon.png" alt=""></span>
+          </button>
+          <ul class="drawer-sub" id="drawerCommunity">
+            <li>공지사항</li>
+            <li>이벤트 / 뉴스</li>
+            <li>든든 딜리버리</li>
+            <li>기부 캠페인</li>
+            <li>고객 리뷰</li>
+          </ul>
+        </li>
+
+        <li>
+          <button class="drawer-toggle" type="button" onclick="toggleDrawerSub('drawerBoard')">
+            <span>고객 게시판</span>
+            <span class="arrow"><img src="./images/down-icon.png" alt=""></span>
+          </button>
+          <ul class="drawer-sub" id="drawerBoard">
+            <li>매장 칭찬하기</li>
+            <li>FAQ</li>
+            <li>고객 문의</li>
+            <li>제휴/제안</li>
+          </ul>
+        </li>
+
+        <li>
+          <button class="drawer-toggle" type="button" onclick="toggleDrawerSub('drawerGuide')">
+            <span>가맹안내</span>
+            <span class="arrow"><img src="./images/down-icon.png" alt=""></span>
+          </button>
+          <ul class="drawer-sub" id="drawerGuide">
+            <li>가맹 상담 신청</li>
+            <li>비용 및 절차</li>
+            <li>교육프로그램</li>
+            <li>인테리어</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="dimmed" id="eventDimmed" onclick="closeEventSheet()"></div>
+    <div class="event-sheet" id="eventSheet">
+      <button class="event-close" type="button" onclick="closeEventSheet()">✕</button>
+      <!-- 이벤트 팝업 이미지 삽입 위치 (권장 사이즈 약 299px * 756px) -->
+      <img src="./images/event.png" alt="이벤트 팝업 화면">
+    </div>
+
+    <div class="dimmed" id="menuDetailDimmed" onclick="closeMenuDetail()"></div>
+    <div class="menu-detail-sheet" id="menuDetailSheet">
+      <button class="menu-detail-close" type="button" onclick="closeMenuDetail()">✕</button>
+      <div class="menu-detail-img">
+        <img id="menuDetailImg" src="" alt="">
+      </div>
+      <h2 id="menuDetailTitle"></h2>
+      <div class="menu-detail-price" id="menuDetailPrice"></div>
+      <div class="menu-detail-desc" id="menuDetailDesc"></div>
+      <button class="menu-detail-add" type="button" id="menuDetailAddBtn">장바구니 담기</button>
+    </div>
+
+    <div class="dimmed" id="quickDimmed" onclick="closeQuickSheet()"></div>
+    <div class="quick-sheet" id="quickSheet">
+      <div class="quick-sheet-header">
+        <div class="quick-sheet-title">
+          <span class="quick-sheet-icon" id="quickSheetIcon"></span>
+          <span id="quickSheetTitle">스탬프</span>
+        </div>
+        <button class="quick-sheet-close" type="button" onclick="closeQuickSheet()">✕</button>
+      </div>
+
+      <div class="quick-sheet-body">
+        <div class="quick-value" id="quickSheetValue">3개</div>
+        <p class="quick-desc" id="quickSheetDesc">현재 보유한 스탬프를 확인할 수 있습니다.</p>
+        <div class="quick-detail-card" id="quickSheetDetail"></div>
+        <button class="quick-action-btn" type="button" id="quickSheetButton">확인</button>
+      </div>
+    </div>
+
+  </div>
+  <script src="./script/script.js"></script>
+</body>
+</html>

@@ -16,7 +16,7 @@
 
         <!-- 스플래시 로고 이미지 삽입 위치 -->
         <!-- 예: <img src="./images/icon-logo.png" alt="로고" class="brand-mark"> -->
-        <div class="brand-mark"><img src="./images/1-logo.png" alt=""></div>
+        <div class="brand-mark"><img src="./images/1-logo.png" alt="이삭토스트 로고"></div>
 
         <div class="loading-wrap">
           <div class="loading-bar">
@@ -78,23 +78,23 @@
       <div class="page-shell">
         <header class="top-header">
           <div class="header-side">
-            <button class="icon-btn" type="button">
+            <button class="icon-btn" type="button" aria-label="뒤로가기">
               <!-- 헤더 뒤로가기 아이콘 삽입 위치 -->
               <!-- 예: <span class="icon-slot"><img src="./images/icon-back.png" alt="뒤로"></span> -->
               <span class="icon-slot"><img src="./images/backicons.png" alt=""></span>
             </button>
 
-            <button class="icon-btn" type="button">
+            <button class="icon-btn" type="button" aria-label="알림">
               <!-- 헤더 알림 아이콘 삽입 위치 -->
               <span class="icon-slot"><img src="./images/bell2.png" alt=""></span>
               
             </button>
           </div>
 
-          <div class="brand-text"><img src="./images/issaclogo.png" alt=""></div>
+          <div class="brand-text"><img src="./images/issaclogo.png" alt="isaac toast"></div>
 
           <div class="header-actions">
-            <button class="icon-btn" type="button" onclick="showCartPage()">
+            <button class="icon-btn" type="button" aria-label="장바구니" onclick="showCartPage()">
               <!-- 헤더 장바구니 아이콘 삽입 위치 -->
               <span class="cart-icon-wrap">
                 <span class="icon-slot"><img src="./images/cart-icon.png" alt=""></span>
@@ -102,7 +102,7 @@
               </span>
             </button>
 
-            <button class="icon-btn" type="button" onclick="openDrawer()">
+            <button class="icon-btn" type="button" aria-label="메뉴 열기" onclick="openDrawer()">
               <!-- 헤더 햄버거 아이콘 삽입 위치 -->
               <span class="icon-slot"><img src="./images/hammenuicons.png" alt=""></span>
             </button>
@@ -149,13 +149,13 @@
 
           <section class="section">
             <h3>EVENT</h3>
-            <button class="event-card" type="button" onclick="openEventSheet()">
+            <div class="event-card" role="button" tabindex="0" data-action="event-sheet">
               <p>신메뉴 스토리 인증 이벤트<br>새우 토스트의 잊을 수 없는 맛</p>
               <div class="event-thumb">
                 <!-- 홈 이벤트 썸네일 이미지 삽입 위치 -->
                 <img src="./images/event.png" alt="이벤트 썸네일">
               </div>
-            </button>
+            </div>
           </section>
 
           <section class="section">
@@ -235,7 +235,7 @@
 
           <section class="section">
             <h3>가까운 매장</h3>
-            <button class="store-card" type="button" onclick="showPage('storePage')">
+            <div class="store-card" role="button" tabindex="0" data-action="store-page">
               <h4>김포 장기점</h4>
               <div class="store-row">
                 <div class="store-logo"><img src="./images/1-logo.png" alt=""></div>
@@ -253,7 +253,7 @@
                   <span class="store-tag">포장</span>
                 </div>
               </div>
-            </button>
+            </div>
           </section>
 
           <footer class="footer-info">

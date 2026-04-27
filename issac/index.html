@@ -125,7 +125,7 @@
             <button class="quick-item" type="button" onclick="openQuickSheet('stamp')">
               <span class="quick-icon">
                 <!-- 스탬프 아이콘 삽입 위치 -->
-                <span class="icon-slot"><img src="./images/stamp iconl.png" alt="스탬프아이콘"></span>
+                <span class="icon-slot"><img src="./images/stampicon.png" alt="스탬프아이콘"></span>
               </span>
               <span>스탬프 <strong>3</strong></span>
             </button>
@@ -244,7 +244,7 @@
                   <div class="store-distance">
                     <span class="icon-mini">
                       <!-- 매장 위치 아이콘 삽입 위치 -->
-                      <span class="icon-slot"><img src="./images/map icon.png" alt="위치아이콘"></span>
+                      <span class="icon-slot"><img src="./images/mapicon.png" alt="위치아이콘"></span>
                     </span>
                     <span>777m</span>
                   </div>
@@ -363,7 +363,7 @@
         <button class="nav-item" type="button" onclick="showPage('home')">
           <span class="nav-icon">
             <!-- 홈 기본 아이콘 삽입 위치 -->
-            <span class="icon-slot"><img src="./images/home icons.png" alt="홈아이콘"></span>
+            <span class="icon-slot"><img src="./images/homeicons.png" alt="홈아이콘"></span>
           </span>
           <span>홈</span>
         </button>
@@ -419,13 +419,13 @@
         <div class="store-address">
           <span class="icon-mini">
             <!-- 매장 상세 위치 아이콘 삽입 위치 -->
-            <span class="icon-slot"><img src="./images/map icon.png" alt="위치아이콘"></span>
+            <span class="icon-slot"><img src="./images/mapicon.png" alt="위치아이콘"></span>
           </span>
           <span>경기 김포시 김포한강4로 125월드타워빌딩 1층 102호<br>(장기동)</span>
         </div>
 
         <div class="store-map-box">
-          <div id="storeMap" class="store-map" aria-label="김포 장기점 지도"></div>
+          <div id="storeMap" class="store-map" role="img" aria-label="김포 장기점 지도"></div>
           <div id="storeMapNotice" class="store-map-notice">
             카카오맵 JavaScript 키를 입력하면 지도가 표시됩니다.
           </div>
@@ -449,7 +449,7 @@
       <div class="order-address">
         <span class="icon-mini">
           <!-- 주문페이지 위치 아이콘 삽입 위치 -->
-          <span class="icon-slot"><img src="./images/map icon.png" alt="위치아이콘"></span>
+          <span class="icon-slot"><img src="./images/mapicon.png" alt="위치아이콘"></span>
         </span>
         <span>경기 김포시 김포한강4로 125월드타워빌딩 1층 102호<br>(장기동)</span>
       </div>
@@ -460,7 +460,7 @@
         <div class="order-type-item" onclick="setOrderType('hall')">
           <span class="type-icon">
             <!-- 매장식사 아이콘 삽입 위치 -->
-            <span class="icon-slot"><img src="./images/hall icon.png" alt="매장식사아이콘"></span>
+            <span class="icon-slot"><img src="./images/hallicon.png" alt="매장식사아이콘"></span>
           </span>
           <span>매장식사</span>
           <span class="check-box"></span>
@@ -469,7 +469,7 @@
         <div class="order-type-item" onclick="setOrderType('takeout')">
           <span class="type-icon">
             <!-- 방문포장 아이콘 삽입 위치 -->
-            <span class="icon-slot"><img src="./images/takeout-icon.png" alt="방문포장아이콘"></span>
+            <span class="icon-slot"><img src="./images/takeouticon.png" alt="방문포장아이콘"></span>
           </span>
           <span>방문포장</span>
           <span class="check-box checked">✓</span>
@@ -595,7 +595,7 @@
 
       <div class="image-detail-card">
         <div class="image-detail-visual">
-          <img id="imageDetailImg" src="" alt="주문상세">
+          <img id="imageDetailImg" src="./images/ordericon.png" alt="주문상세">
         </div>
 
         <h3 class="image-detail-title" id="imageDetailTitle"></h3>
@@ -687,7 +687,7 @@
     <div class="menu-detail-sheet" id="menuDetailSheet">
       <button class="menu-detail-close" type="button" onclick="closeMenuDetail()">✕</button>
       <div class="menu-detail-img">
-        <img id="menuDetailImg" src="" alt="메뉴상세">
+        <img id="menuDetailImg" src="./images/whitelikeicon.png" alt="메뉴상세">
       </div>
       <h2 id="menuDetailTitle"></h2>
       <div class="menu-detail-price" id="menuDetailPrice"></div>

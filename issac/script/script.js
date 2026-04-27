@@ -538,7 +538,7 @@ const pages = document.querySelectorAll(".page");
       stamp: {
         title: "스탬프",
         value: "3개",
-        icon: "./images/stamp iconl.png",
+        icon: "./images/stampicon.png",
         desc: "현재 적립된 스탬프를 확인할 수 있습니다.",
         detail: "스탬프 10개를 모으면 쿠폰으로 교환할 수 있습니다.<br>현재 3개 보유 중이며, 7개를 더 모으면 혜택을 받을 수 있습니다.",
         button: "스탬프 확인"

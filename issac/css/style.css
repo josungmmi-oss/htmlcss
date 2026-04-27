@@ -154,7 +154,7 @@
 
     .loading-percent {
       font-size: 14px;
-      font-weight: 700;
+      font-weight: 300;
       color: #fff;
     }
 
@@ -223,7 +223,7 @@
       background: #bdbdbd;
       color: #fff;
       font-size: 16px;
-      font-weight: 700;
+      font-weight: 400;
     }
 
     .login-tools {
@@ -254,7 +254,7 @@
       justify-content: center;
       color: #fff;
       font-size: 13px;
-      font-weight: 800;
+      font-weight: 500;
       line-height: 1;
       cursor: pointer;
       flex-shrink: 0;
@@ -347,7 +347,7 @@
       background: var(--red);
       color: #fff;
       font-size: 12px;
-      font-weight: 400;
+      font-weight: 700;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -804,13 +804,13 @@
       display: inline-flex;
       align-items: center;
       gap: 5px;
-      height: 24px;
+      height: 28px;
       padding: 0 12px;
       background: #0d82e6;
       color: #fff;
       border-radius: 999px;
       font-size: 11px;
-      font-weight: 400;
+      font-weight: 700;
       margin-bottom: 18px;
     }
 
@@ -834,7 +834,7 @@
     }
 
     .menu-left h4 {
-      font-size: clamp(17px, 2.4vw, 22px);
+      font-size: clamp(17px, 2.4vw, 20px);
       font-weight: 500;
       line-height: 1.35;
       margin-bottom: 8px;
@@ -843,7 +843,7 @@
     }
 
     .menu-left p.price {
-      font-size: 17px;
+      font-size: 16px;
       color: #555;
       margin-bottom: 0;
     }
@@ -1374,8 +1374,8 @@
     .side-drawer {
       position: absolute;
       top: 0;
-      right: -300px;
-      width: 300px;
+      right: -290px;
+      width: 290px;
       height: 100%;
       background: rgba(255,255,255,0.93);
       border: 6px solid var(--red);
@@ -2175,7 +2175,6 @@
   flex: 0 0 132px;
   width: 132px;
   min-width: 112px;
-  cursor: pointer;
 }
 
 .price-select-row {
@@ -2195,5 +2194,132 @@
 
 [data-detail-id] {
   cursor: pointer;
+}
+
+
+
+/* ========== HOME BUTTON INNER HOVER EFFECT ========== */
+/* 홈 화면 상단 스탬프 / 쿠폰 / Pay 버튼 */
+.quick-item {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+}
+
+.quick-item::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 18px;
+  background: rgba(255, 43, 35, 0.08);
+  opacity: 0;
+  transform: scale(0.86);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  pointer-events: none;
+}
+
+.quick-item:hover {
+  transform: translateY(-2px);
+  box-shadow: inset 0 0 0 2px rgba(255, 43, 35, 0.26),
+              0 6px 16px rgba(255, 43, 35, 0.16);
+}
+
+.quick-item:hover::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.quick-item:hover .quick-icon,
+.quick-item:hover span {
+  color: var(--red);
+}
+
+/* 홈 화면 이벤트 카드 */
+.event-card {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.event-card::after {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.16);
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  pointer-events: none;
+}
+
+.event-card:hover {
+  transform: translateY(-2px);
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.38),
+              0 8px 18px rgba(0, 0, 0, 0.14);
+}
+
+.event-card:hover::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* 홈 추천메뉴 / 최근주문 / 가까운 매장 카드 */
+.menu-card,
+.recent-card,
+.store-card {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.menu-card::after,
+.recent-card::after,
+.store-card::after {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border-radius: 11px;
+  background: rgba(255, 43, 35, 0.06);
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  pointer-events: none;
+}
+
+.menu-card:hover,
+.recent-card:hover,
+.store-card:hover {
+  transform: translateY(-3px);
+  box-shadow: inset 0 0 0 2px rgba(255, 43, 35, 0.18),
+              0 8px 18px rgba(255, 43, 35, 0.14);
+}
+
+.menu-card:hover::after,
+.recent-card:hover::after,
+.store-card:hover::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.menu-card img,
+.recent-card img,
+.store-card img {
+  transition: transform 0.22s ease;
+}
+
+.menu-card:hover img,
+.recent-card:hover img,
+.store-card:hover img {
+  transform: scale(1.04);
+}
+
+/* 모바일 터치 시에도 눌리는 느낌 */
+.quick-item:active,
+.event-card:active,
+.menu-card:active,
+.recent-card:active,
+.store-card:active {
+  transform: scale(0.98);
 }
 

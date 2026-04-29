@@ -159,3 +159,34 @@
     height: 44px;
   }
 }
+
+@media (max-width: 767px) {
+  .header .logo {
+    gap: 6px;
+    max-width: calc(100% - 52px);
+    flex-shrink: 1;
+  }
+
+  .header .logo-mark {
+    width: 42px;
+    flex: 0 0 42px;
+  }
+
+  .header .logo-text {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .header .logo-text strong {
+    font-size: clamp(11px, 3.6vw, 15px);
+    letter-spacing: -1px;
+    line-height: 1.15;
+    white-space: nowrap;
+  }
+
+  .header .logo-text span {
+    font-size: clamp(3px, 1.4vw, 5px);
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+}

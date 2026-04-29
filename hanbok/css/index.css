@@ -1631,6 +1631,26 @@ body {
   display: block;
 }
 
+/* 헤더 메뉴: hover 전에는 전부 #333 유지 */
+.gnb a,
+.gnb a.active,
+.gnb-item > a,
+.gnb-item > a.active,
+.gnb-link,
+.gnb-link.active {
+  color: #333;
+}
+
+/* 마우스 hover 또는 키보드 focus 때만 빨간색 */
+.gnb a:hover,
+.gnb a:focus,
+.gnb-item:hover > a,
+.gnb-item:focus-within > a,
+.gnb-link:hover,
+.gnb-link:focus {
+  color: #ee3224;
+}
+
 /* 모바일 공지사항 배경 이미지 */
 @media (max-width: 767px) {
   .notice-section {
@@ -1738,4 +1758,116 @@ body {
 /* 공지사항 탭 필터 동작용 */
 .notice-card[hidden] {
   display: none !important;
+}
+
+/* =========================================================
+   PC 헤더 가로 서브메뉴
+   - 메인 메뉴 hover / focus 시 헤더 아래 120px 영역으로 열림
+   - 모바일/태블릿에서는 기존 모바일 메뉴 유지
+========================================================= */
+.header {
+  overflow: visible;
+}
+
+@media (min-width: 992px) {
+  .gnb a[data-menu] {
+    position: relative;
+  }
+
+  .gnb a[data-menu]:hover,
+  .gnb a[data-menu]:focus,
+  .gnb a[data-menu].is-submenu-active {
+    color: #ff454a;
+    text-decoration: underline;
+    text-underline-offset: 6px;
+  }
+
+  .desktop-submenu {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    width: 100%;
+    height: 120px;
+    background: #fff;
+    border-top: 1px solid #eeeeee;
+    border-bottom: 1px solid #eeeeee;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition: opacity .2s ease, transform .2s ease, visibility .2s ease;
+    z-index: 200;
+  }
+
+  .desktop-submenu.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .desktop-submenu-inner {
+    width: 100%;
+    max-width: 1830px;
+    height: 120px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    align-items: center;
+  }
+
+  .desktop-submenu-title {
+    height: 120px;
+    display: flex;
+    align-items: center;
+    border-right: 1px solid #dddddd;
+    font-size: 16px;
+    color: #111;
+    white-space: nowrap;
+  }
+
+  .desktop-submenu-list {
+    display: flex;
+    align-items: center;
+    gap: clamp(28px, 2.5vw, 56px);
+    padding-left: 44px;
+    font-size: 20px;
+    color: #111;
+    white-space: nowrap;
+  }
+
+  .desktop-submenu-list a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    color: #111;
+  }
+
+  .desktop-submenu-list a:hover,
+  .desktop-submenu-list a:focus,
+  .desktop-submenu-list a.is-sub-active {
+    color: #ff454a;
+  }
+
+  .desktop-submenu-list a.is-sub-active {
+    background: #fff1e9;
+    padding: 2px 6px;
+    font-weight: 600;
+  }
+}
+
+@media (max-width: 991px) {
+  .desktop-submenu {
+    display: none !important;
+  }
+}
+
+/* 공지사항 탭 필터 동작용 */
+.notice-card[hidden] {
+  display: none !important;
+}
+
+.tab-list button {
+  transition: background .2s ease, color .2s ease;
 }

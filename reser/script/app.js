@@ -1,19 +1,5 @@
 
 
-
-
-    const GOOGLE_FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSdqk1r9RuXkpANEdci-uRGLFC-gVyqfwnZ7zfCH2kuiG/formResponse";
-    const GOOGLE_FORM_FIELDS = {
-      name: "entry.1679419301",          
-      phone: "entry.1760961982",       
-      category: "entry.1021061951",  
-      time: "entry.1456670494",      
-      message: "entry.397160537",   
-      agree: "entry.399318229",  
-      marketing: "entry.1386124342" 
-    };
-
-
     /* ===== 시작 팝업 기능: 오늘 하루 안보기 / 닫기 ===== */
     const eventPopup = document.getElementById("eventPopup");
     const eventPopupClose = document.getElementById("eventPopupClose");
@@ -93,14 +79,10 @@
       return nameOk && phoneOk && categoryOk && agreeOk;
     }
 
-    function googleFormReady(){
-      return GOOGLE_FORM_ACTION.indexOf("구글폼ID") === -1 &&
-        GOOGLE_FORM_FIELDS.name.indexOf("이름ID") === -1 &&
-        GOOGLE_FORM_FIELDS.phone.indexOf("연락처ID") === -1 &&
-        GOOGLE_FORM_FIELDS.category.indexOf("상담분야ID") === -1 &&
-        GOOGLE_FORM_FIELDS.message.indexOf("문의내용ID") === -1 &&
-        GOOGLE_FORM_FIELDS.agree.indexOf("개인정보동의ID") === -1 &&
-        GOOGLE_FORM_FIELDS.marketing.indexOf("마케팅동의ID") === -1;
+    function sheetReady(){
+      return SHEET_SCRIPT_URL.indexOf("script.google.com/macros/s/") !== -1 &&
+        SHEET_SCRIPT_URL.indexOf("/exec") !== -1 &&
+        SHEET_SCRIPT_URL.indexOf("여기에_Apps_Script") === -1;
     }
 
     function validateModalForm(){
@@ -186,8 +168,8 @@
         modalFormMessage.style.display = "block";
         return;
       }
-      if(!googleFormReady()){
-        modalFormMessage.textContent = "구글폼 주소와 entry ID를 실제 값으로 교체해주세요.";
+      if(!sheetReady()){
+        modalFormMessage.textContent = "Apps Script 웹앱 URL을 SHEET_SCRIPT_URL에 넣어주세요.";
         modalFormMessage.classList.add("error");
         modalFormMessage.style.display = "block";
         return;
@@ -195,21 +177,28 @@
       const btn = modalForm.querySelector("button[type='submit']");
       btn.disabled = true;
       btn.textContent = "전송 중...";
-      const sendData = new FormData();
-      sendData.append(GOOGLE_FORM_FIELDS.name, modalForm.modalName.value.trim());
-      sendData.append(GOOGLE_FORM_FIELDS.phone, modalForm.modalPhone.value.trim());
-      sendData.append(GOOGLE_FORM_FIELDS.category, modalForm.modalCategory.value);
-      sendData.append(GOOGLE_FORM_FIELDS.time, "미선택");
-      sendData.append(GOOGLE_FORM_FIELDS.message, modalForm.modalMessage.value.trim());
-      sendData.append(GOOGLE_FORM_FIELDS.agree, modalForm.modalAgree.checked ? "동의" : "미동의");
-      sendData.append(GOOGLE_FORM_FIELDS.marketing, modalForm.modalMarketing.checked ? "동의" : "미동의");
+      const sendData = {
+        name: modalForm.modalName.value.trim(),
+        phone: modalForm.modalPhone.value.trim(),
+        category: modalForm.modalCategory.value,
+        time: "미선택",
+        message: modalForm.modalMessage.value.trim(),
+        agree: modalForm.modalAgree.checked ? "동의" : "미동의",
+        marketing: modalForm.modalMarketing.checked ? "동의" : "미동의",
+        page: location.href
+      };
       try{
-        await fetch(GOOGLE_FORM_ACTION, { method:"POST", mode:"no-cors", body:sendData });
+        await fetch(SHEET_SCRIPT_URL, {
+          method:"POST",
+          mode:"no-cors",
+          headers:{ "Content-Type":"text/plain;charset=utf-8" },
+          body: JSON.stringify(sendData)
+        });
         modalForm.reset();
         closeConsultModal();
         openSuccessModal();
       }catch(err){
-        modalFormMessage.textContent = "전송 중 문제가 발생했습니다. 구글폼 주소와 entry ID를 확인해주세요.";
+        modalFormMessage.textContent = "전송 중 문제가 발생했습니다. Apps Script 웹앱 URL과 시트 연결을 확인해주세요.";
         modalFormMessage.classList.add("error");
         modalFormMessage.style.display = "block";
       }finally{

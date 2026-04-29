@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LUHO 상담신청 랜딩페이지</title>
+  <meta name="description" content="루호 성형외과 상담신청 랜딩페이지">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --gold:#A08060;
+      --gold-dark:#856649;
+      --navy:#2C3E50;
+      --beige:#EDE8E0;
+      --text:#333;
+      --sub:#777;
+      --line:#e8e1d8;
+      --shadow:0 14px 34px rgba(0,0,0,.08);
+      --max:1200px;
+    }
+    *{box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{margin:0;font-family:"Noto Sans KR",sans-serif;color:var(--text);background:#fff;line-height:1.6;word-break:keep-all;}
+    a{text-decoration:none;color:inherit;}
+    img{display:block;width:100%;height:100%;object-fit:cover;}
+    input,select,textarea,button{font:inherit;}
+    .container{width:min(100% - 32px,var(--max));margin:0 auto;}
+    .section{padding:86px 0;}
+    .eyebrow{display:inline-block;margin-bottom:12px;font-size:13px;font-weight:500;letter-spacing:.08em;color:var(--gold);text-transform:uppercase;}
+    .section-title{margin:0 0 14px;font-size:clamp(26px,3vw,36px);line-height:1.25;color:var(--navy);font-weight:600;}
+    .section-desc{margin:0 0 34px;color:var(--sub);font-size:24px;}
+    .btn{display:inline-flex;align-items:center;justify-content:center;height:65px;min-width:250px;padding:0 24px;border-radius:999px;border:0;cursor:pointer;font-size: 20px; font-weight:500;transition:.25s; margin-bottom: 100px;}
+    .btn-primary{background:var(--gold);color:#fff;box-shadow:0 8px 18px rgba(160,128,96,.24);}
+    .btn-primary:hover{background:var(--gold-dark);transform:translateY(-1px);}
+    .btn-outline{background:#fff;color:var(--gold);border:1px solid var(--gold);}
+    .btn-outline:hover{background:#f8f3ee;}
+
+    .site-header{position:sticky;top:0;z-index:1000;height:90px;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid #eee8e1;}
+    .header-inner{height:100%;display:flex;align-items:center;justify-content:space-between;gap:20px;}
+    .logo{font-size:28px;font-weight:300;letter-spacing:.18em;color:var(--navy);}
+    .logo small{display:block;margin-top:-6px;font-size:10px;font-weight:500;letter-spacing:.22em;color:var(--sub);}
+    .gnb{display:flex;gap:24px;align-items:center;}
+    .header-consult-btn{height:44px;padding:0 18px;border:0;border-radius:999px;background:var(--gold);color:#fff;font-size: 16px;font-weight:400;cursor:pointer;box-shadow:0 6px 14px rgba(160,128,96,.22);
+      transition:.25s;white-space:nowrap;}
+    .header-consult-btn:hover{background:var(--gold-dark);transform:translateY(-1px);}
+    .gnb a{font-size:18px;font-weight:400;white-space:nowrap;}
+    .menu-btn{display:none;width:42px;height:42px;border:1px solid var(--line);border-radius:12px;background:#fff;cursor:pointer;flex-direction:column;align-items:center;justify-content:center;gap:5px;}
+    .menu-btn span{display:block;width:18px;height:2px;background:#333;border-radius:10px;}
+    .drawer-cover{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:1100;display:none;}
+    .drawer-cover.active{display:block;}
+    .mobile-drawer{position:fixed;top:0;right:-100%;width:min(86vw,360px);height:100vh;background:#fff;z-index:1200;padding:24px 20px;box-shadow:-12px 0 30px rgba(0,0,0,.12);transition:.3s;}
+    .mobile-drawer.active{right:0;}
+    .drawer-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+    .drawer-close{width:40px;height:40px;border:0;border-radius:10px;background:#f5f1ed;font-size:24px;cursor:pointer;}
+    .drawer-nav{display:flex;flex-direction:column;gap:12px;}
+    .drawer-nav a{padding:14px 12px;border-radius:12px;background:#faf8f6;font-weight:700;}
+
+    .hero{padding:52px 0 34px;background:linear-gradient(135deg,#f4f0ea,#fbfaf8 55%,#eef1f6);}
+    .hero-card{min-height:580px;border-radius:30px;overflow:hidden;background:#fff;box-shadow:var(--shadow);display:grid;grid-template-columns:1.05fr .95fr;}
+    .hero-copy{padding:72px 60px;display:flex;flex-direction:column;justify-content:center;}
+    .hero-title{margin:0 0 18px;font-size:clamp(38px,6vw,66px);line-height:1.08;font-weight:500;color:#1c1c1c;}
+    .hero-title span{color:var(--gold);}
+    .hero-desc{margin:0 0 30px;font-size:18px;color:#555;}
+    .hero-visual{position:relative;min-height:580px;background:#eee8df;}
+
+    .image-slot{position:relative;width:100%;height:100%;background:linear-gradient(135deg,#ede8e0,#faf8f4 52%,#e9eef4);overflow:hidden;}
+    .image-slot img{display:block;width:100%;height:100%;object-fit:cover;}
+    .image-slot.no-image:before{content:attr(data-label);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;color:#8a8078;font-weight:800;white-space:pre-line;}
+
+    .trust{background:var(--beige);}
+    .trust-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+    .trust-item{background:#fff;border-radius:22px;padding:28px 22px;text-align:center;box-shadow:0 8px 20px rgba(0,0,0,.04);}
+    .trust-num{font-size:34px;font-weight:800;color:var(--gold);line-height:1;margin-bottom:10px;}
+    .trust-label{font-size:17px;font-weight:800;color:var(--navy);}
+    .trust-sub{margin-top:6px;font-size:14px;color:var(--sub);}
+
+    .specialty-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;}
+    .specialty-card{min-height:220px;border:1px solid var(--line);border-radius:22px;padding:24px 18px;background:#fff;display:flex;flex-direction:column;gap:16px;justify-content:space-between;transition:.25s;}
+    .specialty-card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:#d7c3ac;}
+    .specialty-icon{width:66px;height:66px;border-radius:18px;background:#f8f4ef;color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;}
+    .specialty-card h3{margin:0 0 8px;font-size:20px;color:var(--navy);}
+    .specialty-card p{margin:0;font-size:14px;color:var(--sub);line-height:1.7;}
+    .specialty-link{font-weight:800;color:var(--gold);}
+
+    .review-wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:start;}
+    .review-slider{min-height:420px;border-radius:26px;overflow:hidden;background:#f7f4f1;box-shadow:var(--shadow);}
+    .review-slide{display:none;min-height:420px;}
+    .review-slide.active{display:grid;grid-template-columns:1fr 1fr;}
+    .ba-box{position:relative;min-height:420px;background:#f0ece8;}
+    .ba-badge{position:absolute;top:18px;left:18px;z-index:2;padding:8px 14px;border-radius:999px;background:rgba(44,62,80,.85);color:#fff;font-size:13px;font-weight:800;}
+    .review-info{min-height:420px;border:1px solid var(--line);border-radius:26px;background:#fff;padding:28px;display:flex;flex-direction:column;justify-content:center;gap:18px;}
+    .review-info h3{margin:0;font-size:24px;color:var(--navy);}
+    .review-tags{display:flex;gap:8px;flex-wrap:wrap;}
+    .review-tag{padding:8px 12px;border-radius:999px;background:#f6f2ee;color:var(--gold);font-size:13px;font-weight:800;}
+    .review-quote{margin:0;color:#444;line-height:1.8;}
+    .review-nav{display:flex;gap:10px;}
+    .review-nav button{width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:#fff;cursor:pointer;font-size:18px;}
+
+    .process{background:var(--beige);}
+    .process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+    .process-card{background:#fff;border-radius:20px;padding:28px 22px;box-shadow:0 8px 20px rgba(0,0,0,.04);}
+    .process-step{display:inline-block;margin-bottom:14px;color:var(--gold);font-size:13px;font-weight:800;letter-spacing:.08em;}
+    .process-card h3{margin:0 0 10px;color:var(--navy);font-size:20px;}
+    .process-card p{margin:0;color:var(--sub);font-size:14px;line-height:1.8;}
+
+    .notice-box{padding:28px;border:2px solid #d8c1a8;border-radius:22px;background:#fffdfa;}
+    .notice-list{margin:14px 0 0;padding:0;list-style:none;}
+    .notice-list li{position:relative;padding-left:22px;margin-bottom:14px;color:#555;}
+    .notice-list li:before{content:"※";position:absolute;left:0;color:var(--gold);font-weight:800;}
+
+    .consult-simple{padding:74px 0 82px;text-align:center;background:#fff;}
+    .consult-simple-head{position:relative;display:flex;align-items:center;justify-content:center;min-height:56px;margin-bottom:30px;}
+    .consult-simple-title{position:absolute;left:0;margin:0;font-size:20px;font-weight:800;color:#111;}
+    .consult-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;width:100%;margin:0 auto;}
+    .consult-gallery-card{aspect-ratio:16/9;border:0;background:#f7f4ef;overflow:hidden;border-radius:0;}
+    .consult-gallery-card .image-slot{height:100%;}
+    .field,.field-select,.field-textarea{width:100%;border:1px solid #ddd;border-radius:12px;padding:14px 16px;background:#fff;color:#222;outline:none;}
+    .field:focus,.field-select:focus,.field-textarea:focus{border-color:var(--gold);}
+    .field.error,.field-select.error{border-color:#c62828;background:#fffafa;}
+    .field-textarea{min-height:130px;resize:vertical;}
+    .error-text{display:none;font-size:13px;color:#c62828;}
+    .form-row{display:flex;flex-direction:column;gap:8px;text-align:left;}
+    .label{font-size:14px;font-weight:800;}
+    .required{color:#c45353;margin-left:4px;}
+    .check-group{display:flex;flex-direction:column;gap:12px;margin-top:6px;}
+    .check-item{display:flex;gap:10px;font-size:14px;color:#555;text-align:left;}
+    .check-item input{margin-top:4px;accent-color:var(--gold);}
+    .form-actions{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:24px;}
+    .modal-form .form-actions{justify-content:center;text-align:center;}
+    .modal-form .form-actions .form-message{width:100%;text-align:center;}
+    .modal-form .form-actions .btn{margin:0 auto;}
+    .form-message{display:none;font-size:14px;font-weight:800;color:#2e7d32;}
+    .form-message.error{color:#c62828;}
+
+    .bottom-nav{padding:28px 0 0;}
+    .bottom-nav-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;}
+    .bottom-nav-item{border:1px solid var(--line);border-radius:20px;background:#fff;padding:22px 16px;text-align:center;transition:.25s;}
+    .bottom-nav-item:hover{transform:translateY(-3px);box-shadow:var(--shadow);}
+    .bottom-nav-icon{width:56px;height:56px;margin:0 auto 12px;border-radius:16px;background:#f8f4ef;color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;}
+    .bottom-nav-item h4{margin:0 0 6px;color:var(--navy);}
+    .bottom-nav-item p{margin:0;color:var(--sub);font-size:13px;}
+
+    .footer-visual{position:relative;overflow:hidden;margin-top:88px;background:#20222b;color:#fff;}
+    .footer-visual:before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(0,0,0,.35),rgba(0,0,0,.15));}
+    .footer-visual-inner{position:relative;z-index:2;min-height:380px;display:flex;align-items:center;justify-content:center;text-align:center;padding:50px 16px;}
+    .footer-visual-content h3{margin:0 0 18px;font-size:clamp(28px,4vw,42px);}
+    .footer-visual-content p{margin:0 auto 26px;max-width:700px;color:rgba(255,255,255,.9);}
+    .site-footer{background:#1f2027;color:rgba(255,255,255,.82);padding:34px 0 90px;}
+    .footer-inner{display:flex;flex-direction:column;gap:18px;}
+    .footer-logo{font-size:24px;letter-spacing:.18em;font-weight:300;}
+    .footer-links{display:flex;gap:16px;flex-wrap:wrap;color:rgba(255,255,255,.7);font-size:14px;}
+    .footer-info{font-size:14px;line-height:1.9;color:rgba(255,255,255,.7);}
+    .sticky-cta{display:none;position:fixed;left:16px;right:16px;bottom:16px;z-index:999;gap:10px;}
+    .sticky-cta .btn{flex:1;min-width:0;border-radius:16px;height:54px;}
+    .top-btn{position:fixed;right:22px;bottom:22px;z-index:998;width:54px;height:54px;border:0;border-radius:50%;background:var(--gold);color:#fff;font-size:22px;font-weight:500;box-shadow:0 10px 24px rgba(0,0,0,.16);cursor:pointer;opacity:0;visibility:hidden;transform:translateY(10px);transition:.25s;}
+    .top-btn.show{opacity:1;visibility:visible;transform:translateY(0);}
+    .modal-cover{position:fixed;inset:0;z-index:1600;background:rgba(0,0,0,.48);display:none;align-items:center;justify-content:center;padding:20px;}
+    .modal-cover.active{display:flex;}
+    .modal-box{position:relative;width:min(100%,560px);max-height:90vh;overflow:auto;background:#fff;border-radius:24px;padding:30px;box-shadow:0 24px 70px rgba(0,0,0,.22);}
+    .modal-close{position:absolute;top:16px;right:16px;width:38px;height:38px;border:0;border-radius:50%;background:#f5f1ed;font-size:24px;line-height:1;cursor:pointer;}
+    .modal-title{margin:0 0 6px;color:var(--navy);font-size:26px;font-weight:800;}
+    .modal-desc{margin:0 0 22px;color:var(--sub);font-size:15px;}
+    .modal-form{display:flex;flex-direction:column;gap:14px;}
+    .modal-message{text-align:center;}
+    .modal-message h3{margin:0 0 12px;color:var(--navy);font-size:28px;}
+    .modal-message p{margin:0 0 24px;color:#555;font-size:17px;}
+    .reveal{opacity:0;transform:translateY(24px);transition:opacity .6s,transform .6s;}
+    .reveal.show{opacity:1;transform:translateY(0);}
+
+    /* ===== 시작 팝업: 가정의 달 진료 안내 ===== */
+    .event-popup-cover{
+      position:fixed;
+      inset:0;
+      z-index:5000;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      background:rgba(0,0,0,.45);
+    }
+    .event-popup-cover.active{display:flex;}
+    .event-popup-box{
+      width:min(92vw,450px);
+      background:#fff;
+      border-radius:14px;
+      overflow:hidden;
+      box-shadow:0 24px 70px rgba(0,0,0,.28);
+    }
+    .event-popup-img{
+      width:100%;
+      height:auto;
+      display:block;
+      object-fit:contain;
+    }
+    .event-popup-actions{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px 14px;
+      background:#fff;
+      border-top:1px solid #eee;
+    }
+    .event-popup-today{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      font-size:14px;
+      color:#555;
+      cursor:pointer;
+      user-select:none;
+    }
+    .event-popup-today input{
+      width:16px;
+      height:16px;
+      accent-color:var(--gold);
+    }
+    .event-popup-close{
+      min-width:68px;
+      height:34px;
+      border:0;
+      border-radius:999px;
+      background:var(--gold);
+      color:#fff;
+      cursor:pointer;
+      font-size:14px;
+    }
+    .event-popup-close:hover{background:var(--gold-dark);}
+
+
+    @media(max-width:1199px){
+      .gnb{display:none;}.header-consult-btn{display:inline-flex;align-items:center;height:40px;padding:0 14px;font-size:13px; font-weight: 300;}.menu-btn{display:flex;}
+      .hero-card{grid-template-columns:1fr;}.hero-copy{padding:52px 36px 28px;}.hero-visual{min-height:420px;}.trust-grid{grid-template-columns:repeat(2,1fr);}
+      .specialty-grid{grid-template-columns:repeat(3,1fr);}.review-wrap,.consult-wrap{grid-template-columns:1fr;}.process-grid{grid-template-columns:repeat(2,1fr);}
+      .bottom-nav-grid{grid-template-columns:repeat(3,1fr);}
+    }
+    @media(max-width:767px){
+      .container{width:100%;padding-left:16px;padding-right:16px;}.section{padding:56px 0;}.site-header{height:90px;}.header-consult-btn{display:inline-flex;
+        align-items:center;justify-content:center;min-width:auto;height:38px;padding:0 12px;font-size:13px;}.hero{padding:28px 0 22px;}
+        .hero-card{border-radius:24px;}.hero-copy{padding:34px 20px 18px;}.hero-title{font-size:42px;}.hero-desc{font-size:14px;}
+        .hero-visual{min-height:300px;}.trust-grid,.specialty-grid,.process-grid,.bottom-nav-grid,.consult-gallery{grid-template-columns:1fr;}
+        .review-slide.active{grid-template-columns:1fr;}.ba-box{min-height:240px;}.review-info{min-height:auto;}.consult-simple-head{justify-content:center;min-height:auto;flex-direction:column;gap:16px;}
+        .consult-simple-title{position:static;}.form-grid{grid-template-columns:1fr;}.form-actions{align-items:stretch;flex-direction:column;}.form-actions .btn{width:100%;}.footer-visual{margin-top:56px;}
+        .sticky-cta{display:flex;}.site-footer{padding-bottom:110px;}.modal-cover{padding:16px;}.event-popup-card{width:100%;max-width:430px;}.top-btn{right:18px;bottom:86px;z-index:1201;display:flex;align-items:center;justify-content:center;} .event-popup-box{width:min(92vw,430px);} .event-popup-actions{padding:10px 12px;} .event-popup-today{font-size:13px;}
+    }
+  </style>
+</head>
+<body>
+  <script>
+    /* =========================================================
+       이미지 삽입 방식 안내
+       - 이미지는 HTML 안의 <img src="./assets/images/파일명.jpg"> 부분에서 직접 수정합니다.
+       - 아래 구글시트 연결 코드는 그대로 유지합니다.
+    ========================================================= */
+
+    /* =========================================================
+       구글시트 연결 위치
+       - 아래 SHEET_SCRIPT_URL에 Apps Script 웹앱 URL을 넣어주세요.
+       - 주소 형식은 https://script.google.com/macros/s/배포ID/exec 입니다.
+       - 구글시트 주소를 직접 넣는 것이 아니라, Apps Script 배포 URL을 넣어야 합니다.
+    ========================================================= */
+    const SHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzDahC2BCQq3Ek8PBRhGBc8diTHoYwukrcOWcqVaCeoBkQpGwgT2OsG58RF3cfpDX49/exec";
+    
+  </script>
+
+
+
+  <!-- 시작 팝업: 가정의 달 진료 안내 -->
+  <div class="event-popup-cover" id="eventPopup" aria-hidden="true">
+    <div class="event-popup-box" role="dialog" aria-modal="true" aria-label="가정의 달 5월 진료 안내">
+      <!-- 팝업 이미지 삽입 위치 -->
+      <img src="./images/imgi_2_260417030820400.jpg" alt="가정의 달 5월 진료 안내" class="event-popup-img">
+      <div class="event-popup-actions">
+        <label class="event-popup-today">
+          <input type="checkbox" id="eventPopupToday">
+          <span>오늘 하루 안보기</span>
+        </label>
+        <button type="button" class="event-popup-close" id="eventPopupClose">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#" class="logo"><img src="./images/imgi_13_logo-brown.png" alt=""><small></small></a>
+      <nav class="gnb">
+        <a href="#about">루호소개</a>
+        <a href="#specialty">상담분야</a>
+        <a href="#review">리얼후기</a>
+        <a href="#process">상담절차</a>
+        <a href="#footer">오시는 길</a>
+      </nav>
+      <button type="button" class="header-consult-btn" id="openConsultModal">상담신청하기</button>
+      <button class="menu-btn" id="menuOpen" aria-label="메뉴 열기"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+
+  <div class="drawer-cover" id="drawerCover"></div>
+  <aside class="mobile-drawer" id="mobileDrawer">
+    <div class="drawer-head">
+      <div class="logo"><small></small></div>
+      <button class="drawer-close" id="menuClose">&times;</button>
+    </div>
+    <nav class="drawer-nav">
+      <a href="#about" class="drawer-link">루호소개</a>
+      <a href="#specialty" class="drawer-link">상담분야</a>
+      <a href="#review" class="drawer-link">리얼후기</a>
+      <a href="#process" class="drawer-link">상담절차</a>
+      <a href="#consultation-form" class="drawer-link">상담신청</a>
+      <a href="#footer" class="drawer-link">오시는 길</a>
+    </nav>
+  </aside>
+
+  <main>
+    <section class="hero" id="about">
+      <div class="container">
+        <div class="hero-card reveal">
+          <div class="hero-copy">
+            <span class="eyebrow">LUHO Consultation</span>
+            <h1 class="hero-title">숨겨진 선을 <br><span>그리다</span></h1>
+            <p class="hero-desc">지금, 루호에서 나만의 상담을 시작하세요.<br>자연스러운 아름다움을 위한 1:1 맞춤 상담을 제공합니다.</p>
+            <div class="hero-cta"><a href="#review" class="btn btn-outline">리얼 후기 보기</a></div>
+          </div>
+          <div class="hero-visual">
+            <!-- 이미지 삽입 위치 1: 메인 히어로 이미지 -->
+            <div class="image-slot">
+              <img src="./images/3.png" alt="루호 히어로 이미지">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section trust">
+      <div class="container">
+        <div class="reveal">
+          <span class="eyebrow">Trust Indicators</span>
+          <h2 class="section-title">루호 상담신청이 신뢰받는 이유</h2>
+          <p class="section-desc">방문자가 안심하고 상담을 시작할 수 있도록 핵심 신뢰 요소를 간결하게 제시합니다.</p>
+        </div>
+        <div class="trust-grid">
+          <div class="trust-item reveal"><div class="trust-num">1:1</div><div class="trust-label">맞춤 상담</div><div class="trust-sub">개인의 얼굴형과 니즈를 고려한 상담</div></div>
+          <div class="trust-item reveal"><div class="trust-num">CARE</div><div class="trust-label">체계적 안내</div><div class="trust-sub">상담부터 경과 안내까지 세심한 프로세스</div></div>
+          <div class="trust-item reveal"><div class="trust-num">SAFE</div><div class="trust-label">개인정보 보호</div><div class="trust-sub">상담 목적으로만 안전하게 처리</div></div>
+          <div class="trust-item reveal"><div class="trust-num">LUHO</div><div class="trust-label">브랜드 일관성</div><div class="trust-sub">고급스럽고 신뢰감 있는 상담 경험 제공</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="specialty">
+      <div class="container">
+        <div class="reveal">
+          <span class="eyebrow">Specialty</span>
+          <h2 class="section-title">상담 분야 안내</h2>
+          <p class="section-desc">관심 분야를 먼저 확인해보세요. 분야별 대표 시술 내용을 한눈에 볼 수 있도록 구성했습니다.</p>
+        </div>
+        <div class="specialty-grid">
+          <article class="specialty-card reveal"><div class="specialty-icon">눈</div><div><h3>눈성형</h3><p>쌍꺼풀, 눈매교정, 앞트임, 뒤트임, 밑트임 상담</p></div><span class="specialty-link">자세히 보기</span></article>
+          <article class="specialty-card reveal"><div class="specialty-icon">코</div><div><h3>코성형</h3><p>코끝 교정, 콧볼 축소, 콧대 라인 상담</p></div><span class="specialty-link">자세히 보기</span></article>
+          <article class="specialty-card reveal"><div class="specialty-icon">윤</div><div><h3>지방/윤곽</h3><p>지방이식, 볼살, 얼굴 윤곽 라인 상담</p></div><span class="specialty-link">자세히 보기</span></article>
+          <article class="specialty-card reveal"><div class="specialty-icon">이</div><div><h3>이마성형</h3><p>이마 볼륨, 이마 지방이식, 헤어라인 상담</p></div><span class="specialty-link">자세히 보기</span></article>
+          <article class="specialty-card reveal"><div class="specialty-icon">동안</div><div><h3>리프팅/동안</h3><p>실리프팅, 울쎄라, 보톡스, 필러 상담</p></div><span class="specialty-link">자세히 보기</span></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="review">
+      <div class="container">
+        <div class="reveal">
+          <span class="eyebrow">Real Review</span>
+          <h2 class="section-title">Before & After / 리얼 후기</h2>
+          <p class="section-desc">이미지 경로만 바꾸면 같은 레이아웃으로 쉽게 적용됩니다.</p>
+        </div>
+        <div class="review-wrap">
+          <div class="review-feature reveal">
+            <div class="review-slider" id="reviewSlider">
+              <!-- 이미지 삽입 위치 2: 후기 1 Before / After -->
+              <div class="review-slide active">
+                <div class="ba-box">
+                  <span class="ba-badge">BEFORE</span>
+                  <div class="image-slot">
+                    <img src="./images/before.png" alt="눈성형 Before 이미지">
+                  </div>
+                </div>
+                <div class="ba-box">
+                  <span class="ba-badge">AFTER</span>
+                  <div class="image-slot">
+                    <img src="./images/after.png" alt="눈성형 After 이미지">
+                  </div>
+                </div>
+              </div>
+
+              <!-- 이미지 삽입 위치 3: 후기 2 Before / After -->
+              <div class="review-slide">
+                <div class="ba-box">
+                  <span class="ba-badge">BEFORE</span>
+                  <div class="image-slot">
+                    <img src="./images/nobe.png" alt="코성형 Before 이미지">
+                  </div>
+                </div>
+                <div class="ba-box">
+                  <span class="ba-badge">AFTER</span>
+                  <div class="image-slot">
+                    <img src="./images/noaf.png" alt="코성형 After 이미지">
+                  </div>
+                </div>
+              </div>
+
+              <!-- 이미지 삽입 위치 4: 후기 3 Before / After -->
+              <div class="review-slide">
+                <div class="ba-box">
+                  <span class="ba-badge">BEFORE</span>
+                  <div class="image-slot">
+                    <img src="./images/lifbe.png" alt="리프팅 Before 이미지">
+                  </div>
+                </div>
+                <div class="ba-box">
+                  <span class="ba-badge">AFTER</span>
+                  <div class="image-slot">
+                    <img src="./images/lifaf.png" alt="리프팅 After 이미지">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="review-info reveal">
+            <h3 id="reviewTitle">리얼 후기</h3>
+            <div class="review-tags" id="reviewTags"></div>
+            <p class="review-quote" id="reviewQuote"></p>
+            <div class="review-nav"><button type="button" id="reviewPrev">←</button><button type="button" id="reviewNext">→</button></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section process" id="process">
+      <div class="container">
+        <div class="reveal">
+          <span class="eyebrow">Consultation Process</span>
+          <h2 class="section-title">상담 신청 절차</h2>
+          <p class="section-desc">상담 신청 이후 진행되는 흐름을 간단하고 명확하게 안내합니다.</p>
+        </div>
+        <div class="process-grid">
+          <article class="process-card reveal"><span class="process-step">STEP 01</span><h3>온라인 상담신청</h3><p>이름, 연락처, 관심 분야, 희망 상담 시간대를 입력합니다.</p></article>
+          <article class="process-card reveal"><span class="process-step">STEP 02</span><h3>상담 확인 연락</h3><p>접수 후 영업일 기준 순차적으로 담당자가 연락드립니다.</p></article>
+          <article class="process-card reveal"><span class="process-step">STEP 03</span><h3>내원 상담 예약</h3><p>상담 일정 조율 후 예약이 확정됩니다.</p></article>
+          <article class="process-card reveal"><span class="process-step">STEP 04</span><h3>1:1 맞춤 상담</h3><p>의료진과 함께 맞춤 상담을 진행합니다.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="notice-box reveal">
+          <span class="eyebrow">Notice</span>
+          <h2 class="section-title">상담신청 전 안내사항</h2>
+          <ul class="notice-list">
+            <li>상담신청 후 영업일 기준 1~2일 이내 순차적으로 안내드립니다.</li>
+            <li>제출하신 개인정보는 상담 목적으로만 사용되며 안전하게 보호됩니다.</li>
+            <li>상담신청은 수술 예약 확정을 의미하지 않으며, 내원 상담 후 최종 결정됩니다.</li>
+            <li>병원 일정에 따라 상담 가능 분야 및 일정은 변동될 수 있습니다.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="consult-simple" id="consultation-form">
+      <div class="container">
+        <div class="consult-simple-head reveal">
+          
+          <button type="button" class="btn btn-primary" id="sectionOpenConsultModal">상담신청하기</button>
+        </div>
+        <div class="consult-gallery">
+          <!-- 이미지 삽입 위치 5: 상담신청 아래 병원 이미지 1 -->
+          <div class="consult-gallery-card reveal">
+            <div class="image-slot">
+              <img src="./images/hospital.png" alt="병원 이미지 1">
+            </div>
+          </div>
+          <!-- 이미지 삽입 위치 6: 상담신청 아래 병원 이미지 2 -->
+          <div class="consult-gallery-card reveal">
+            <div class="image-slot">
+              <img src="./images/doctorsur.jpg" alt="병원 이미지 2">
+            </div>
+          </div>
+          <!-- 이미지 삽입 위치 7: 상담신청 아래 상담 이미지 -->
+          <div class="consult-gallery-card reveal">
+            <div class="image-slot">
+              <img src="./images/imgi_17_main_visual_08.jpg" alt="상담 이미지">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="footer-visual">
+      <!-- 이미지 삽입 위치 8: 하단 비주얼 배경 이미지 -->
+      <div class="image-slot" style="position:absolute;inset:0;">
+        <img src="./images/luhobg.jpg" alt="하단 병원 이미지">
+      </div>
+      <div class="footer-visual-inner"><div class="footer-visual-content reveal"><h3>루호성형외과는 약속합니다</h3><p>자연스러운 아름다움을 추구하기 위해 처음부터 끝까지 진심을 담아 상담을 진행합니다.</p></div></div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="footer">
+    <div class="container footer-inner">
+      <div class="footer-logo">LUHO PLASTIC SURGERY</div>
+      <div class="footer-links"><a href="#about">루호소개</a><a href="#specialty">상담분야</a><a href="#review">리얼후기</a><a href="#consultation-form">상담신청</a><a href="#footer">오시는 길</a></div>
+      <div class="footer-info">서울시 강남구 예시로 123, LUHO 빌딩<br>대표번호 02-0000-0000 · 상담시간 09:00 - 18:00<br>Copyright © LUHO Plastic Surgery. All Rights Reserved.</div>
+    </div>
+  </footer>
+
+  <button type="button" class="top-btn" id="topBtn" aria-label="맨 위로 이동">↑</button>
+
+  <div class="modal-cover" id="consultModal" aria-hidden="true">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button type="button" class="modal-close" id="closeConsultModal" aria-label="팝업 닫기">&times;</button>
+      <h2 class="modal-title" id="modalTitle">상담 신청하기</h2>
+      <p class="modal-desc">정보를 남겨주시면 확인 후 연락드리겠습니다.</p>
+      <form class="modal-form" id="modalConsultForm" novalidate>
+        <div class="form-row"><label for="modalName" class="label">이름 <span class="required">*</span></label><input type="text" id="modalName" name="modalName" class="field" placeholder="이름을 입력해주세요"><div class="error-text" data-error-for="modalName">이름은 2자 이상 입력해주세요.</div></div>
+        <div class="form-row"><label for="modalPhone" class="label">연락처 <span class="required">*</span></label><input type="tel" id="modalPhone" name="modalPhone" class="field" placeholder="010-0000-0000" maxlength="13"><div class="error-text" data-error-for="modalPhone">연락처 형식을 확인해주세요.</div></div>
+        <div class="form-row"><label for="modalCategory" class="label">상담 분야 <span class="required">*</span></label><select id="modalCategory" name="modalCategory" class="field-select"><option value="">상담 분야를 선택해주세요</option><option value="눈성형">눈성형</option><option value="코성형">코성형</option><option value="지방/윤곽">지방/윤곽</option><option value="이마성형">이마성형</option><option value="리프팅/동안">리프팅/동안</option><option value="기타">기타</option></select><div class="error-text" data-error-for="modalCategory">상담 분야를 선택해주세요.</div></div>
+        <div class="form-row"><label for="modalMessage" class="label">문의 내용</label><textarea id="modalMessage" name="modalMessage" class="field-textarea" maxlength="300" placeholder="문의 내용을 입력해주세요."></textarea></div>
+        <div class="check-group"><label class="check-item"><input type="checkbox" id="modalAgree" name="modalAgree"><span>개인정보 수집 및 이용에 동의합니다. <span class="required">*</span></span></label><div class="error-text" data-error-for="modalAgree">개인정보 수집 및 이용 동의가 필요합니다.</div><label class="check-item"><input type="checkbox" id="modalMarketing" name="modalMarketing"><span>이벤트 및 프로모션 정보 수신에 동의합니다. (선택)</span></label></div>
+        <div class="form-actions"><div class="form-message" id="modalFormMessage"></div><button type="submit" class="btn btn-primary">신청완료</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-cover" id="successModal" aria-hidden="true">
+    <div class="modal-box modal-message" role="dialog" aria-modal="true">
+      <h3>신청이 완료되었습니다.</h3>
+      <p>곧 연락드리겠습니다.</p>
+      <button type="button" class="btn btn-primary" id="closeSuccessModal">확인</button>
+    </div>
+  </div>
+
+  <div class="sticky-cta"><a href="tel:0200000000" class="btn btn-outline">전화상담</a><button type="button" class="btn btn-primary" id="mobileOpenConsultModal">상담 신청하기</button></div>
+
+  <script>
+
+    /* ===== 시작 팝업 기능: 오늘 하루 안보기 / 닫기 ===== */
+    const eventPopup = document.getElementById("eventPopup");
+    const eventPopupClose = document.getElementById("eventPopupClose");
+    const eventPopupToday = document.getElementById("eventPopupToday");
+    const EVENT_POPUP_KEY = "luhoEventPopupClosedDate";
+
+    function getTodayKey(){
+      const d = new Date();
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return year + "-" + month + "-" + day;
+    }
+
+    function openEventPopup(){
+      if(!eventPopup) return;
+      const savedDate = localStorage.getItem(EVENT_POPUP_KEY);
+      if(savedDate === getTodayKey()) return;
+      eventPopup.classList.add("active");
+      eventPopup.setAttribute("aria-hidden", "false");
+    }
+
+    function closeEventPopup(){
+      if(!eventPopup) return;
+      if(eventPopupToday && eventPopupToday.checked){
+        localStorage.setItem(EVENT_POPUP_KEY, getTodayKey());
+      }
+      eventPopup.classList.remove("active");
+      eventPopup.setAttribute("aria-hidden", "true");
+    }
+
+    window.addEventListener("load", openEventPopup);
+    if(eventPopupClose) eventPopupClose.addEventListener("click", closeEventPopup);
+    if(eventPopup){
+      eventPopup.addEventListener("click", function(e){
+        if(e.target === eventPopup) closeEventPopup();
+      });
+    }
+
+    function onlyNumbers(value){
+      let result = "";
+      for(let i = 0; i < value.length; i++){
+        const ch = value.charAt(i);
+        if(ch >= "0" && ch <= "9") result += ch;
+      }
+      return result;
+    }
+
+    function formatPhone(value){
+      const n = onlyNumbers(value).slice(0,11);
+      if(n.length <= 3) return n;
+      if(n.length <= 7) return n.slice(0,3) + "-" + n.slice(3);
+      return n.slice(0,3) + "-" + n.slice(3,7) + "-" + n.slice(7);
+    }
+
+    function showFieldError(name, show){
+      const target = document.querySelector("[name='" + name + "']") || document.getElementById(name);
+      const errorText = document.querySelector("[data-error-for='" + name + "']");
+      if(target) target.classList.toggle("error", show);
+      if(errorText) errorText.style.display = show ? "block" : "none";
+    }
+
+    function validateForm(){
+      const name = document.getElementById("name");
+      const phone = document.getElementById("phone");
+      const category = document.getElementById("category");
+      const agree = document.getElementById("agree");
+      const nameOk = name.value.trim().length >= 2;
+      const nums = onlyNumbers(phone.value);
+      const phoneOk = nums.length === 10 || nums.length === 11;
+      const categoryOk = category.value !== "";
+      const agreeOk = agree.checked;
+      showFieldError("name", !nameOk);
+      showFieldError("phone", !phoneOk);
+      showFieldError("category", !categoryOk);
+      showFieldError("agree", !agreeOk);
+      return nameOk && phoneOk && categoryOk && agreeOk;
+    }
+
+    function sheetReady(){
+      return SHEET_SCRIPT_URL.indexOf("script.google.com/macros/s/") !== -1 &&
+        SHEET_SCRIPT_URL.indexOf("/exec") !== -1 &&
+        SHEET_SCRIPT_URL.indexOf("여기에_Apps_Script") === -1;
+    }
+
+    function validateModalForm(){
+      const name = document.getElementById("modalName");
+      const phone = document.getElementById("modalPhone");
+      const category = document.getElementById("modalCategory");
+      const agree = document.getElementById("modalAgree");
+      const nameOk = name.value.trim().length >= 2;
+      const phoneOk = onlyNumbers(phone.value).length === 10 || onlyNumbers(phone.value).length === 11;
+      const categoryOk = category.value !== "";
+      const agreeOk = agree.checked;
+      showFieldError("modalName", !nameOk);
+      showFieldError("modalPhone", !phoneOk);
+      showFieldError("modalCategory", !categoryOk);
+      showFieldError("modalAgree", !agreeOk);
+      return nameOk && phoneOk && categoryOk && agreeOk;
+    }
+
+    const reviewSlider = document.getElementById("reviewSlider");
+    const reviewTitle = document.getElementById("reviewTitle");
+    const reviewTags = document.getElementById("reviewTags");
+    const reviewQuote = document.getElementById("reviewQuote");
+    const REVIEW_INFO = [
+      { title: "눈성형 리얼 후기", tags: ["#눈매교정", "#자연스러운라인"], quote: "상담부터 수술 후 경과 안내까지 세심하게 진행되어 안심할 수 있었습니다." },
+      { title: "코성형 리얼 후기", tags: ["#코끝", "#콧대라인"], quote: "제 얼굴형에 맞는 디자인으로 상담해주셔서 좋았고, 회복 과정도 친절하게 안내받았습니다." },
+      { title: "리프팅 리얼 후기", tags: ["#리프팅", "#동안시술"], quote: "과한 변화보다 자연스러운 개선을 원했는데 원하는 방향으로 상담이 진행되어 만족스러웠습니다." }
+    ];
+    let reviewIndex = 0;
+
+    function updateReview(){
+      const slides = document.querySelectorAll(".review-slide");
+      for(let i = 0; i < slides.length; i++) slides[i].classList.toggle("active", i === reviewIndex);
+      const item = REVIEW_INFO[reviewIndex];
+      reviewTitle.textContent = item.title;
+      reviewQuote.textContent = item.quote;
+      reviewTags.innerHTML = "";
+      for(let i = 0; i < item.tags.length; i++){
+        const tag = document.createElement("span");
+        tag.className = "review-tag";
+        tag.textContent = item.tags[i];
+        reviewTags.appendChild(tag);
+      }
+    }
+
+    updateReview();
+    document.getElementById("reviewPrev").addEventListener("click", function(){ reviewIndex = reviewIndex === 0 ? REVIEW_INFO.length - 1 : reviewIndex - 1; updateReview(); });
+    document.getElementById("reviewNext").addEventListener("click", function(){ reviewIndex = reviewIndex === REVIEW_INFO.length - 1 ? 0 : reviewIndex + 1; updateReview(); });
+
+    const topBtn = document.getElementById("topBtn");
+    window.addEventListener("scroll", function(){
+      if(window.scrollY > 500) topBtn.classList.add("show");
+      else topBtn.classList.remove("show");
+    });
+    topBtn.addEventListener("click", function(){ window.scrollTo({ top:0, behavior:"smooth" }); });
+
+    const consultModal = document.getElementById("consultModal");
+    const successModal = document.getElementById("successModal");
+    const modalForm = document.getElementById("modalConsultForm");
+    const modalFormMessage = document.getElementById("modalFormMessage");
+    function openConsultModal(){ consultModal.classList.add("active"); consultModal.setAttribute("aria-hidden","false"); document.body.style.overflow = "hidden"; }
+    function closeConsultModal(){ consultModal.classList.remove("active"); consultModal.setAttribute("aria-hidden","true"); document.body.style.overflow = ""; }
+    function openSuccessModal(){ successModal.classList.add("active"); successModal.setAttribute("aria-hidden","false"); document.body.style.overflow = "hidden"; }
+    function closeSuccessModal(){ successModal.classList.remove("active"); successModal.setAttribute("aria-hidden","true"); document.body.style.overflow = ""; }
+    document.getElementById("openConsultModal").addEventListener("click", openConsultModal);
+    document.getElementById("mobileOpenConsultModal").addEventListener("click", openConsultModal);
+    document.getElementById("sectionOpenConsultModal").addEventListener("click", openConsultModal);
+    document.getElementById("closeConsultModal").addEventListener("click", closeConsultModal);
+    document.getElementById("closeSuccessModal").addEventListener("click", closeSuccessModal);
+    consultModal.addEventListener("click", function(e){ if(e.target === consultModal) closeConsultModal(); });
+    successModal.addEventListener("click", function(e){ if(e.target === successModal) closeSuccessModal(); });
+    document.getElementById("modalPhone").addEventListener("input", function(e){ e.target.value = formatPhone(e.target.value); showFieldError("modalPhone", false); });
+    document.getElementById("modalName").addEventListener("input", function(){ showFieldError("modalName", false); });
+    document.getElementById("modalCategory").addEventListener("change", function(){ showFieldError("modalCategory", false); });
+    document.getElementById("modalAgree").addEventListener("change", function(){ showFieldError("modalAgree", false); });
+
+    modalForm.addEventListener("submit", async function(e){
+      e.preventDefault();
+      modalFormMessage.style.display = "none";
+      modalFormMessage.classList.remove("error");
+      if(!validateModalForm()){
+        modalFormMessage.textContent = "필수 입력 항목을 확인해주세요.";
+        modalFormMessage.classList.add("error");
+        modalFormMessage.style.display = "block";
+        return;
+      }
+      if(!sheetReady()){
+        modalFormMessage.textContent = "Apps Script 웹앱 URL을 SHEET_SCRIPT_URL에 넣어주세요.";
+        modalFormMessage.classList.add("error");
+        modalFormMessage.style.display = "block";
+        return;
+      }
+      const btn = modalForm.querySelector("button[type='submit']");
+      btn.disabled = true;
+      btn.textContent = "전송 중...";
+      const sendData = {
+        name: modalForm.modalName.value.trim(),
+        phone: modalForm.modalPhone.value.trim(),
+        category: modalForm.modalCategory.value,
+        time: "미선택",
+        message: modalForm.modalMessage.value.trim(),
+        agree: modalForm.modalAgree.checked ? "동의" : "미동의",
+        marketing: modalForm.modalMarketing.checked ? "동의" : "미동의",
+        page: location.href
+      };
+      try{
+        await fetch(SHEET_SCRIPT_URL, {
+          method:"POST",
+          mode:"no-cors",
+          headers:{ "Content-Type":"text/plain;charset=utf-8" },
+          body: JSON.stringify(sendData)
+        });
+        modalForm.reset();
+        closeConsultModal();
+        openSuccessModal();
+      }catch(err){
+        modalFormMessage.textContent = "전송 중 문제가 발생했습니다. Apps Script 웹앱 URL과 시트 연결을 확인해주세요.";
+        modalFormMessage.classList.add("error");
+        modalFormMessage.style.display = "block";
+      }finally{
+        btn.disabled = false;
+        btn.textContent = "신청완료";
+      }
+    });
+
+    const drawer = document.getElementById("mobileDrawer");
+    const cover = document.getElementById("drawerCover");
+    function openDrawer(){ drawer.classList.add("active"); cover.classList.add("active"); document.body.style.overflow = "hidden"; }
+    function closeDrawer(){ drawer.classList.remove("active"); cover.classList.remove("active"); document.body.style.overflow = ""; }
+    document.getElementById("menuOpen").addEventListener("click", openDrawer);
+    document.getElementById("menuClose").addEventListener("click", closeDrawer);
+    cover.addEventListener("click", closeDrawer);
+    document.querySelectorAll(".drawer-link").forEach(function(link){ link.addEventListener("click", closeDrawer); });
+
+    const observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){ entry.target.classList.add("show"); observer.unobserve(entry.target); }
+      });
+    }, { threshold: .15 });
+    document.querySelectorAll(".reveal").forEach(function(el){ observer.observe(el); });
+
+    /*
+      현재 HTML에는 id="consultForm"인 일반 상담폼이 없습니다.
+      그래서 일반폼 스크립트는 제거했습니다.
+      실제 전송은 팝업폼 id="modalConsultForm"에서 처리됩니다.
+    */
+  </script>
+</body>
+</html>

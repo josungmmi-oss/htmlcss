@@ -1379,6 +1379,8 @@ body {
     height: 64px;
   }
 
+  
+
   .header .logo {
     max-width: calc(100% - 90px);
     gap: 8px;
@@ -1397,7 +1399,7 @@ body {
   }
 
   .header .logo-text strong {
-    font-size: clamp(16px, 2.2vw, 18px);
+    font-size: clamp(16px, 2.2vw, 20px);
     letter-spacing: -1px;
     line-height: 1.15;
     white-space: nowrap;
@@ -1416,6 +1418,7 @@ body {
     transform: translateY(-50%);
   }
 }
+
 
 /* 모바일 로고 글자 줄바꿈 방지 */
 @media (max-width: 767px) {
@@ -1444,9 +1447,9 @@ body {
   }
 
   .header .logo-text strong {
-    font-size: clamp(11px, 3.6vw, 15px);
+    font-size: clamp(11px, 3.6vw, 17px);
     letter-spacing: -1px;
-    line-height: 1.15;
+    line-height: 1;
     white-space: nowrap;
   }
 
@@ -1634,10 +1637,11 @@ body {
     background-color: #ECECEC !important;
     background-image: url("../mainimages/bg_notice.png") !important;
     background-repeat: no-repeat !important;
-    background-position: center 40px !important;
+    background-position: center 70px !important;
     background-size: 92% auto !important;
   }
 }
+
 
 
 /* =========================================================

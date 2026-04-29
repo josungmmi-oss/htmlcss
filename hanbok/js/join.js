@@ -1,0 +1,3 @@
+const menuOpen=document.querySelector('.menu-open');const menuClose=document.querySelector('.menu-close');const mobileMenu=document.querySelector('.mobile-menu');if(menuOpen){menuOpen.addEventListener('click',()=>mobileMenu.classList.add('active'))}if(menuClose){menuClose.addEventListener('click',()=>mobileMenu.classList.remove('active'))}
+
+function setStep(n){document.querySelectorAll('.join-content').forEach(s=>s.classList.add('hidden'));document.getElementById('join'+n).classList.remove('hidden');document.querySelectorAll('.step').forEach(s=>s.classList.toggle('active',Number(s.dataset.step)<=n));window.scrollTo({top:0,behavior:'smooth'})}document.querySelectorAll('[data-join]').forEach(b=>b.addEventListener('click',()=>setStep(Number(b.dataset.join))));

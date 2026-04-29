@@ -1,0 +1,3 @@
+const menuOpen=document.querySelector('.menu-open');const menuClose=document.querySelector('.menu-close');const mobileMenu=document.querySelector('.mobile-menu');if(menuOpen){menuOpen.addEventListener('click',()=>mobileMenu.classList.add('active'))}if(menuClose){menuClose.addEventListener('click',()=>mobileMenu.classList.remove('active'))}
+
+const modal=document.getElementById('withdrawModal');document.getElementById('openModal').addEventListener('click',()=>modal.classList.remove('hidden'));document.getElementById('closeModal').addEventListener('click',()=>modal.classList.add('hidden'));modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.add('hidden')});

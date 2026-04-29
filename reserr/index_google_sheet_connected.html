@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LUHO 상담신청 랜딩페이지</title>
+  <meta name="description" content="루호 성형외과 상담신청 랜딩페이지">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+
+  
+
+
+
+  <!-- 시작 팝업: 가정의 달 진료 안내 -->
+  <div class="event-popup-cover" id="eventPopup" aria-hidden="true">
+    <div class="event-popup-box" role="dialog" aria-modal="true" aria-label="가정의 달 5월 진료 안내">
+      <!-- 팝업 이미지 삽입 위치 -->
+      <img src="./images/imgi_2_260417030820400.jpg" alt="가정의 달 5월 진료 안내" class="event-popup-img">
+      <div class="event-popup-actions">
+        <label class="event-popup-today">
+          <input type="checkbox" id="eventPopupToday">
+          <span>오늘 하루 안보기</span>
+        </label>
+        <button type="button" class="event-popup-close" id="eventPopupClose">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#" class="logo"><img src="./images/imgi_13_logo-brown.png" alt=""><small></small></a>
+      <nav class="gnb">
+        <a href="#about">루호소개</a>
+        <a href="#specialty">상담분야</a>
+        <a href="#review">리얼후기</a>
+        <a href="#process">상담절차</a>
+        <a href="#footer">오시는 길</a>
+      </nav>
+      <button type="button" class="header-consult-btn" id="openConsultModal">상담신청하기</button>
+      <button class="menu-btn" id="menuOpen" aria-label="메뉴 열기"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+
+  <div class="drawer-cover" id="drawerCover"></div>
+  <aside class="mobile-drawer" id="mobileDrawer">
+    <div class="drawer-head">
+      <div class="logo"><small></small></div>
+      <button class="drawer-close" id="menuClose">&times;</button>
+    </div>
+    <nav class="drawer-nav">
+      <a href="#about" class="drawer-link">루호소개</a>
+      <a href="#specialty" class="drawer-link">상담분야</a>
+      <a href="#review" class="drawer-link">리얼후기</a>
+      <a href="#process" class="drawer-link">상담절차</a>
+      <a href="#consultation-form" class="drawer-link">상담신청</a>
+      <a href="#footer" class="drawer-link">오시는 길</a>
+    </nav>
+  </aside>
+
+  <main>
+    <section class="hero" id="about">
+      <div class="container">
+        <div class="hero-card reveal">
+          <div class="hero-copy">
+            <span class="eyebrow">LUHO Consultation</span>
+            <h1 class="hero-title">숨겨진 선을 <br><span>그리다</span></h1>
+            <p class="hero-desc">지금, 루호에서 나만의 상담을 시작하세요.<br>자연스러운 아름다움을 위한 1:1 맞춤 상담을 제공합니다.</p>
+            <div class="hero-cta"><a href="#review" class="btn btn-outline">리얼 후기 보기</a></div>
+          </div>
+          <div class="hero-visual">
+            <!-- 이미지 삽입 위치 1: 메인 히어로 이미지 -->
+            <div class="image-slot">
+              <img src="./images/3.png" alt="루호 히어로 이미지">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section trust">
+      <div class="container">
+        <div class="reveal">
+          <span class="eyebrow">Trust Indicators</span>
+          <h2 class="section-title">루호 상담신청이 신뢰받는 이유</h2>
+          <p class="section-desc">방문자가 안심하고 상담을 시작할 수 있도록 핵심 신뢰 요소를 간결하게 제시합니다.</p>
+        </div>
+        <div class="trust-grid">
+          <div class="trust-item reveal"><div class="trust-num">1:1</div><div class="trust-label">맞춤 상담</div><div class="trust-sub">개인의 얼굴형과 니즈를 고려한 상담</div></div>
+          <div class="trust-item reveal"><div class="trust-num">CARE</div><div class="trust-label">체계적 안내</div><div class="trust-sub">상담부터 경과 안내까지 세심한 프로세스</div></div>
+          <div class="trust-item reveal"><div class="trust-num">SAFE</div><div class="trust-label">개인정보 보호</div><div class="trust-sub">상담 목적으로만 안전하게 처리</div></div>
+          <div class="trust-item reveal"><div class="trust-num">LUHO</div><div class="trust-label">브랜드 일관성</div><div class="trust-sub">고급스럽고 신뢰감 있는 상담 경험 제공</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="specialty">
+      <div class="container">
+        <div class="reveal">
+          <span class="eyebrow">Specialty</span>
+          <h2 class="section-title">상담 분야 안내</h2>
+          <p class="section-desc">관심 분야를 먼저 확인해보세요. 분야별 대표 시술 내용을 한눈에 볼 수 있도록 구성했습니다.</p>
+        </div>
+        <div class="specialty-grid">
+          <article class="specialty-card reveal"><div class="specialty-icon">눈</div><div><h3>눈성형</h3><p>쌍꺼풀, 눈매교정, 앞트임, 뒤트임, 밑트임 상담</p></div><span class="specialty-link">자세히 보기</span></article>
+          <article class="specialty-card reveal"><div class="specialty-icon">코</div><div><h3>코성형</h3><p>코끝 교정, 콧볼 축소, 콧대 라인 상담</p></div><span class="specialty-link">자세히 보기</span></article>
+          <article class="specialty-card reveal"><div class="specialty-icon">윤</div><div><h3>지방/윤곽</h3><p>지방이식, 볼살, 얼굴 윤곽 라인 상담</p></div><span class="specialty-link">자세히 보기</span></article>
+          <article class="specialty-card reveal"><div class="specialty-icon">이</div><div><h3>이마성형</h3><p>이마 볼륨, 이마 지방이식, 헤어라인 상담</p></div><span class="specialty-link">자세히 보기</span></article>
+          <article class="specialty-card reveal"><div class="specialty-icon">동안</div><div><h3>리프팅/동안</h3><p>실리프팅, 울쎄라, 보톡스, 필러 상담</p></div><span class="specialty-link">자세히 보기</span></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="review">
+      <div class="container">
+        <div class="reveal">
+          <span class="eyebrow">Real Review</span>
+          <h2 class="section-title">Before & After / 리얼 후기</h2>
+          <p class="section-desc">이미지 경로만 바꾸면 같은 레이아웃으로 쉽게 적용됩니다.</p>
+        </div>
+        <div class="review-wrap">
+          <div class="review-feature reveal">
+            <div class="review-slider" id="reviewSlider">
+              <!-- 이미지 삽입 위치 2: 후기 1 Before / After -->
+              <div class="review-slide active">
+                <div class="ba-box">
+                  <span class="ba-badge">BEFORE</span>
+                  <div class="image-slot">
+                    <img src="./images/before.png" alt="눈성형 Before 이미지">
+                  </div>
+                </div>
+                <div class="ba-box">
+                  <span class="ba-badge">AFTER</span>
+                  <div class="image-slot">
+                    <img src="./images/after.png" alt="눈성형 After 이미지">
+                  </div>
+                </div>
+              </div>
+
+              <!-- 이미지 삽입 위치 3: 후기 2 Before / After -->
+              <div class="review-slide">
+                <div class="ba-box">
+                  <span class="ba-badge">BEFORE</span>
+                  <div class="image-slot">
+                    <img src="./images/nobe.png" alt="코성형 Before 이미지">
+                  </div>
+                </div>
+                <div class="ba-box">
+                  <span class="ba-badge">AFTER</span>
+                  <div class="image-slot">
+                    <img src="./images/noaf.png" alt="코성형 After 이미지">
+                  </div>
+                </div>
+              </div>
+
+              <!-- 이미지 삽입 위치 4: 후기 3 Before / After -->
+              <div class="review-slide">
+                <div class="ba-box">
+                  <span class="ba-badge">BEFORE</span>
+                  <div class="image-slot">
+                    <img src="./images/lifbe.png" alt="리프팅 Before 이미지">
+                  </div>
+                </div>
+                <div class="ba-box">
+                  <span class="ba-badge">AFTER</span>
+                  <div class="image-slot">
+                    <img src="./images/lifaf.png" alt="리프팅 After 이미지">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="review-info reveal">
+            <h3 id="reviewTitle">리얼 후기</h3>
+            <div class="review-tags" id="reviewTags"></div>
+            <p class="review-quote" id="reviewQuote"></p>
+            <div class="review-nav"><button type="button" id="reviewPrev">←</button><button type="button" id="reviewNext">→</button></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section process" id="process">
+      <div class="container">
+        <div class="reveal">
+          <span class="eyebrow">Consultation Process</span>
+          <h2 class="section-title">상담 신청 절차</h2>
+          <p class="section-desc">상담 신청 이후 진행되는 흐름을 간단하고 명확하게 안내합니다.</p>
+        </div>
+        <div class="process-grid">
+          <article class="process-card reveal"><span class="process-step">STEP 01</span><h3>온라인 상담신청</h3><p>이름, 연락처, 관심 분야, 희망 상담 시간대를 입력합니다.</p></article>
+          <article class="process-card reveal"><span class="process-step">STEP 02</span><h3>상담 확인 연락</h3><p>접수 후 영업일 기준 순차적으로 담당자가 연락드립니다.</p></article>
+          <article class="process-card reveal"><span class="process-step">STEP 03</span><h3>내원 상담 예약</h3><p>상담 일정 조율 후 예약이 확정됩니다.</p></article>
+          <article class="process-card reveal"><span class="process-step">STEP 04</span><h3>1:1 맞춤 상담</h3><p>의료진과 함께 맞춤 상담을 진행합니다.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="notice-box reveal">
+          <span class="eyebrow">Notice</span>
+          <h2 class="section-title">상담신청 전 안내사항</h2>
+          <ul class="notice-list">
+            <li>상담신청 후 영업일 기준 1~2일 이내 순차적으로 안내드립니다.</li>
+            <li>제출하신 개인정보는 상담 목적으로만 사용되며 안전하게 보호됩니다.</li>
+            <li>상담신청은 수술 예약 확정을 의미하지 않으며, 내원 상담 후 최종 결정됩니다.</li>
+            <li>병원 일정에 따라 상담 가능 분야 및 일정은 변동될 수 있습니다.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="consult-simple" id="consultation-form">
+      <div class="container">
+        <div class="consult-simple-head reveal">
+          
+          <button type="button" class="btn btn-primary" id="sectionOpenConsultModal">상담신청하기</button>
+        </div>
+        <div class="consult-gallery">
+          <!-- 이미지 삽입 위치 5: 상담신청 아래 병원 이미지 1 -->
+          <div class="consult-gallery-card reveal">
+            <div class="image-slot">
+              <img src="./images/hospital.png" alt="병원 이미지 1">
+            </div>
+          </div>
+          <!-- 이미지 삽입 위치 6: 상담신청 아래 병원 이미지 2 -->
+          <div class="consult-gallery-card reveal">
+            <div class="image-slot">
+              <img src="./images/doctorsur.jpg" alt="병원 이미지 2">
+            </div>
+          </div>
+          <!-- 이미지 삽입 위치 7: 상담신청 아래 상담 이미지 -->
+          <div class="consult-gallery-card reveal">
+            <div class="image-slot">
+              <img src="./images/imgi_17_main_visual_08.jpg" alt="상담 이미지">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="footer-visual">
+      <!-- 이미지 삽입 위치 8: 하단 비주얼 배경 이미지 -->
+      <div class="image-slot" style="position:absolute;inset:0;">
+        <img src="./images/luhobg.jpg" alt="하단 병원 이미지">
+      </div>
+      <div class="footer-visual-inner"><div class="footer-visual-content reveal"><h3>루호성형외과는 약속합니다</h3><p>자연스러운 아름다움을 추구하기 위해 처음부터 끝까지 진심을 담아 상담을 진행합니다.</p></div></div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="footer">
+    <div class="container footer-inner">
+      <div class="footer-logo">LUHO PLASTIC SURGERY</div>
+      <div class="footer-links"><a href="#about">루호소개</a><a href="#specialty">상담분야</a><a href="#review">리얼후기</a><a href="#consultation-form">상담신청</a><a href="#footer">오시는 길</a></div>
+      <div class="footer-info">서울시 강남구 예시로 123, LUHO 빌딩<br>대표번호 02-0000-0000 · 상담시간 09:00 - 18:00<br>Copyright © LUHO Plastic Surgery. All Rights Reserved.</div>
+    </div>
+  </footer>
+
+  <button type="button" class="top-btn" id="topBtn" aria-label="맨 위로 이동">↑</button>
+
+  <div class="modal-cover" id="consultModal" aria-hidden="true">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button type="button" class="modal-close" id="closeConsultModal" aria-label="팝업 닫기">&times;</button>
+      <h2 class="modal-title" id="modalTitle">상담 신청하기</h2>
+      <p class="modal-desc">정보를 남겨주시면 확인 후 연락드리겠습니다.</p>
+      <form class="modal-form" id="modalConsultForm" novalidate>
+        <div class="form-row"><label for="modalName" class="label">이름 <span class="required">*</span></label><input type="text" id="modalName" name="modalName" class="field" placeholder="이름을 입력해주세요"><div class="error-text" data-error-for="modalName">이름은 2자 이상 입력해주세요.</div></div>
+        <div class="form-row"><label for="modalPhone" class="label">연락처 <span class="required">*</span></label><input type="tel" id="modalPhone" name="modalPhone" class="field" placeholder="010-0000-0000" maxlength="13"><div class="error-text" data-error-for="modalPhone">연락처 형식을 확인해주세요.</div></div>
+        <div class="form-row"><label for="modalCategory" class="label">상담 분야 <span class="required">*</span></label><select id="modalCategory" name="modalCategory" class="field-select"><option value="">상담 분야를 선택해주세요</option><option value="눈성형">눈성형</option><option value="코성형">코성형</option><option value="지방/윤곽">지방/윤곽</option><option value="이마성형">이마성형</option><option value="리프팅/동안">리프팅/동안</option><option value="기타">기타</option></select><div class="error-text" data-error-for="modalCategory">상담 분야를 선택해주세요.</div></div>
+        <div class="form-row"><label for="modalMessage" class="label">문의 내용</label><textarea id="modalMessage" name="modalMessage" class="field-textarea" maxlength="300" placeholder="문의 내용을 입력해주세요."></textarea></div>
+        <div class="check-group"><label class="check-item"><input type="checkbox" id="modalAgree" name="modalAgree"><span>개인정보 수집 및 이용에 동의합니다. <span class="required">*</span></span></label><div class="error-text" data-error-for="modalAgree">개인정보 수집 및 이용 동의가 필요합니다.</div><label class="check-item"><input type="checkbox" id="modalMarketing" name="modalMarketing"><span>이벤트 및 프로모션 정보 수신에 동의합니다. (선택)</span></label></div>
+        <div class="form-actions"><div class="form-message" id="modalFormMessage"></div><button type="submit" class="btn btn-primary">신청완료</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-cover" id="successModal" aria-hidden="true">
+    <div class="modal-box modal-message" role="dialog" aria-modal="true">
+      <h3>신청이 완료되었습니다.</h3>
+      <p>곧 연락드리겠습니다.</p>
+      <button type="button" class="btn btn-primary" id="closeSuccessModal">확인</button>
+    </div>
+  </div>
+
+  <div class="sticky-cta"><a href="tel:0200000000" class="btn btn-outline">전화상담</a><button type="button" class="btn btn-primary" id="mobileOpenConsultModal">상담 신청하기</button></div>
+
+<script src="./script/app.js"></script>
+</body>
+</html>

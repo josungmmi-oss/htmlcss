@@ -166,7 +166,7 @@
       padding: 12px 0;
       background: #fff;
       border-top: 1px solid #eee;
-      padding-bottom: calc(12px + env(safe-area-inset-bottom));
+      padding-bottom: 24px;
     }
     .nav-item { display: flex; flex-direction: column; align-items: center; color: #ccc; font-size: 11px; gap: 5px; cursor: pointer; }
     .nav-item.active { color: #5a70b3; }
@@ -218,7 +218,7 @@
     .reserve-input:focus { border-color: #5a70b3; background: #fff; }
     .bottom-fixed-btn {
       position: absolute; bottom: 0; left: 0; width: 100%; padding: 20px; background: #222; color: #fff; font-size: 18px; font-weight: 700;
-      text-align: center; cursor: pointer; padding-bottom: calc(20px + env(safe-area-inset-bottom)); z-index: 100;
+      text-align: center; cursor: pointer; padding-bottom: 24px; z-index: 100;
     }
 
     .status-chip {
@@ -244,3 +244,9 @@
 #screen-onboarding { z-index: 40; }
 #screen-login { z-index: 30; }
 #screen-home { z-index: 20; }
+
+.list-message {
+  padding: 50px 20px;
+  text-align: center;
+  color: #777;
+}

@@ -101,7 +101,8 @@ const GO_CAMPING_API_KEY = "YOUR_GO_CAMPING_API_KEY"; // 공공데이터 API 키
         const progress = timestamp - startTime;
         const percent = Math.min(Math.floor((progress / duration) * 100), 100);
         if (loadingText) loadingText.innerText = percent + '%';
-        if (progress < duration) requestAnimationFrame(animatePercentage);
+        if (progress >= duration) return;
+        requestAnimationFrame(animatePercentage);
       }
       requestAnimationFrame(animatePercentage);
     }, 50);
@@ -228,7 +229,7 @@ const GO_CAMPING_API_KEY = "YOUR_GO_CAMPING_API_KEY"; // 공공데이터 API 키
 
     const listContainer = document.getElementById('resultList');
     document.getElementById('listTitle').style.display = 'none';
-    listContainer.innerHTML = '<div style="padding:50px 20px; text-align:center; color:#777;">데이터를 불러오는 중입니다...</div>';
+    setListMessage(listContainer, '데이터를 불러오는 중입니다...');
 
     if (!GO_CAMPING_API_KEY || GO_CAMPING_API_KEY === "YOUR_GO_CAMPING_API_KEY") {
       const filtered = dummyData.filter(item =>
@@ -247,7 +248,7 @@ const GO_CAMPING_API_KEY = "YOUR_GO_CAMPING_API_KEY"; // 공공데이터 API 키
         if (!Array.isArray(items)) items = [items];
         renderList(items, false);
       } else {
-        listContainer.innerHTML = '<div style="padding:50px 20px; text-align:center; color:#777;">검색 결과가 없습니다.</div>';
+        setListMessage(listContainer, '검색 결과가 없습니다.');
       }
     } catch (error) {
       renderList(dummyData, false);
@@ -271,6 +272,61 @@ const GO_CAMPING_API_KEY = "YOUR_GO_CAMPING_API_KEY"; // 공공데이터 API 키
     return `${value.toFixed(1)}Km`;
   }
 
+  function setListMessage(container, message) {
+    if (!container) return;
+    container.textContent = '';
+    const messageBox = document.createElement('div');
+    messageBox.className = 'list-message';
+    messageBox.textContent = message;
+    container.appendChild(messageBox);
+  }
+
+  function createElement(tagName, className, textContent) {
+    const element = document.createElement(tagName);
+    if (className) element.className = className;
+    if (typeof textContent === 'string') element.textContent = textContent;
+    return element;
+  }
+
+  function createListItem(item, index, likes) {
+    const isLiked = likes.some(c => c.facltNm === item.facltNm);
+    const imgUrl = item.firstImageUrl || 'https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?auto=format&fit=crop&w=300&q=80';
+    const address = item.addr1 || `${item.doNm || ''} ${item.sigunguNm || ''}`.trim();
+    const category = getCampCategory(item);
+    const distance = getCampDistance(item, index);
+
+    const itemBox = createElement('div', 'list-item');
+    const thumbWrap = createElement('div', 'list-thumb-wrap');
+    const image = createElement('img', 'list-img');
+    image.src = imgUrl;
+    image.alt = item.facltNm || '캠핑장 이미지';
+    thumbWrap.appendChild(image);
+
+    const rightBox = createElement('div', 'list-right');
+    rightBox.appendChild(createElement('div', 'list-title', item.facltNm || '캠핑장 이름'));
+    rightBox.appendChild(createElement('div', 'list-addr', address));
+
+    const favRow = createElement('div', 'list-fav-row');
+    const likeIcon = createElement('i', isLiked ? 'fas fa-heart like-btn liked' : 'far fa-heart like-btn');
+    likeIcon.addEventListener('click', (event) => {
+      event.stopPropagation();
+      toggleLikeLogic(event.currentTarget, item);
+    });
+    favRow.appendChild(likeIcon);
+
+    const bottomBox = createElement('div', 'list-bottom');
+    bottomBox.appendChild(createElement('span', 'list-category', category));
+    bottomBox.appendChild(createElement('span', 'list-distance', distance));
+
+    rightBox.appendChild(favRow);
+    rightBox.appendChild(bottomBox);
+    itemBox.appendChild(thumbWrap);
+    itemBox.appendChild(rightBox);
+    itemBox.addEventListener('click', () => openSingleMap(item));
+
+    return itemBox;
+  }
+
   function renderList(items, isFavoriteView = false) {
     const listContainer = document.getElementById('resultList');
     const listTitle = document.getElementById('listTitle');
@@ -284,49 +340,14 @@ const GO_CAMPING_API_KEY = "YOUR_GO_CAMPING_API_KEY"; // 공공데이터 API 키
     }
 
     if (!items.length) {
-      listContainer.innerHTML = '<div style="padding:50px 20px; text-align:center; color:#777;">목록이 비어있습니다.</div>';
+      setListMessage(listContainer, '목록이 비어있습니다.');
       return;
     }
 
     let likes = JSON.parse(localStorage.getItem('liked_camps') || '[]');
 
     items.forEach((item, index) => {
-      const isLiked = likes.some(c => c.facltNm === item.facltNm);
-      const heartClass = isLiked ? 'fas fa-heart like-btn liked' : 'far fa-heart like-btn';
-      const div = document.createElement('div');
-      div.className = 'list-item';
-      const imgUrl = item.firstImageUrl || 'https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?auto=format&fit=crop&w=300&q=80';
-      const address = item.addr1 || `${item.doNm || ''} ${item.sigunguNm || ''}`.trim();
-      const category = getCampCategory(item);
-      const distance = getCampDistance(item, index);
-
-      div.innerHTML = [
-        '<div class="list-thumb-wrap">',
-        `  <img src="${imgUrl}" class="list-img" alt="${item.facltNm}">`,
-        '</div>',
-        '<div class="list-right">',
-        `  <div class="list-title">${item.facltNm}</div>`,
-        `  <div class="list-addr">${address}</div>`,
-        '  <div class="list-fav-row">',
-        `    <i class="${heartClass}"></i>`,
-        '  </div>',
-        '  <div class="list-bottom">',
-        `    <span class="list-category">${category}</span>`,
-        `    <span class="list-distance">${distance}</span>`,
-        '  </div>',
-        '</div>'
-      ].join('');
-
-      const likeBtn = div.querySelector('.like-btn');
-      if (likeBtn) {
-        likeBtn.onclick = (e) => {
-          e.stopPropagation();
-          toggleLikeLogic(e.target, item);
-        };
-      }
-
-      div.onclick = () => openSingleMap(item);
-      listContainer.appendChild(div);
+      listContainer.appendChild(createListItem(item, index, likes));
     });
   }
 
@@ -436,15 +457,22 @@ const GO_CAMPING_API_KEY = "YOUR_GO_CAMPING_API_KEY"; // 공공데이터 API 키
 
   function openBottomSheet(item) {
     const sheet = document.getElementById('mapBottomSheet');
+    if (!sheet) return;
     const imgUrl = item.firstImageUrl || "https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?auto=format&fit=crop&w=150&q=80";
-    sheet.innerHTML = `
-      <img src="${imgUrl}" class="sheet-img" alt="선택한 캠핑장 이미지">
-      <div class="sheet-info">
-        <div class="sheet-title">${item.facltNm}</div>
-        <div class="sheet-addr">${item.addr1 || ''}</div>
-        <div class="sheet-link">상세페이지로 이동 ➔</div>
-      </div>
-    `;
+
+    sheet.textContent = '';
+
+    const image = createElement('img', 'sheet-img');
+    image.src = imgUrl;
+    image.alt = '선택한 캠핑장 이미지';
+
+    const infoBox = createElement('div', 'sheet-info');
+    infoBox.appendChild(createElement('div', 'sheet-title', item.facltNm || '캠핑장 이름'));
+    infoBox.appendChild(createElement('div', 'sheet-addr', item.addr1 || ''));
+    infoBox.appendChild(createElement('div', 'sheet-link', '상세페이지로 이동 ➔'));
+
+    sheet.appendChild(image);
+    sheet.appendChild(infoBox);
     sheet.classList.add('show');
     sheet.onclick = () => openDetailScreen(item);
   }
